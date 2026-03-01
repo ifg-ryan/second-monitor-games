@@ -72,148 +72,68 @@ export default function PricingPage() {
   return (
     <div style={{ background: "var(--bg)" }}>
 
-      {/* ── Hero ──────────────────────────────────────────────────── */}
+      {/* ── Hero — two-column above the fold ──────────────────────── */}
       <section
         style={{
-          background:    "linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%)",
-          borderBottom:  "1px solid var(--border)",
-          padding:       "72px 24px 80px",
-          textAlign:     "center",
+          background:   "linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%)",
+          borderBottom: "1px solid var(--border)",
+          padding:      "64px 32px 72px",
         }}
       >
-        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+        <div
+          className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 lg:gap-16 items-center"
+          style={{ maxWidth: "1060px", margin: "0 auto" }}
+        >
 
-          <div
-            style={{
-              display:       "inline-block",
-              background:    "var(--accent-dim)",
-              color:         "var(--accent)",
-              fontSize:      "11px",
-              fontWeight:    700,
-              letterSpacing: "0.12em",
-              padding:       "4px 14px",
-              borderRadius:  "20px",
-              textTransform: "uppercase",
-              marginBottom:  "24px",
-            }}
-          >
-            Second Monitor Games Plus
-          </div>
-
-          <h1
-            style={{
-              fontFamily:   "var(--font-dm-serif)",
-              color:        "var(--text)",
-              fontSize:     "clamp(2.25rem, 5vw, 3.5rem)",
-              lineHeight:   1.1,
-              marginBottom: "20px",
-            }}
-          >
-            You play every day.<br />
-            <span style={{ color: "var(--accent)" }}>Play better.</span>
-          </h1>
-
-          <p
-            style={{
-              color:        "var(--text-muted)",
-              fontSize:     "1.1rem",
-              lineHeight:   1.7,
-              marginBottom: "40px",
-            }}
-          >
-            Remove the ads. Unlock every past puzzle. Keep your streak forever.
-            All for less than a coffee a month.
-          </p>
-
-          {/* ── Pricing card ──────────────────────────────────────── */}
-          <div
-            style={{
-              background:   "var(--surface)",
-              border:       "1px solid var(--border)",
-              borderRadius: "20px",
-              padding:      "40px",
-              maxWidth:     "420px",
-              margin:       "0 auto",
-              position:     "relative",
-              overflow:     "hidden",
-            }}
-          >
-            {/* Glow accent */}
-            <div
-              aria-hidden
-              style={{
-                position:     "absolute",
-                top:          "-60px",
-                left:         "50%",
-                transform:    "translateX(-50%)",
-                width:        "240px",
-                height:       "120px",
-                background:   "radial-gradient(ellipse, rgba(232,168,56,0.18) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Monthly */}
-            <div style={{ marginBottom: "28px" }}>
-              <div
-                style={{
-                  display:     "flex",
-                  alignItems:  "baseline",
-                  gap:         "6px",
-                  justifyContent: "center",
-                  marginBottom: "4px",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-dm-serif)",
-                    fontSize:   "3.5rem",
-                    color:      "var(--accent)",
-                    lineHeight: 1,
-                  }}
-                >
-                  {MONTHLY_PRICE}
-                </span>
-                <span style={{ color: "var(--text-muted)", fontSize: "0.95rem" }}>
-                  / month
-                </span>
-              </div>
-              <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", margin: 0 }}>
-                or{" "}
-                <strong style={{ color: "var(--text-dim)" }}>
-                  {ANNUAL_MONTHLY_EQUIV}/mo
-                </strong>{" "}
-                billed annually ({ANNUAL_PRICE}/yr)
-                <span
-                  style={{
-                    marginLeft:    "8px",
-                    background:    "rgba(83,141,78,0.2)",
-                    color:         "#6abf69",
-                    fontSize:      "11px",
-                    fontWeight:    700,
-                    padding:       "2px 7px",
-                    borderRadius:  "4px",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Save 33%
-                </span>
-              </p>
-            </div>
-
-            {/* What's included — quick list */}
+          {/* ── Left: marketing copy ───────────────────────────────── */}
+          <div>
             <div
               style={{
-                borderTop:    "1px solid var(--border)",
-                borderBottom: "1px solid var(--border)",
-                padding:      "20px 0",
-                marginBottom: "24px",
+                display:       "inline-block",
+                background:    "var(--accent-dim)",
+                color:         "var(--accent)",
+                fontSize:      "11px",
+                fontWeight:    700,
+                letterSpacing: "0.12em",
+                padding:       "4px 14px",
+                borderRadius:  "20px",
+                textTransform: "uppercase",
+                marginBottom:  "24px",
               }}
             >
+              Second Monitor Games Plus
+            </div>
+
+            <h1
+              style={{
+                fontFamily:   "var(--font-dm-serif)",
+                color:        "var(--text)",
+                fontSize:     "clamp(2rem, 4vw, 3.2rem)",
+                lineHeight:   1.1,
+                marginBottom: "20px",
+              }}
+            >
+              You play every day.<br />
+              <span style={{ color: "var(--accent)" }}>Play better.</span>
+            </h1>
+
+            <p
+              style={{
+                color:        "var(--text-muted)",
+                fontSize:     "1.05rem",
+                lineHeight:   1.75,
+                marginBottom: "32px",
+                maxWidth:     "480px",
+              }}
+            >
+              Remove the ads. Unlock every past puzzle. Keep your streak safe on the server.
+              All for less than a coffee a month.
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                "No ads on any game",
-                "Full archive — every past puzzle",
+                "No ads on any game — ever",
+                "Full archive — every past puzzle, every game",
                 "Stats & streaks saved to the server",
                 "Full leaderboard ranking",
                 "Cross-device sync",
@@ -221,84 +141,151 @@ export default function PricingPage() {
                 <div
                   key={item}
                   style={{
-                    display:      "flex",
-                    alignItems:   "center",
-                    gap:          "10px",
-                    padding:      "6px 0",
-                    fontSize:     "0.9rem",
-                    color:        "var(--text-muted)",
+                    display:    "flex",
+                    alignItems: "center",
+                    gap:        "10px",
+                    fontSize:   "0.95rem",
+                    color:      "var(--text-muted)",
                   }}
                 >
-                  <span style={{ color: "var(--accent)", fontSize: "0.85rem", flexShrink: 0 }}>✓</span>
+                  <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>✓</span>
                   {item}
                 </div>
               ))}
             </div>
+          </div>
 
-            {/* CTA buttons */}
-            <div className="flex flex-col" style={{ gap: "10px" }}>
-              <a
-                href="/subscribe"
-                style={{
-                  display:        "block",
-                  background:     "var(--accent)",
-                  color:          "#0d0d18",
-                  fontWeight:     700,
-                  fontSize:       "1rem",
-                  padding:        "15px",
-                  borderRadius:   "10px",
-                  textDecoration: "none",
-                  textAlign:      "center",
-                  transition:     "opacity 0.2s",
-                }}
-              >
-                Subscribe Monthly — {MONTHLY_PRICE}/mo
-              </a>
-              <a
-                href="/subscribe?plan=annual"
-                style={{
-                  display:        "block",
-                  background:     "transparent",
-                  color:          "var(--text)",
-                  fontWeight:     600,
-                  fontSize:       "0.9rem",
-                  padding:        "13px",
-                  borderRadius:   "10px",
-                  textDecoration: "none",
-                  textAlign:      "center",
-                  border:         "1px solid var(--border)",
-                  transition:     "border-color 0.2s",
-                }}
-              >
-                Subscribe Annually — {ANNUAL_PRICE}/yr
+          {/* ── Right: pricing card ────────────────────────────────── */}
+          <div
+            style={{
+              background:   "var(--surface)",
+              border:       "1px solid var(--border)",
+              borderRadius: "20px",
+              padding:      "36px 32px",
+              position:     "relative",
+              overflow:     "hidden",
+            }}
+          >
+            {/* Glow */}
+            <div
+              aria-hidden
+              style={{
+                position:      "absolute",
+                top:           "-50px",
+                left:          "50%",
+                transform:     "translateX(-50%)",
+                width:         "260px",
+                height:        "120px",
+                background:    "radial-gradient(ellipse, rgba(232,168,56,0.16) 0%, transparent 70%)",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Annual — PRIMARY */}
+            <div style={{ marginBottom: "24px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                 <span
                   style={{
-                    marginLeft:    "8px",
-                    background:    "rgba(83,141,78,0.2)",
+                    fontSize:      "0.72rem",
+                    fontWeight:    700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color:         "var(--text-muted)",
+                  }}
+                >
+                  Annual plan
+                </span>
+                <span
+                  style={{
+                    background:    "rgba(83,141,78,0.22)",
                     color:         "#6abf69",
                     fontSize:      "10px",
                     fontWeight:    700,
-                    padding:       "2px 6px",
+                    padding:       "3px 8px",
                     borderRadius:  "4px",
-                    letterSpacing: "0.06em",
+                    letterSpacing: "0.07em",
                     textTransform: "uppercase",
-                    verticalAlign: "middle",
                   }}
                 >
-                  Best value
+                  Save 33%
                 </span>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "4px" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--font-dm-serif)",
+                    fontSize:   "3.2rem",
+                    color:      "var(--accent)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {ANNUAL_MONTHLY_EQUIV}
+                </span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>/ mo</span>
+              </div>
+              <p style={{ color: "var(--text-muted)", fontSize: "0.82rem", margin: 0 }}>
+                {ANNUAL_PRICE} billed once per year
+              </p>
+            </div>
+
+            {/* Annual CTA — hero button */}
+            <a
+              href="/subscribe?plan=annual"
+              style={{
+                display:        "block",
+                background:     "var(--accent)",
+                color:          "#0d0d18",
+                fontWeight:     700,
+                fontSize:       "1rem",
+                padding:        "15px",
+                borderRadius:   "10px",
+                textDecoration: "none",
+                textAlign:      "center",
+                transition:     "opacity 0.2s",
+                marginBottom:   "16px",
+              }}
+            >
+              Get Annual Plan — {ANNUAL_PRICE}/yr →
+            </a>
+
+            {/* Monthly divider + option */}
+            <div
+              style={{
+                borderTop:  "1px solid var(--border)",
+                paddingTop: "16px",
+                display:    "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                Monthly option
+              </span>
+              <a
+                href="/subscribe"
+                style={{
+                  color:          "var(--text)",
+                  fontWeight:     600,
+                  fontSize:       "0.9rem",
+                  textDecoration: "none",
+                  borderBottom:   "1px solid var(--border)",
+                  paddingBottom:  "1px",
+                }}
+              >
+                {MONTHLY_PRICE}/mo
               </a>
             </div>
 
             <p
               style={{
-                marginTop: "16px",
-                fontSize:  "0.78rem",
+                marginTop: "14px",
+                fontSize:  "0.75rem",
                 color:     "var(--text-muted)",
                 textAlign: "center",
               }}
             >
-              Cancel any time. No long-term commitment.
+              Cancel any time · No long-term commitment
             </p>
           </div>
 
@@ -572,7 +559,7 @@ export default function PricingPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: "12px" }}>
             <a
-              href="/subscribe"
+              href="/subscribe?plan=annual"
               style={{
                 display:        "inline-flex",
                 alignItems:     "center",
@@ -588,7 +575,7 @@ export default function PricingPage() {
                 whiteSpace:     "nowrap",
               }}
             >
-              Subscribe — {MONTHLY_PRICE}/mo →
+              Get Annual Plan — {ANNUAL_PRICE}/yr →
             </a>
             <a
               href="/"
@@ -603,10 +590,11 @@ export default function PricingPage() {
           </div>
 
           <p style={{ marginTop: "18px", fontSize: "0.78rem", color: "var(--text-muted)" }}>
-            Annual plan available — {ANNUAL_PRICE}/yr ({ANNUAL_MONTHLY_EQUIV}/mo).{" "}
-            <a href="/subscribe?plan=annual" style={{ color: "var(--accent)", textDecoration: "none" }}>
-              Save 33%
+            Or go month-to-month —{" "}
+            <a href="/subscribe" style={{ color: "var(--accent)", textDecoration: "none" }}>
+              {MONTHLY_PRICE}/mo
             </a>
+            . Cancel any time.
           </p>
         </div>
       </section>
