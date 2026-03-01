@@ -466,6 +466,302 @@
       transition: width 0.3s ease;
     }
     .dist-bar.active-row { background: #538d4e; }
+
+    /* ── Layer 4: Preroll ad screen ── */
+    #preroll-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #121213;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 80;
+      text-align: center;
+      padding: 40px;
+    }
+    #preroll-screen.active { display: flex; }
+
+    .preroll-ad-area {
+      width: 100%;
+      max-width: 480px;
+      min-height: 200px;
+      background: #1a1a1b;
+      border: 1px solid #3a3a3c;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #818384;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .preroll-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      max-width: 480px;
+      height: 32px;
+      gap: 10px;
+    }
+
+    #preroll-countdown { font-size: 0.8rem; color: #818384; }
+
+    #preroll-skip {
+      display: none;
+      padding: 6px 16px;
+      background: #3a3a3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      transition: opacity 0.15s;
+    }
+    #preroll-skip:hover { opacity: 0.8; }
+
+    /* ── Layer 4: Archive gate ── */
+    #archive-gate {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #121213;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 70;
+      text-align: center;
+      padding: 40px;
+    }
+    #archive-gate.active { display: flex; }
+
+    #archive-gate-icon { font-size: 2.5rem; }
+
+    #archive-gate h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #archive-gate p { color: #818384; font-size: 0.9rem; max-width: 300px; }
+
+    .archive-gate-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #archive-trial-btn {
+      padding: 11px 24px;
+      background: #538d4e;
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #archive-trial-btn:hover { opacity: 0.85; }
+
+    #archive-today-btn {
+      padding: 11px 24px;
+      background: none;
+      color: #818384;
+      border: 1px solid #3a3a3c;
+      border-radius: 28px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    #archive-today-btn:hover { color: #fff; border-color: #818384; }
+
+    /* ── Layer 4: Upsell modal ── */
+    #upsell-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      align-items: center;
+      justify-content: center;
+      z-index: 310;
+      padding: 20px;
+    }
+    #upsell-modal.active { display: flex; }
+
+    .upsell-card {
+      background: #1a1a1b;
+      border: 1px solid #3a3a3c;
+      border-radius: 10px;
+      padding: 32px;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .upsell-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #818384;
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .upsell-close:hover { color: #fff; }
+
+    #upsell-emoji { font-size: 2.2rem; line-height: 1; }
+
+    #upsell-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    #upsell-body {
+      font-size: 0.88rem;
+      color: #818384;
+      line-height: 1.5;
+    }
+
+    .upsell-perks {
+      list-style: none;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .upsell-perks li {
+      font-size: 0.85rem;
+      color: #818384;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .upsell-perks li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #538d4e;
+      font-weight: 700;
+    }
+
+    #upsell-cta-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: #538d4e;
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+    #upsell-cta-btn:hover { background: #6aad63; }
+
+    .upsell-dismiss {
+      font-size: 0.78rem;
+      color: #818384;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .upsell-dismiss:hover { color: #fff; }
+
+    /* ── Layer 4: Subscription badge (header) ── */
+    #subscription-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      display: none;
+      margin-right: 4px;
+    }
+    #subscription-badge.badge-subscriber { background: #538d4e;  color: #fff; display: inline; }
+    #subscription-badge.badge-trial      { background: #b59f3b;  color: #fff; display: inline; }
+    #subscription-badge.badge-free       { display: none; }
+
+    /* ── Layer 4: Result screen extras ── */
+    #result-cta {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    #result-cta.active { display: flex; }
+
+    #result-cta-btn {
+      padding: 14px 36px;
+      background: #538d4e;
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #result-cta-btn:hover { background: #6aad63; }
+
+    .result-cta-sub { font-size: 0.75rem; color: #818384; }
+
+    #endroll-ad {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      min-height: 80px;
+      background: #1a1a1b;
+      border: 1px solid #3a3a3c;
+      border-radius: 6px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    #endroll-ad.active { display: flex; }
+
+    .ad-label {
+      font-size: 0.65rem;
+      color: #818384;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body>
@@ -475,6 +771,23 @@
     <div class="icon">🖥️</div>
     <div class="msg">Best experienced on desktop</div>
     <div class="sub">Second Monitor Games is designed for landscape displays at 1200px+</div>
+  </div>
+
+  <!-- Layer 4: Upsell modal -->
+  <div id="upsell-modal">
+    <div class="upsell-card">
+      <button class="upsell-close" id="upsell-close-btn" aria-label="Close">✕</button>
+      <div id="upsell-emoji"></div>
+      <div id="upsell-title"></div>
+      <div id="upsell-body"></div>
+      <ul class="upsell-perks">
+        <li>No ads, ever</li>
+        <li>Full archive — thousands of past puzzles</li>
+        <li>All games included</li>
+      </ul>
+      <button id="upsell-cta-btn"></button>
+      <button class="upsell-dismiss" id="upsell-dismiss-btn">Maybe later</button>
+    </div>
   </div>
 
   <!-- Layer 3: stats modal -->
@@ -499,12 +812,35 @@
     </div>
   </div>
 
+  <!-- Layer 4: Preroll ad screen -->
+  <div id="preroll-screen">
+    <div class="preroll-ad-area">
+      <span class="ad-label">Advertisement</span>
+    </div>
+    <div class="preroll-footer">
+      <span id="preroll-countdown"></span>
+      <button id="preroll-skip">Skip Ad ›</button>
+    </div>
+  </div>
+
+  <!-- Layer 4: Archive gate -->
+  <div id="archive-gate">
+    <div id="archive-gate-icon">🔒</div>
+    <h2>Subscriber Only</h2>
+    <p>This puzzle is from the archive. Subscribe to access thousands of past puzzles ad-free.</p>
+    <div class="archive-gate-buttons">
+      <button id="archive-trial-btn">Start Free Trial</button>
+      <button id="archive-today-btn">Play Today's Puzzle</button>
+    </div>
+  </div>
+
   <header>
     <div id="header-left">
       <button class="header-btn" id="help-btn" aria-label="How to play">?</button>
     </div>
     <h1>Decode</h1>
     <div id="header-right">
+      <span id="subscription-badge" class="badge-free"></span>
       <button class="header-btn" id="stats-btn" aria-label="Statistics">📊</button>
       <span id="puzzle-num"></span>
     </div>
@@ -528,18 +864,30 @@
       <button id="share-btn">Share Result</button>
       <button id="continue-btn">Continue</button>
     </div>
+    <!-- Layer 4: upsell CTA for free users -->
+    <div id="result-cta">
+      <button id="result-cta-btn">Start Free Trial</button>
+      <span class="result-cta-sub">Go ad-free · Unlock the full archive</span>
+    </div>
+    <!-- Layer 4: endroll ad for free users -->
+    <div id="endroll-ad">
+      <div class="ad-slot-area">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
   </div>
 
   <script>
     // ============================================================
-    // SMG RULES v1.1 — GAME CONFIG  (Rule 2)
+    // SMG RULES v1.2 — GAME CONFIG  (Rule 2)
     // ============================================================
     const GAME_CONFIG = {
       name:        "decode",
       displayName: "Decode",
       gameType:    "puzzle",
       launchDate:  "2026-03-01",
-      smgVersion:  "1.1",
+      smgVersion:  "1.2",
+      isArchive:   false,          // Layer 4: true when showing a past puzzle
       howToPlay: [
         "<strong>Guess the word</strong> in 6 tries.",
         "Each guess must be a valid 5-letter word. Press <strong>Enter</strong> to submit.",
@@ -1507,7 +1855,40 @@
     // Layer 2B: how-to
     const LS_SEEN_HOW_TO = `smg_${GAME_CONFIG.name}_seenHowTo`;
     // Layer 3: stats
-    const LS_STATS       = `smg_${GAME_CONFIG.name}_stats`;
+    const LS_STATS         = `smg_${GAME_CONFIG.name}_stats`;
+    // Layer 4: streak upsell seen milestone
+    const LS_STREAK_UPSELL = `smg_${GAME_CONFIG.name}_streakUpsellSeen`;
+
+    // ============================================================
+    // LAYER 4: User tier runtime
+    // ============================================================
+    let USER_TIER       = "free";   // "free" | "trial" | "subscriber"
+    let TRIAL_DAYS_LEFT = 0;
+    let _tierResolve    = null;
+    const _adCallbacks  = {};
+
+    window.addEventListener("message", e => {
+      const { type, payload } = e.data || {};
+      if (type === "USER_STATUS") {
+        USER_TIER       = payload?.tier          || "free";
+        TRIAL_DAYS_LEFT = payload?.trialDaysLeft || 0;
+        if (_tierResolve) { _tierResolve(); _tierResolve = null; }
+      } else if (type === "AD_COMPLETE") {
+        const cb = _adCallbacks[payload?.slot];
+        if (cb) { delete _adCallbacks[payload.slot]; cb(); }
+      }
+    });
+
+    function isPaidUser() {
+      return USER_TIER === "subscriber" || USER_TIER === "trial";
+    }
+
+    function waitForUserStatus(ms = 1500) {
+      return new Promise(resolve => {
+        const t = setTimeout(resolve, ms);
+        _tierResolve = () => { clearTimeout(t); resolve(); };
+      });
+    }
 
     // ============================================================
     // LAYER 2A: Streak tracking
@@ -1821,6 +2202,9 @@
 
       const shareText = buildShareText();
 
+      // Layer 4: streak milestone upsell
+      checkStreakUpsell(streak);
+
       // Rule 4: postMessage to parent — fires exactly once
       window.parent.postMessage({
         type: "GAME_OVER",
@@ -1835,6 +2219,7 @@
           shareText,
           streak,
           maxStreak:    getMaxStreak(),
+          tier:         USER_TIER,          // Layer 4
         },
       }, "*");
 
@@ -1867,6 +2252,9 @@
       ).join("<br>");
 
       resultScreen.classList.add("active");
+
+      // Layer 4: ads + upsell CTA for free users
+      showResultExtras();
     }
 
     // ============================================================
@@ -1978,6 +2366,9 @@
     // ============================================================
     document.getElementById("continue-btn").addEventListener("click", () => {
       resultScreen.classList.remove("active");
+      // Layer 4: reset result extras for next viewing
+      document.getElementById("result-cta").classList.remove("active");
+      document.getElementById("endroll-ad").classList.remove("active");
     });
 
     // ============================================================
@@ -2030,23 +2421,210 @@
     }
 
     // ============================================================
+    // LAYER 4: postMessage helpers
+    // ============================================================
+    function fireAdRequested(slot) {
+      window.parent.postMessage({
+        type: "AD_REQUESTED",
+        payload: { slot, game: GAME_CONFIG.name },
+      }, "*");
+    }
+
+    function fireArchiveGateHit() {
+      window.parent.postMessage({
+        type: "ARCHIVE_GATE_HIT",
+        payload: { game: GAME_CONFIG.name, puzzleNumber: PUZZLE_NUM },
+      }, "*");
+    }
+
+    function fireUpgradeRequested(source = "") {
+      window.parent.postMessage({
+        type: "UPGRADE_REQUESTED",
+        payload: { game: GAME_CONFIG.name, source },
+      }, "*");
+    }
+
+    // ============================================================
+    // LAYER 4: Preroll ad (free users only, before first play)
+    // ============================================================
+    function showPreroll() {
+      return new Promise(resolve => {
+        const screen  = document.getElementById("preroll-screen");
+        const skipBtn = document.getElementById("preroll-skip");
+        const countEl = document.getElementById("preroll-countdown");
+
+        screen.classList.add("active");
+        fireAdRequested("preroll");
+
+        let done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          clearInterval(ticker);
+          screen.classList.remove("active");
+          resolve();
+        }
+
+        _adCallbacks["preroll"] = finish;
+
+        let secs = 5;
+        skipBtn.style.display = "none";
+        countEl.style.display = "inline";
+        countEl.textContent   = `Skip ad in ${secs}s`;
+
+        const ticker = setInterval(() => {
+          secs--;
+          if (secs <= 0) {
+            clearInterval(ticker);
+            countEl.style.display = "none";
+            skipBtn.style.display = "flex";
+          } else {
+            countEl.textContent = `Skip ad in ${secs}s`;
+          }
+        }, 1000);
+
+        skipBtn.addEventListener("click", finish, { once: true });
+      });
+    }
+
+    // ============================================================
+    // LAYER 4: Archive gate (free users on past puzzles)
+    // ============================================================
+    function showArchiveGate() {
+      document.getElementById("archive-gate").classList.add("active");
+    }
+
+    document.getElementById("archive-trial-btn").addEventListener("click", () => {
+      fireUpgradeRequested("archive-gate");
+    });
+
+    document.getElementById("archive-today-btn").addEventListener("click", () => {
+      window.parent.postMessage({
+        type: "NAVIGATE_TODAY",
+        payload: { game: GAME_CONFIG.name },
+      }, "*");
+    });
+
+    // ============================================================
+    // LAYER 4: Upsell modal
+    // ============================================================
+    const upsellModal = document.getElementById("upsell-modal");
+
+    function showUpsellModal({
+      emoji    = "⭐",
+      title    = "",
+      body     = "",
+      ctaLabel = "Start Free Trial",
+      source   = "",
+    } = {}) {
+      document.getElementById("upsell-emoji").textContent = emoji;
+      document.getElementById("upsell-title").textContent = title;
+      document.getElementById("upsell-body").textContent  = body;
+      const ctaBtn = document.getElementById("upsell-cta-btn");
+      ctaBtn.textContent = ctaLabel;
+      ctaBtn.onclick = () => { closeUpsellModal(); fireUpgradeRequested(source); };
+      upsellModal.classList.add("active");
+    }
+
+    function closeUpsellModal() { upsellModal.classList.remove("active"); }
+
+    document.getElementById("upsell-close-btn").addEventListener("click", closeUpsellModal);
+    document.getElementById("upsell-dismiss-btn").addEventListener("click", closeUpsellModal);
+    upsellModal.addEventListener("click", e => { if (e.target === upsellModal) closeUpsellModal(); });
+
+    // ============================================================
+    // LAYER 4: Subscription badge (header)
+    // ============================================================
+    function updateHeaderBadge() {
+      const badge = document.getElementById("subscription-badge");
+      badge.className = "";
+      if (USER_TIER === "subscriber") {
+        badge.textContent = "Subscriber";
+        badge.classList.add("badge-subscriber");
+      } else if (USER_TIER === "trial") {
+        const days = TRIAL_DAYS_LEFT > 0 ? ` · ${TRIAL_DAYS_LEFT}d left` : "";
+        badge.textContent = `Trial${days}`;
+        badge.classList.add("badge-trial");
+      } else {
+        badge.classList.add("badge-free");
+      }
+    }
+
+    // ============================================================
+    // LAYER 4: Result extras (endroll ad + upsell CTA for free users)
+    // ============================================================
+    function showResultExtras() {
+      if (isPaidUser()) return;
+      const endroll = document.getElementById("endroll-ad");
+      endroll.classList.add("active");
+      fireAdRequested("endroll");
+      document.getElementById("result-cta-btn").onclick = () => {
+        fireUpgradeRequested("result-screen");
+      };
+      document.getElementById("result-cta").classList.add("active");
+    }
+
+    // ============================================================
+    // LAYER 4: Streak milestone upsell
+    // ============================================================
+    const STREAK_MILESTONES = [3, 7, 14, 30];
+
+    function checkStreakUpsell(streak) {
+      if (isPaidUser()) return;
+      const lastSeen  = parseInt(localStorage.getItem(LS_STREAK_UPSELL) || "0");
+      const milestone = STREAK_MILESTONES.find(m => streak >= m && m > lastSeen);
+      if (!milestone) return;
+      localStorage.setItem(LS_STREAK_UPSELL, String(milestone));
+      setTimeout(() => {
+        showUpsellModal({
+          emoji:    "🔥",
+          title:    `${streak}-day streak!`,
+          body:     "You're on a roll. Subscribe to go ad-free and unlock the full archive.",
+          ctaLabel: "Start Free Trial",
+          source:   `streak-milestone-${milestone}`,
+        });
+      }, 800);
+    }
+
+    // ============================================================
     // INIT
     // ============================================================
-    function init() {
+    async function init() {
+      // ---- Phase 1: structural setup (runs immediately) ----
       document.getElementById("puzzle-num").textContent = `#${PUZZLE_NUM}`;
       buildBoard();
       buildKeyboard();
       buildHowToContent();
 
-      // Rule 3: check if already played today
       const alreadyPlayed = localStorage.getItem(LS_LAST_PLAYED) === TODAY_UTC;
 
+      // Rule 7: signal ready before waiting for tier
+      fireGameReady(alreadyPlayed);
+
+      // Layer 4: wait up to 1.5s for parent to deliver USER_STATUS
+      await waitForUserStatus(1500);
+
+      // ---- Phase 2: tier-dependent UI ----
+      updateHeaderBadge();
+
+      // Layer 4: archive gate blocks free users on past puzzles
+      if (GAME_CONFIG.isArchive && !isPaidUser()) {
+        showArchiveGate();
+        fireArchiveGateHit();
+        return;
+      }
+
+      // Layer 4: preroll for free users (only on new games)
+      if (!isPaidUser() && !alreadyPlayed) {
+        await showPreroll();
+      }
+
+      // Rule 3: restore already-played state
       if (alreadyPlayed) {
         const savedStr = localStorage.getItem(LS_LAST_RESULT);
         if (savedStr) {
           try {
             restoreState(JSON.parse(savedStr));
-            fireGameReady(true);
             return;
           } catch (err) {
             localStorage.removeItem(LS_LAST_PLAYED);
@@ -2054,9 +2632,6 @@
           }
         }
       }
-
-      // Rule 7: signal ready
-      fireGameReady(false);
 
       // Layer 2B: auto-show how-to on first visit
       if (!localStorage.getItem(LS_SEEN_HOW_TO)) openHowTo();
