@@ -1,3 +1,5 @@
+import { Pool } from '@neondatabase/serverless';
+import { PrismaNeon } from '@prisma/adapter-neon';
 import { PrismaClient } from '@/generated/prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
@@ -5,25 +7,13 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient(): PrismaClient {
-  const dbUrl = process.env.DATABASE_URL ?? '';
-
-  if (dbUrl.startsWith('postgresql://') || dbUrl.startsWith('postgres://')) {
-    // Production: Neon serverless Postgres
-    const { Pool, neonConfig } = require('@neondatabase/serverless');
-    const { PrismaNeon } = require('@prisma/adapter-neon');
-    const ws = require('ws');
-    neonConfig.webSocketConstructor = ws;
-    const pool = new Pool({ connectionString: dbUrl });
-    const adapter = new PrismaNeon(pool);
-    return new PrismaClient({ adapter });
-  } else {
-    // Local dev: SQLite via better-sqlite3
-    const path = require('path');
-    const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
-    const filePath = path.resolve((dbUrl || 'file:./dev.db').replace(/^file:/, ''));
-    const adapter = new PrismaBetterSqlite3({ url: filePath });
-    return new PrismaClient({ adapter });
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL environment variable is not set');
   }
+  const pool = new Pool({ connectionString });
+  const adapter = new PrismaNeon(pool);
+  return new PrismaClient({ adapter });
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
