@@ -1,6 +1,14 @@
 export const metadata = {
-  title: "The Escape — Second Monitor Games",
-  description: "Play today's The Escape. A dark card strategy game on Second Monitor Games.",
+  title:       "The Escape — Daily Card Strategy Puzzle",
+  description: "A daily card strategy puzzle. Reveal anchors, manage your hand, and escape before turns run out. Free to play — new challenge every day.",
+  keywords:    ["daily card game", "card strategy puzzle", "daily strategy game", "card puzzle game online", "free strategy game", "daily brain puzzle"],
+  alternates:  { canonical: "https://secondmonitorgames.com/games/the-escape" },
+  openGraph: {
+    title:       "The Escape — Daily Card Strategy Puzzle",
+    description: "A daily card strategy puzzle. Reveal anchors, manage your hand, escape before turns run out. Free to play.",
+    url:         "https://secondmonitorgames.com/games/the-escape",
+    type:        "website",
+  },
 };
 
 function getTodayLabel() {

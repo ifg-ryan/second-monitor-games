@@ -1,6 +1,19 @@
 export const metadata = {
-  title: "Decode — Second Monitor Games",
-  description: "Play today's Decode. A daily five-letter word puzzle on Second Monitor Games.",
+  title:       "Decode — Free Daily Word Puzzle",
+  description: "Guess the five-letter word in six tries. Free daily word puzzle — new challenge every day, no subscription needed. Play online now.",
+  keywords:    ["daily word puzzle", "free word puzzle game", "five letter word puzzle", "word guessing game", "daily brain puzzle", "free puzzle game online", "word puzzle like Wordle"],
+  alternates:  { canonical: "https://secondmonitorgames.com/games/decode" },
+  openGraph: {
+    title:       "Decode — Free Daily Word Puzzle",
+    description: "Guess the five-letter word in six tries. New puzzle every day — free, no subscription needed.",
+    url:         "https://secondmonitorgames.com/games/decode",
+    type:        "website",
+  },
+  twitter: {
+    card:        "summary_large_image",
+    title:       "Decode — Free Daily Word Puzzle",
+    description: "Guess the five-letter word in six tries. New puzzle every day — free.",
+  },
 };
 
 function getTodayLabel() {
@@ -14,8 +27,34 @@ function getTodayLabel() {
 export default function DecodePage() {
   const today = getTodayLabel();
 
+  const jsonLd = {
+    "@context":           "https://schema.org",
+    "@type":              "VideoGame",
+    "name":               "Decode",
+    "description":        "A free daily five-letter word puzzle game. Guess the word in six tries — green for correct, yellow for wrong position, grey for not in word. New puzzle every day.",
+    "url":                "https://secondmonitorgames.com/games/decode",
+    "applicationCategory": "Game",
+    "genre":              ["Puzzle", "Word Game", "Brain Game"],
+    "gamePlatform":       "Web Browser",
+    "operatingSystem":    "Any",
+    "offers": {
+      "@type":         "Offer",
+      "price":         "0",
+      "priceCurrency": "USD",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name":  "Second Monitor Games",
+      "url":   "https://secondmonitorgames.com",
+    },
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 64px)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── Game info bar ───────────────────────────────────── */}
       <div

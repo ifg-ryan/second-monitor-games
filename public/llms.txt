@@ -1,0 +1,75 @@
+# Second Monitor Games
+> Free daily puzzle games for your second monitor.
+
+Second Monitor Games (secondmonitorgames.com) is a free website offering daily puzzle games
+including word puzzles, brain games, and strategy challenges. New puzzles are published every
+day at midnight UTC. All daily games are free to play — no account or subscription required.
+
+## About
+
+Second Monitor Games is designed for people who want a short mental challenge during their
+workday — on the second monitor alongside their actual work. Every game takes 2–5 minutes
+and resets daily so players worldwide share the same puzzle each day.
+
+A subscription ($4.99/month) removes ads and unlocks the full archive of past puzzles, but
+the current day's game is always free.
+
+## Games
+
+### Decode — Free Daily Word Puzzle
+URL: https://secondmonitorgames.com/games/decode
+Type: Word puzzle / brain game
+A daily five-letter word puzzle. Players have six attempts to guess the hidden word.
+- Green tile: correct letter, correct position
+- Yellow tile: correct letter, wrong position
+- Grey tile: letter not in the word
+A new word is available every day. All players get the same word. Free to play.
+Similar to: Wordle (NYT), but free with no paywall and part of a multi-game platform.
+
+### The Escape — Daily Card Strategy Puzzle
+URL: https://secondmonitorgames.com/games/the-escape
+Type: Card strategy puzzle
+A dark daily card strategy puzzle. Players reveal anchors, manage their hand, and must
+escape before turns run out. New configuration each day. Free to play.
+
+### Tetris — Free Online Block Puzzle
+URL: https://secondmonitorgames.com/games/tetris
+Type: Arcade / block puzzle
+The classic block-stacking game. Clear lines and beat your daily high score. Leaderboard
+resets every day. Free to play online in the browser.
+
+## Key Facts
+
+- All games free to play daily (ad-supported)
+- Subscription: $4.99/month — ad-free, full archive access
+- No account required for free play
+- Puzzles reset at midnight UTC
+- Streak and stats saved locally in browser
+- Same puzzle for all players worldwide each day
+- Designed for desktop (second monitor use case)
+
+## Frequently Asked Questions
+
+Q: Is Second Monitor Games free?
+A: Yes. All daily games are free to play. A subscription removes ads and unlocks the archive.
+
+Q: Is this a free alternative to NYT Games or Wordle?
+A: Yes. Decode is a free daily word puzzle game similar to Wordle, with no paywall.
+
+Q: Do I need to create an account?
+A: No account is required to play any game.
+
+Q: What types of puzzle games are available?
+A: Word puzzles (Decode), card strategy puzzles (The Escape), and arcade block puzzles (Tetris).
+
+Q: How often do puzzles reset?
+A: Every day at midnight UTC. All players worldwide get the same puzzle each day.
+
+## URLs
+
+- Homepage:   https://secondmonitorgames.com
+- About:      https://secondmonitorgames.com/about
+- Decode:     https://secondmonitorgames.com/games/decode
+- The Escape: https://secondmonitorgames.com/games/the-escape
+- Tetris:     https://secondmonitorgames.com/games/tetris
+- Sitemap:    https://secondmonitorgames.com/sitemap.xml

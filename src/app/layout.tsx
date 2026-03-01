@@ -20,14 +20,55 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Second Monitor Games",
+  title: {
+    template: "%s | Second Monitor Games",
+    default:  "Second Monitor Games — Free Daily Puzzle Games",
+  },
   description:
-    "A new game every day. Play free or subscribe for an ad-free experience.",
+    "Free daily puzzle games for your second monitor. A new word puzzle, brain game, and strategy challenge every day — no subscription needed. Play today.",
+  keywords: [
+    "daily puzzle game",
+    "free daily word puzzle",
+    "online puzzle game",
+    "word puzzle game",
+    "daily brain puzzle",
+    "free brain games",
+    "puzzle game at work",
+    "five letter word puzzle",
+    "daily puzzle game free",
+    "word puzzle online free",
+    "games to play at work",
+    "brain puzzle game online",
+    "puzzle game like Wordle",
+    "free word puzzle game",
+  ],
+  metadataBase: new URL("https://secondmonitorgames.com"),
+  alternates: {
+    canonical: "https://secondmonitorgames.com",
+  },
   openGraph: {
-    title: "Second Monitor Games",
-    description:
-      "A new game every day. Play free or subscribe for an ad-free experience.",
-    siteName: "Second Monitor Games",
+    title:       "Second Monitor Games — Free Daily Puzzle Games",
+    description: "Free daily puzzle games. A new word puzzle, brain game, and strategy challenge every day — no subscription needed.",
+    siteName:    "Second Monitor Games",
+    url:         "https://secondmonitorgames.com",
+    type:        "website",
+    locale:      "en_US",
+  },
+  twitter: {
+    card:        "summary_large_image",
+    title:       "Second Monitor Games — Free Daily Puzzle Games",
+    description: "Free daily puzzle games. New word puzzles and brain games every day — no subscription needed.",
+    site:        "@SecondMonitorGames",
+  },
+  robots: {
+    index:            true,
+    follow:           true,
+    googleBot: {
+      index:               true,
+      follow:              true,
+      "max-image-preview": "large",
+      "max-snippet":       -1,
+    },
   },
 };
 
@@ -43,10 +84,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/*
-          Inline script runs before first paint to apply the saved theme
-          and prevent a flash of the wrong theme on load.
-        */}
+        {/* Theme init — runs before first paint to prevent flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -58,6 +96,34 @@ export default function RootLayout({
                 );
               } catch (e) {}
             `,
+          }}
+        />
+        {/* JSON-LD — WebSite + Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type":       "WebSite",
+                  "@id":         "https://secondmonitorgames.com/#website",
+                  "name":        "Second Monitor Games",
+                  "url":         "https://secondmonitorgames.com",
+                  "description": "Free daily puzzle games. A new word puzzle, brain game, and strategy challenge every day.",
+                  "inLanguage":  "en-US",
+                },
+                {
+                  "@type":  "Organization",
+                  "@id":    "https://secondmonitorgames.com/#organization",
+                  "name":   "Second Monitor Games",
+                  "url":    "https://secondmonitorgames.com",
+                  "sameAs": [
+                    "https://twitter.com/SecondMonitorGames",
+                  ],
+                },
+              ],
+            }),
           }}
         />
       </head>

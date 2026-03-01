@@ -1,8 +1,16 @@
 import TetrisClient from './TetrisClient';
 
 export const metadata = {
-  title: 'Tetris — Second Monitor Games',
-  description: 'Play today\'s Tetris. A new game every day on Second Monitor Games.',
+  title:       "Tetris — Free Online Block Puzzle Game",
+  description: "The classic block puzzle game, free to play online. Clear lines, beat your daily high score, and survive as long as you can. New challenge every day.",
+  keywords:    ["tetris online", "free tetris game", "block puzzle game", "online puzzle game free", "arcade puzzle game", "classic block game"],
+  alternates:  { canonical: "https://secondmonitorgames.com/games/tetris" },
+  openGraph: {
+    title:       "Tetris — Free Online Block Puzzle Game",
+    description: "The classic block puzzle game, free to play online. Clear lines and beat your daily high score.",
+    url:         "https://secondmonitorgames.com/games/tetris",
+    type:        "website",
+  },
 };
 
 function getTodayLabel() {

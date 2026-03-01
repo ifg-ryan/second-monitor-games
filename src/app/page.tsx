@@ -1,4 +1,17 @@
+import type { Metadata } from "next";
 import GameCard from "@/components/game/GameCard";
+
+export const metadata: Metadata = {
+  title:       "Free Daily Puzzle Games — Play Today",
+  description: "Free daily puzzle games for your second monitor. New word puzzles, brain games, and strategy challenges every day. No subscription needed — play free online.",
+  alternates:  { canonical: "https://secondmonitorgames.com" },
+  openGraph: {
+    title:       "Second Monitor Games — Free Daily Puzzle Games",
+    description: "New word puzzles, brain games, and strategy challenges every day. Free to play — no subscription needed.",
+    url:         "https://secondmonitorgames.com",
+    type:        "website",
+  },
+};
 
 function getTodayLabel() {
   return new Date().toLocaleDateString("en-US", {
@@ -65,8 +78,39 @@ const GAMES = [
 export default function Home() {
   const today = getTodayLabel();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type":    "ItemList",
+    "name":     "Free Daily Puzzle Games",
+    "url":      "https://secondmonitorgames.com",
+    "itemListElement": [
+      {
+        "@type":    "ListItem",
+        "position": 1,
+        "name":     "The Escape — Daily Card Strategy Puzzle",
+        "url":      "https://secondmonitorgames.com/games/the-escape",
+      },
+      {
+        "@type":    "ListItem",
+        "position": 2,
+        "name":     "Decode — Free Daily Word Puzzle",
+        "url":      "https://secondmonitorgames.com/games/decode",
+      },
+      {
+        "@type":    "ListItem",
+        "position": 3,
+        "name":     "Tetris — Daily Arcade Puzzle",
+        "url":      "https://secondmonitorgames.com/games/tetris",
+      },
+    ],
+  };
+
   return (
     <div style={{ background: "var(--bg)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── Date strip ───────────────────────────────────────── */}
       <div
