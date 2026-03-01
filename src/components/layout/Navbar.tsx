@@ -80,19 +80,6 @@ export default function Navbar() {
           >
             🏆 Leaderboard
           </a>
-          <a
-            href="/pricing"
-            className="nav-link-muted"
-            style={{
-              borderRadius: "6px",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              padding: "8px 16px",
-              textDecoration: "none",
-            }}
-          >
-            Pricing
-          </a>
         </nav>
 
         {/* Right Actions */}
