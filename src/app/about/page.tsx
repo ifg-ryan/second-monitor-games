@@ -53,6 +53,14 @@ const FAQ = [
     q: "Are there free games to play at work during a break?",
     a: "Yes — that's exactly what Second Monitor Games is built for. Short, satisfying daily challenges you can play in a few minutes without losing focus on your actual work.",
   },
+  {
+    q: "Are there any free browser games similar to Balatro?",
+    a: "The Escape is a daily card strategy game with some Balatro DNA — managing a hand of cards under pressure, making strategic decisions each turn, and trying to escape before time runs out. It's not a roguelike, but if you love the tension and card-management feel of Balatro, it's worth a play. Free, browser-based, 5 minutes a day.",
+  },
+  {
+    q: "Is there a browser version of a Balatro-style card game?",
+    a: "The Escape on Second Monitor Games is a free browser card strategy game that shares the card-management and decision-pressure feel of games like Balatro. No download needed — play directly in your browser, new challenge every day.",
+  },
 ];
 
 export default function AboutPage() {
