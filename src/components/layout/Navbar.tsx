@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function Navbar() {
@@ -83,34 +84,59 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3 shrink-0">
-          <a
-            href="/login"
-            className="hidden sm:block nav-link-muted"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              textDecoration: "none",
-            }}
-          >
-            Log in
-          </a>
-          <a
-            href="/pricing"
-            style={{
-              background: "var(--accent)",
-              color: "#0d0d18",
-              borderRadius: "8px",
-              fontSize: "0.875rem",
-              fontWeight: 700,
-              padding: "8px 16px",
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              transition: "opacity 0.2s",
-            }}
-            className="hover:opacity-90"
-          >
-            Subscribe — $4.99/mo
-          </a>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                className="hidden sm:block nav-link-muted"
+                style={{
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Log in
+              </button>
+            </SignInButton>
+            <a
+              href="/pricing"
+              style={{
+                background: "var(--accent)",
+                color: "#0d0d18",
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                fontWeight: 700,
+                padding: "8px 16px",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                transition: "opacity 0.2s",
+              }}
+              className="hover:opacity-90"
+            >
+              Subscribe — $4.99/mo
+            </a>
+          </SignedOut>
+          <SignedIn>
+            <a
+              href="/pricing"
+              style={{
+                background: "var(--accent)",
+                color: "#0d0d18",
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                fontWeight: 700,
+                padding: "8px 16px",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                transition: "opacity 0.2s",
+              }}
+              className="hover:opacity-90"
+            >
+              Subscribe — $4.99/mo
+            </a>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
           <ThemeToggle />
         </div>
 
