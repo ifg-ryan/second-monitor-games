@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tetris</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --body-bg:  #1a1a2e;
+      --panel-bg: #16213e;
+      --border:   #444;
+      --accent:   #00c8ff;
+      --text:     #e0e0e0;
+      --muted:    #888;
+      --btn-bg:   #00c8ff;
+      --btn-text: #0d0d1a;
+      --font:     'Courier New', monospace;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--body-bg);
+      font-family: var(--font);
+      color: var(--text);
+      transition: background 0.4s;
+    }
+
+    /* ─── Menu ─────────────────────────────────────────────── */
+    #menu-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      padding: 40px 32px;
+      text-align: center;
+      width: 560px;
+      max-width: 100vw;
+    }
+
+    #menu-title {
+      font-size: 54px;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 0 24px var(--accent);
+      transition: color 0.4s, text-shadow 0.4s;
+    }
+
+    #menu-subtitle {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+      transition: color 0.4s;
+    }
+
+    /* Name input */
+    #name-section { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+
+    #name-input {
+      padding: 10px 20px;
+      font-size: 15px;
+      font-family: var(--font);
+      background: var(--panel-bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      outline: none;
+      width: 280px;
+      transition: border-color 0.2s, background 0.4s, color 0.4s;
+    }
+
+    #name-input:focus { border-color: var(--accent); }
+    #name-input::placeholder { color: var(--muted); opacity: 0.7; }
+
+    #name-greeting {
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--accent);
+      min-height: 20px;
+      opacity: 0;
+      transition: opacity 0.3s, color 0.4s;
+    }
+
+    #name-greeting.visible { opacity: 1; }
+
+    /* Style cards */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      transition: color 0.4s;
+    }
+
+    #style-cards { display: flex; gap: 14px; }
+
+    .style-card {
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 14px;
+      padding: 16px 12px;
+      width: 144px;
+      text-align: center;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      user-select: none;
+    }
+
+    .style-card:hover { transform: translateY(-4px); }
+
+    .card-preview {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      border-radius: 7px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3px;
+      padding: 5px;
+    }
+
+    .card-preview span { border-radius: 3px; }
+    .card-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; }
+    .card-desc { font-size: 10px; line-height: 1.4; opacity: 0.65; }
+
+    #menu-start-btn {
+      padding: 13px 50px;
+      font-size: 15px;
+      font-family: var(--font);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: opacity 0.15s, transform 0.12s;
+    }
+
+    #menu-start-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    .menu-hint { font-size: 10px; color: var(--muted); line-height: 2.2; transition: color 0.4s; }
+    .menu-hint em { font-style: normal; color: var(--accent); transition: color 0.4s; }
+
+    /* Leaderboard (menu) */
+    #lb-section { width: 100%; }
+
+    #lb-table {
+      max-height: 218px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.4s;
+    }
+
+    #lb-table::-webkit-scrollbar { width: 5px; }
+    #lb-table::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .lb-row {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 11px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s;
+    }
+
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+    .lb-row.lb-you {
+      background: rgba(0,0,0,0) !important;
+      border-left: 3px solid var(--accent);
+    }
+
+    .lb-rank { width: 28px; font-size: 10px; color: var(--muted); flex-shrink: 0; }
+    .lb-rank.gold   { color: #ffd700; font-weight: bold; }
+    .lb-rank.silver { color: #c0c0c0; font-weight: bold; }
+    .lb-rank.bronze { color: #cd7f32; font-weight: bold; }
+
+    .lb-name  { flex: 1; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 6px; }
+    .lb-you .lb-name { color: var(--accent); }
+
+    .lb-score { width: 68px; text-align: right; color: var(--accent); font-weight: bold; font-size: 12px; flex-shrink: 0; }
+    .lb-meta  { width: 76px; text-align: right; color: var(--muted); font-size: 10px; flex-shrink: 0; }
+
+    /* ─── Game Screen ────────────────────────────────────────── */
+    #game-screen { display: none; gap: 18px; align-items: flex-start; }
+    #game-screen.active { display: flex; }
+    #game-container { position: relative; }
+
+    #board {
+      display: block;
+      border: 2px solid var(--border);
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 134px;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .panel h3 {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 3px;
+      transition: color 0.4s;
+    }
+
+    .panel .value {
+      font-size: 21px;
+      font-weight: bold;
+      color: var(--accent);
+      transition: color 0.4s;
+    }
+
+    #player-panel .value {
+      font-size: 13px;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+
+    #next-canvas { display: block; margin-top: 7px; }
+
+    #back-btn {
+      padding: 7px;
+      font-size: 10px;
+      font-family: var(--font);
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    #back-btn:hover { color: var(--text); border-color: var(--text); }
+
+    /* ─── In-game Overlay ─────────────────────────────────────── */
+    #overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.86);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      border: 2px solid var(--border);
+      padding: 0 12px;
+    }
+
+    #overlay h1 {
+      font-size: 25px;
+      color: var(--accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      transition: color 0.4s;
+    }
+
+    #overlay p {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      transition: color 0.4s;
+    }
+
+    #overlay .big   { font-size: 18px; color: var(--text); transition: color 0.4s; }
+    #overlay .rank  { font-size: 13px; color: var(--accent); font-weight: bold; transition: color 0.4s; }
+
+    /* Mini leaderboard inside overlay */
+    #overlay-lb {
+      width: 100%;
+      font-size: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 0;
+      max-height: 130px;
+      overflow-y: auto;
+    }
+
+    #overlay-lb .lb-row { padding: 3px 8px; font-size: 10px; }
+
+    .gbtn {
+      padding: 9px 24px;
+      font-size: 12px;
+      font-family: var(--font);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: opacity 0.15s;
+    }
+
+    .gbtn:hover { opacity: 0.82; }
+
+    .ctrl { font-size: 10px; color: var(--muted); line-height: 2; transition: color 0.4s; }
+    .ctrl em { font-style: normal; color: var(--accent); transition: color 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ MENU ═══════════════════ -->
+<div id="menu-screen">
+  <div>
+    <div id="menu-title">TETRIS</div>
+    <div id="menu-subtitle">Stack · Clear · Score</div>
+  </div>
+
+  <div id="name-section">
+    <input id="name-input" type="text" maxlength="20"
+           placeholder="Enter your name to play..." autocomplete="off" spellcheck="false" />
+    <div id="name-greeting"></div>
+  </div>
+
+  <div>
+    <div class="section-label">Choose Your Style</div>
+    <div id="style-cards"></div>
+  </div>
+
+  <button id="menu-start-btn">Start Game</button>
+
+  <p class="menu-hint">
+    <em>← →</em> Move &nbsp; <em>↑</em> Rotate &nbsp; <em>↓</em> Soft Drop
+    &nbsp; <em>Space</em> Hard Drop &nbsp; <em>P</em> Pause
+  </p>
+
+  <div id="lb-section">
+    <div class="section-label">Leaderboard</div>
+    <div id="lb-table"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ GAME ═══════════════════ -->
+<div id="game-screen">
+  <div id="game-container">
+    <canvas id="board" width="300" height="600"></canvas>
+    <div id="overlay"></div>
+  </div>
+  <div id="sidebar">
+    <div class="panel" id="player-panel">
+      <h3>Player</h3>
+      <div class="value" id="player-name-display">---</div>
+    </div>
+    <div class="panel"><h3>Score</h3><div class="value" id="score-val">0</div></div>
+    <div class="panel"><h3>Level</h3><div class="value" id="level-val">1</div></div>
+    <div class="panel"><h3>Lines</h3><div class="value" id="lines-val">0</div></div>
+    <div class="panel"><h3>Next</h3><canvas id="next-canvas" width="120" height="80"></canvas></div>
+    <button id="back-btn">← Menu</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// THEMES
+// ═══════════════════════════════════════════════════════════════
+
+const THEMES = {
+  cyberpunk: {
+    id: 'cyberpunk', name: 'Neon Cyberpunk', desc: 'Electric grid & neon glow',
+    vars: {
+      '--body-bg':  '#04040f', '--panel-bg': '#0a0a20',
+      '--border':   '#00ff41', '--accent':   '#00ff41',
+      '--text':     '#ccffcc', '--muted':    '#2a7a3a',
+      '--btn-bg':   '#00ff41', '--btn-text': '#000',
+      '--font':     "'Courier New', monospace",
+    },
+    boardBg: '#06060f', gridColor: '#0b1f0b',
+    boardGlow: '0 0 28px rgba(0,255,65,0.35)',
+    pieces: { I:'#00ffff', O:'#ffff00', T:'#ff00ff', S:'#00ff41', Z:'#ff1133', J:'#1155ff', L:'#ff8800' },
+    particleColors: ['#00ff41','#ff00ff','#00ffff','#fff','#ffff00','#ff1133'],
+    cellStyle: 'neon',
+    cardBg: '#0a0a20',
+    swatches: ['#00ff41','#ff00ff','#00ffff','#ffff00','#ff1133','#1155ff','#ff8800','#ccffcc','#0b1f0b'],
+  },
+  wood: {
+    id: 'wood', name: 'Old World Wood', desc: 'Carved timber, rustic charm',
+    vars: {
+      '--body-bg':  '#160c04', '--panel-bg': '#2e1a0a',
+      '--border':   '#7a4e28', '--accent':   '#e0a030',
+      '--text':     '#f0d898', '--muted':    '#9a7040',
+      '--btn-bg':   '#7a4e28', '--btn-text': '#f8ecd0',
+      '--font':     "Georgia, 'Times New Roman', serif",
+    },
+    boardBg: '#200e04', gridColor: '#2c1208',
+    boardGlow: '4px 4px 16px rgba(0,0,0,0.7)',
+    pieces: { I:'#c8a050', O:'#cc5522', T:'#884422', S:'#486030', Z:'#882020', J:'#304468', L:'#b86010' },
+    particleColors: ['#e0a030','#f0d898','#ffcc55','#cc5522','#f8ecd0','#c8a050'],
+    cellStyle: 'wood',
+    cardBg: '#2e1a0a',
+    swatches: ['#c8a050','#cc5522','#884422','#486030','#882020','#304468','#b86010','#e0a030','#f0d898'],
+  },
+  bubblegum: {
+    id: 'bubblegum', name: 'Bubble Gum Pop', desc: 'Sweet, bouncy & colourful',
+    vars: {
+      '--body-bg':  '#ffd6ea', '--panel-bg': '#ffffff',
+      '--border':   '#ff69b4', '--accent':   '#ff1493',
+      '--text':     '#cc006e', '--muted':    '#dd88aa',
+      '--btn-bg':   '#ff1493', '--btn-text': '#ffffff',
+      '--font':     "'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive",
+    },
+    boardBg: '#fff5fa', gridColor: '#ffd6ea',
+    boardGlow: '0 6px 24px rgba(255,105,180,0.4)',
+    pieces: { I:'#00aaff', O:'#ffcc00', T:'#cc44cc', S:'#00cc66', Z:'#ff3344', J:'#4455ee', L:'#ff8800' },
+    particleColors: ['#ff69b4','#ffcc00','#cc44cc','#00aaff','#ff1493','#ffffff','#00cc66'],
+    cellStyle: 'bubble',
+    cardBg: '#fff5fa',
+    swatches: ['#ff69b4','#ffcc00','#cc44cc','#00aaff','#ff3344','#4455ee','#ff8800','#ff1493','#00cc66'],
+  },
+};
+
+let currentTheme = THEMES.cyberpunk;
+
+function applyTheme(id) {
+  currentTheme = THEMES[id];
+  const root = document.documentElement;
+  for (const [k, v] of Object.entries(currentTheme.vars)) root.style.setProperty(k, v);
+  const boardEl = document.getElementById('board');
+  if (boardEl) boardEl.style.boxShadow = currentTheme.boardGlow;
+  document.querySelectorAll('.style-card').forEach(card => {
+    const t = THEMES[card.dataset.theme];
+    const sel = card.dataset.theme === id;
+    card.style.borderColor = sel ? t.vars['--accent'] : 'transparent';
+    card.style.boxShadow   = sel ? `0 0 14px ${t.vars['--accent']}` : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════════════════════════════
+
+const DEFAULT_LEADERBOARD = [
+  { name: 'TetrisMaximus',       score: 28800, lines: 68, level: 7, you: false },
+  { name: 'BlockDropper_99',     score: 24600, lines: 58, level: 6, you: false },
+  { name: 'QuantumStacker',      score: 21200, lines: 50, level: 6, you: false },
+  { name: 'GridGoblin_X',        score: 17900, lines: 43, level: 5, you: false },
+  { name: 'ClearMaster3K',       score: 15500, lines: 37, level: 4, you: false },
+  { name: 'Professor_Plop',      score: 11800, lines: 28, level: 3, you: false },
+  { name: 'Dropazoidal_Dan',     score: 9400,  lines: 23, level: 3, you: false },
+  { name: 'BlockBusting_Bertha', score: 7200,  lines: 18, level: 2, you: false },
+  { name: 'LineClear_Larry',     score: 4600,  lines: 12, level: 2, you: false },
+  { name: 'NeonNinja_88',        score: 2900,  lines:  7, level: 1, you: false },
+  { name: 'SpeedStack_Suzy',     score: 1800,  lines:  5, level: 1, you: false },
+  { name: 'S_Piece_Sally',       score:  900,  lines:  3, level: 1, you: false },
+];
+
+let leaderboard = [];
+
+function loadLeaderboard() {
+  try {
+    const saved = localStorage.getItem('tetris-lb');
+    leaderboard = saved ? JSON.parse(saved) : DEFAULT_LEADERBOARD.map(e => ({ ...e }));
+  } catch {
+    leaderboard = DEFAULT_LEADERBOARD.map(e => ({ ...e }));
+  }
+}
+
+function saveLeaderboard() {
+  try { localStorage.setItem('tetris-lb', JSON.stringify(leaderboard)); } catch { /* quota */ }
+}
+
+// Returns the 1-based rank the entry landed at (after insertion)
+function addToLeaderboard(name, sc, ln, lv) {
+  // Clear any old "you" flags so only the latest run is highlighted
+  leaderboard.forEach(e => { e.you = false; });
+  leaderboard.push({ name, score: sc, lines: ln, level: lv, you: true });
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, 15);
+  saveLeaderboard();
+  const idx = leaderboard.findIndex(e => e.you);
+  return idx === -1 ? -1 : idx + 1; // 1-based, or -1 if sliced out of top 15
+}
+
+// Prevent XSS when injecting user-supplied text into innerHTML
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function rankClass(i) {
+  if (i === 0) return 'gold';
+  if (i === 1) return 'silver';
+  if (i === 2) return 'bronze';
+  return '';
+}
+
+function lbRowHTML(entry, index) {
+  const you  = entry.you ? ' lb-you' : '';
+  const rc   = rankClass(index);
+  const rnk  = `<span class="lb-rank ${rc}">#${index + 1}</span>`;
+  const name = `<span class="lb-name">${escapeHTML(entry.name)}</span>`;
+  const sc   = `<span class="lb-score">${entry.score.toLocaleString()}</span>`;
+  const meta = `<span class="lb-meta">Lv${entry.level} · ${entry.lines}L</span>`;
+  return `<div class="lb-row${you}">${rnk}${name}${sc}${meta}</div>`;
+}
+
+function renderLeaderboard(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = leaderboard.map((e, i) => lbRowHTML(e, i)).join('');
+  // Scroll the "you" row into view in the menu table
+  if (containerId === 'lb-table') {
+    const youRow = el.querySelector('.lb-you');
+    if (youRow) youRow.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MENU BUILD
+// ═══════════════════════════════════════════════════════════════
+
+let playerName = 'Player';
+
+function buildMenu() {
+  // Style cards
+  const wrap = document.getElementById('style-cards');
+  for (const theme of Object.values(THEMES)) {
+    const card = document.createElement('div');
+    card.className = 'style-card';
+    card.dataset.theme = theme.id;
+    card.style.background = theme.cardBg;
+    card.style.color = theme.vars['--text'];
+
+    const preview = document.createElement('div');
+    preview.className = 'card-preview';
+    preview.style.background = theme.vars['--panel-bg'];
+    theme.swatches.forEach(col => {
+      const s = document.createElement('span');
+      s.style.background = col;
+      preview.appendChild(s);
+    });
+
+    card.appendChild(preview);
+    card.insertAdjacentHTML('beforeend',
+      `<div class="card-name">${theme.name}</div><div class="card-desc">${theme.desc}</div>`);
+    card.addEventListener('click', () => applyTheme(theme.id));
+    wrap.appendChild(card);
+  }
+  applyTheme('cyberpunk');
+
+  // Name input — live greeting, name persistence
+  const nameInput    = document.getElementById('name-input');
+  const greetingEl   = document.getElementById('name-greeting');
+
+  const savedName = localStorage.getItem('tetris-player-name') || '';
+  if (savedName) {
+    nameInput.value = savedName;
+    playerName = savedName;
+    greetingEl.textContent = `Welcome back, ${savedName}!`;
+    greetingEl.classList.add('visible');
+  }
+
+  nameInput.addEventListener('input', () => {
+    const v = nameInput.value.trim();
+    playerName = v || 'Player';
+    if (v) {
+      greetingEl.textContent = `Welcome, ${v}!`;
+      greetingEl.classList.add('visible');
+      localStorage.setItem('tetris-player-name', v);
+    } else {
+      greetingEl.classList.remove('visible');
+      localStorage.removeItem('tetris-player-name');
+    }
+  });
+
+  // Load leaderboard and render
+  loadLeaderboard();
+  renderLeaderboard('lb-table');
+}
+
+document.getElementById('menu-start-btn').addEventListener('click', () => {
+  // Sync playerName from input at start time (handles empty input gracefully)
+  const raw = document.getElementById('name-input').value.trim();
+  playerName = raw || 'Player';
+  document.getElementById('menu-screen').style.display = 'none';
+  document.getElementById('game-screen').classList.add('active');
+  startGame();
+});
+
+document.getElementById('back-btn').addEventListener('click', () => {
+  stopGame();
+  document.getElementById('game-screen').classList.remove('active');
+  const ms = document.getElementById('menu-screen');
+  ms.style.display = 'flex';
+  renderLeaderboard('lb-table');
+});
+
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════════════
+
+const COLS = 10;
+const ROWS = 20;
+const CELL = 30;
+
+const PIECE_KEYS = ['I','O','T','S','Z','J','L'];
+
+const SHAPES = {
+  I: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+  O: [[0,1,1,0],[0,1,1,0],[0,0,0,0],[0,0,0,0]],
+  T: [[0,1,0,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]],
+  S: [[0,1,1,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]],
+  Z: [[1,1,0,0],[0,1,1,0],[0,0,0,0],[0,0,0,0]],
+  J: [[1,0,0,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]],
+  L: [[0,0,1,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]],
+};
+
+const LINE_POINTS = [0, 100, 300, 500, 800];
+
+// ═══════════════════════════════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════════════════════════════
+
+let board       = [];
+let current     = null;
+let next        = null;
+let score       = 0;
+let lines       = 0;
+let level       = 1;
+let gameRunning = false;
+let paused      = false;
+let lastDrop    = 0;
+let rafId       = null;
+
+// ═══════════════════════════════════════════════════════════════
+// PARTICLE SYSTEM
+// ═══════════════════════════════════════════════════════════════
+
+let particles = [];
+
+function spawnLineParticles(rows) {
+  for (const row of rows) {
+    const py   = row * CELL + CELL / 2;
+    const cols = currentTheme.particleColors;
+    for (let i = 0; i < 20; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const spd   = 2.5 + Math.random() * 4.5;
+      particles.push({
+        x: Math.random() * (COLS * CELL),
+        y: py,
+        vx: Math.cos(angle) * spd,
+        vy: Math.sin(angle) * spd - 2.5,
+        color: cols[Math.floor(Math.random() * cols.length)],
+        alpha: 1,
+        size:  3 + Math.random() * 4.5,
+        decay: 0.026 + Math.random() * 0.018,
+        square: Math.random() > 0.5,
+      });
+    }
+  }
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x  += p.vx;
+    p.y  += p.vy;
+    p.vy += 0.18;
+    p.vx *= 0.97;
+    p.alpha -= p.decay;
+    if (p.alpha <= 0) particles.splice(i, 1);
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    ctx.globalAlpha = Math.max(0, p.alpha);
+    ctx.fillStyle   = p.color;
+    if (p.square) {
+      ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CANVAS
+// ═══════════════════════════════════════════════════════════════
+
+const boardCanvas = document.getElementById('board');
+const ctx         = boardCanvas.getContext('2d');
+const nextCanvas  = document.getElementById('next-canvas');
+const nctx        = nextCanvas.getContext('2d');
+const overlay     = document.getElementById('overlay');
+
+// ═══════════════════════════════════════════════════════════════
+// CELL DRAWING — 3 styles
+// ═══════════════════════════════════════════════════════════════
+
+function rrPath(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y,     x + w, y + h, r);
+  c.arcTo(x + w, y + h, x,     y + h, r);
+  c.arcTo(x,     y + h, x,     y,     r);
+  c.arcTo(x,     y,     x + w, y,     r);
+  c.closePath();
+}
+
+function cellNeon(c, gx, gy, col, alpha) {
+  c.globalAlpha = alpha;
+  const px = gx * CELL + 1, py = gy * CELL + 1, w = CELL - 2, h = CELL - 2;
+  c.shadowColor = col;
+  c.shadowBlur  = alpha > 0.4 ? 8 : 0;
+  c.fillStyle   = col;
+  c.fillRect(px, py, w, h);
+  c.shadowBlur  = 0;
+  c.shadowColor = 'transparent';
+  c.fillStyle   = 'rgba(0,0,0,0.52)';
+  c.fillRect(px + 3, py + 3, w - 6, h - 6);
+  c.strokeStyle = col;
+  c.lineWidth   = 0.8;
+  c.strokeRect(px + 3.5, py + 3.5, w - 7, h - 7);
+  c.globalAlpha = 1;
+}
+
+function cellWood(c, gx, gy, col, alpha) {
+  c.globalAlpha = alpha;
+  const px = gx * CELL + 1, py = gy * CELL + 1, w = CELL - 2, h = CELL - 2;
+  c.fillStyle = col;
+  c.fillRect(px, py, w, h);
+  c.strokeStyle = 'rgba(0,0,0,0.13)';
+  c.lineWidth   = 1;
+  for (let i = 0; i < 3; i++) {
+    const gy2 = py + 5 + i * 8;
+    c.beginPath();
+    c.moveTo(px + 2, gy2);
+    c.bezierCurveTo(px + w * 0.3, gy2 - 1, px + w * 0.7, gy2 + 1, px + w - 2, gy2);
+    c.stroke();
+  }
+  c.fillStyle = 'rgba(255,255,255,0.28)';
+  c.fillRect(px, py, w, 4);
+  c.fillRect(px, py, 4, h);
+  c.fillStyle = 'rgba(0,0,0,0.28)';
+  c.fillRect(px, py + h - 4, w, 4);
+  c.fillRect(px + w - 4, py, 4, h);
+  c.globalAlpha = 1;
+}
+
+function cellBubble(c, gx, gy, col, alpha) {
+  c.globalAlpha = alpha;
+  const px = gx * CELL + 2, py = gy * CELL + 2, w = CELL - 4, h = CELL - 4, r = 7;
+  c.fillStyle = 'rgba(0,0,0,0.18)';
+  rrPath(c, px + 2, py + 3, w, h, r);
+  c.fill();
+  c.fillStyle = col;
+  rrPath(c, px, py, w, h, r);
+  c.fill();
+  c.fillStyle = 'rgba(255,255,255,0.46)';
+  rrPath(c, px + 3, py + 3, w - 6, h * 0.42, r - 2);
+  c.fill();
+  c.globalAlpha = 1;
+}
+
+function drawCell(c, gx, gy, col, alpha = 1) {
+  switch (currentTheme.cellStyle) {
+    case 'neon':   cellNeon(c, gx, gy, col, alpha);   break;
+    case 'wood':   cellWood(c, gx, gy, col, alpha);   break;
+    case 'bubble': cellBubble(c, gx, gy, col, alpha); break;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BOARD LOGIC
+// ═══════════════════════════════════════════════════════════════
+
+function createBoard() {
+  return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+}
+
+function randomPiece() {
+  const key = PIECE_KEYS[Math.floor(Math.random() * PIECE_KEYS.length)];
+  return {
+    shape: SHAPES[key].map(r => [...r]),
+    color: currentTheme.pieces[key],
+    x: Math.floor(COLS / 2) - 2,
+    y: 0,
+  };
+}
+
+function rotateShape(s) {
+  const n = s.length;
+  const out = Array.from({ length: n }, () => Array(n).fill(0));
+  for (let r = 0; r < n; r++)
+    for (let c = 0; c < n; c++)
+      out[c][n - 1 - r] = s[r][c];
+  return out;
+}
+
+function collides(shape, x, y, b) {
+  for (let r = 0; r < shape.length; r++)
+    for (let c = 0; c < shape[r].length; c++) {
+      if (!shape[r][c]) continue;
+      const nx = x + c, ny = y + r;
+      if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
+      if (ny >= 0 && b[ny][nx]) return true;
+    }
+  return false;
+}
+
+// Two-pass clear so particle Y positions are correct
+function clearLines() {
+  const full = [];
+  for (let r = 0; r < ROWS; r++)
+    if (board[r].every(c => c !== null)) full.push(r);
+  if (!full.length) return;
+
+  spawnLineParticles(full);
+
+  for (let i = full.length - 1; i >= 0; i--) {
+    board.splice(full[i], 1);
+    board.unshift(Array(COLS).fill(null));
+  }
+
+  const cleared = full.length;
+  lines  += cleared;
+  score  += LINE_POINTS[Math.min(cleared, 4)] * level;
+  level   = Math.floor(lines / 10) + 1;
+  updateHUD();
+}
+
+function lockPiece() {
+  for (let r = 0; r < current.shape.length; r++)
+    for (let c = 0; c < current.shape[r].length; c++)
+      if (current.shape[r][c])
+        board[current.y + r][current.x + c] = current.color;
+  clearLines();
+  spawnPiece();
+}
+
+function spawnPiece() {
+  current = next || randomPiece();
+  next    = randomPiece();
+  drawNextPiece();
+  if (collides(current.shape, current.x, current.y, board)) {
+    endGame();
+    return;
+  }
+}
+
+function ghostY() {
+  let gy = current.y;
+  while (!collides(current.shape, current.x, gy + 1, board)) gy++;
+  return gy;
+}
+
+function moveLeft()  { if (!collides(current.shape, current.x - 1, current.y, board)) current.x--; }
+function moveRight() { if (!collides(current.shape, current.x + 1, current.y, board)) current.x++; }
+
+function moveDown() {
+  if (!collides(current.shape, current.x, current.y + 1, board)) { current.y++; return true; }
+  lockPiece();
+  return false;
+}
+
+function rotate() {
+  const rot = rotateShape(current.shape);
+  for (const k of [0, -1, 1, -2, 2])
+    if (!collides(rot, current.x + k, current.y, board)) {
+      current.shape = rot; current.x += k; return;
+    }
+}
+
+function hardDrop() {
+  while (!collides(current.shape, current.x, current.y + 1, board)) {
+    current.y++;
+    score += 2;
+  }
+  lockPiece();
+  updateHUD();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DRAWING
+// ═══════════════════════════════════════════════════════════════
+
+function drawGrid() {
+  ctx.strokeStyle = currentTheme.gridColor;
+  ctx.lineWidth   = 0.5;
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++)
+      ctx.strokeRect(c * CELL, r * CELL, CELL, CELL);
+}
+
+function draw() {
+  ctx.fillStyle = currentTheme.boardBg;
+  ctx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
+
+  if (currentTheme.cellStyle === 'wood') {
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+    ctx.lineWidth = 1;
+    for (let y = 4; y < boardCanvas.height; y += 7) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(boardCanvas.width, y); ctx.stroke();
+    }
+  }
+
+  drawGrid();
+
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++)
+      if (board[r][c]) drawCell(ctx, c, r, board[r][c]);
+
+  if (current) {
+    const gy = ghostY();
+    for (let r = 0; r < current.shape.length; r++)
+      for (let c = 0; c < current.shape[r].length; c++)
+        if (current.shape[r][c]) drawCell(ctx, current.x + c, gy + r, current.color, 0.14);
+    for (let r = 0; r < current.shape.length; r++)
+      for (let c = 0; c < current.shape[r].length; c++)
+        if (current.shape[r][c]) drawCell(ctx, current.x + c, current.y + r, current.color);
+  }
+
+  drawParticles();
+}
+
+function drawNextPiece() {
+  nctx.fillStyle = currentTheme.vars['--panel-bg'];
+  nctx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+  if (!next) return;
+
+  const cs = 20;
+  const ox = Math.floor((nextCanvas.width  / cs - 4) / 2);
+  const oy = Math.floor((nextCanvas.height / cs - 4) / 2);
+
+  for (let r = 0; r < next.shape.length; r++)
+    for (let c = 0; c < next.shape[r].length; c++) {
+      if (!next.shape[r][c]) continue;
+      const px = (ox + c) * cs, py = (oy + r) * cs;
+      nctx.fillStyle = next.color;
+      if (currentTheme.cellStyle === 'bubble') {
+        rrPath(nctx, px + 2, py + 2, cs - 4, cs - 4, 5); nctx.fill();
+        nctx.fillStyle = 'rgba(255,255,255,0.42)';
+        rrPath(nctx, px + 3, py + 3, cs - 6, (cs - 4) * 0.42, 3); nctx.fill();
+      } else {
+        nctx.fillRect(px + 1, py + 1, cs - 2, cs - 2);
+        if (currentTheme.cellStyle === 'neon') {
+          nctx.fillStyle = 'rgba(0,0,0,0.5)';
+          nctx.fillRect(px + 3, py + 3, cs - 6, cs - 6);
+          nctx.strokeStyle = next.color; nctx.lineWidth = 0.7;
+          nctx.strokeRect(px + 3.5, py + 3.5, cs - 7, cs - 7);
+        } else {
+          nctx.fillStyle = 'rgba(255,255,255,0.25)';
+          nctx.fillRect(px + 1, py + 1, cs - 2, 3);
+        }
+      }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HUD
+// ═══════════════════════════════════════════════════════════════
+
+function updateHUD() {
+  document.getElementById('score-val').textContent = score.toLocaleString();
+  document.getElementById('level-val').textContent = level;
+  document.getElementById('lines-val').textContent = lines;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GAME LOOP
+// ═══════════════════════════════════════════════════════════════
+
+function dropInterval() { return Math.max(80, 600 - (level - 1) * 50); }
+
+function gameLoop(ts) {
+  if (!gameRunning) return;
+  if (ts - lastDrop >= dropInterval()) { moveDown(); lastDrop = ts; }
+  updateParticles();
+  draw();
+  if (gameRunning) rafId = requestAnimationFrame(gameLoop);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LIFECYCLE
+// ═══════════════════════════════════════════════════════════════
+
+function startGame() {
+  board     = createBoard();
+  score     = 0; lines = 0; level = 1;
+  paused    = false;
+  particles = [];
+  updateHUD();
+
+  // Show player name in sidebar
+  document.getElementById('player-name-display').textContent = playerName;
+
+  next = randomPiece();
+  spawnPiece();
+
+  overlay.style.display = 'none';
+  gameRunning = true;
+  rafId = requestAnimationFrame(ts => { lastDrop = ts; rafId = requestAnimationFrame(gameLoop); });
+}
+
+function stopGame() {
+  gameRunning = false;
+  cancelAnimationFrame(rafId);
+  clearAllRepeat();
+}
+
+function endGame() {
+  if (!gameRunning) return;
+  stopGame();
+
+  const rank = addToLeaderboard(playerName, score, lines, level);
+
+  let rankLine;
+  if (rank === 1)      rankLine = `<p class="rank">New High Score! You are #1!</p>`;
+  else if (rank <= 5)  rankLine = `<p class="rank">You ranked #${rank} on the leaderboard!</p>`;
+  else if (rank <= 10) rankLine = `<p class="rank">You ranked #${rank} — nice run!</p>`;
+  else if (rank > 0)   rankLine = `<p class="rank">You ranked #${rank} — keep stacking!</p>`;
+  else                 rankLine = `<p>Keep playing to crack the top 15!</p>`;
+
+  // Build mini top-5 leaderboard for the overlay
+  const miniLb = leaderboard.slice(0, 5).map((e, i) => lbRowHTML(e, i)).join('');
+
+  overlay.innerHTML = `
+    <h1>Game Over</h1>
+    <p class="big">${escapeHTML(playerName)} — ${score.toLocaleString()} pts</p>
+    <p>Lines: ${lines} &nbsp;|&nbsp; Level: ${level}</p>
+    ${rankLine}
+    <div id="overlay-lb">${miniLb}</div>
+    <button class="gbtn" id="replay-btn">Play Again</button>
+    <p class="ctrl"><em>P</em> pause &nbsp; <em>← →</em> move &nbsp; <em>↑</em> rotate &nbsp; <em>Space</em> drop</p>
+  `;
+  overlay.style.display = 'flex';
+  document.getElementById('replay-btn').addEventListener('click', startGame);
+}
+
+function togglePause() {
+  if (!gameRunning) return;
+  paused = !paused;
+  if (paused) {
+    cancelAnimationFrame(rafId);
+    clearAllRepeat();
+    overlay.innerHTML = `<h1>Paused</h1><p>Press <em style="color:var(--accent)">P</em> to resume</p>`;
+    overlay.style.display = 'flex';
+  } else {
+    overlay.style.display = 'none';
+    rafId = requestAnimationFrame(ts => { lastDrop = ts; rafId = requestAnimationFrame(gameLoop); });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INPUT
+// ═══════════════════════════════════════════════════════════════
+
+const HELD      = new Set();
+const REPEATS   = {};
+const RPT_DELAY = 150;
+const RPT_RATE  = 50;
+
+function clearAllRepeat() {
+  for (const k of HELD) { clearTimeout(REPEATS[k]); delete REPEATS[k]; }
+  HELD.clear();
+}
+
+function handleKey(key) {
+  if (!gameRunning || paused) return;
+  switch (key) {
+    case 'ArrowLeft':  moveLeft();  break;
+    case 'ArrowRight': moveRight(); break;
+    case 'ArrowDown':  moveDown();  lastDrop = performance.now(); break;
+    case 'ArrowUp':    rotate();    break;
+    case ' ':          hardDrop();  break;
+  }
+  if (gameRunning) draw();
+}
+
+document.addEventListener('keydown', e => {
+  // Don't intercept arrow keys if the name input is focused
+  if (document.activeElement === document.getElementById('name-input')) return;
+  if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
+  if (e.key === 'p' || e.key === 'P') { togglePause(); return; }
+  if (HELD.has(e.key)) return;
+  HELD.add(e.key);
+  handleKey(e.key);
+  if (['ArrowLeft','ArrowRight','ArrowDown'].includes(e.key)) {
+    REPEATS[e.key] = setTimeout(function rep() {
+      if (HELD.has(e.key)) { handleKey(e.key); REPEATS[e.key] = setTimeout(rep, RPT_RATE); }
+    }, RPT_DELAY);
+  }
+});
+
+document.addEventListener('keyup', e => {
+  HELD.delete(e.key);
+  clearTimeout(REPEATS[e.key]);
+  delete REPEATS[e.key];
+});
+
+// ═══════════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════════
+
+buildMenu();
+board = createBoard();
+draw();
+</script>
+</body>
+</html>
