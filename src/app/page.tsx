@@ -35,6 +35,19 @@ const GAMES = [
     featured: false,
   },
   {
+    title: "Decode",
+    description:
+      "A daily word puzzle. Guess the five-letter word in six tries. Green, yellow, or grey — decode the pattern.",
+    tag: "Word Game",
+    href: "/games/decode",
+    accentColor: "#538d4e",
+    bgGradient:
+      "linear-gradient(135deg, #121213 0%, #1a1a1b 50%, #0a0f0a 100%)",
+    icon: "🟩",
+    featured: false,
+    isNew: true,
+  },
+  {
     title: "More Coming Soon",
     description:
       "New games are in development. Subscribe to get notified when they launch.",

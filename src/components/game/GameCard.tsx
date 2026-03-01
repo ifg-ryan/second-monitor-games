@@ -8,6 +8,7 @@ interface GameCardProps {
   icon: React.ReactNode;
   featured?: boolean;
   comingSoon?: boolean;
+  isNew?: boolean;
 }
 
 export default function GameCard({
@@ -20,6 +21,7 @@ export default function GameCard({
   icon,
   featured = false,
   comingSoon = false,
+  isNew = false,
 }: GameCardProps) {
   return (
     <div
@@ -77,6 +79,25 @@ export default function GameCard({
             }}
           >
             Coming Soon
+          </div>
+        )}
+        {isNew && !comingSoon && (
+          <div
+            style={{
+              position: "absolute",
+              top: "12px",
+              right: "12px",
+              background: accentColor,
+              color: "#0d0d18",
+              fontSize: "10px",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              padding: "3px 8px",
+              borderRadius: "4px",
+              textTransform: "uppercase",
+            }}
+          >
+            New
           </div>
         )}
         <div style={{ fontSize: featured ? "64px" : "52px" }}>{icon}</div>
