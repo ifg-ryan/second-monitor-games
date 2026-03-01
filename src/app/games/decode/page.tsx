@@ -1,18 +1,18 @@
 export const metadata = {
-  title:       "Decode — Free Daily Word Puzzle",
-  description: "Guess the five-letter word in six tries. Free daily word puzzle — new challenge every day, no subscription needed. Play online now.",
-  keywords:    ["daily word puzzle", "free word puzzle game", "five letter word puzzle", "word guessing game", "daily brain puzzle", "free puzzle game online", "word puzzle like Wordle"],
+  title:       "Decode — Free Daily Word Puzzle Game",
+  description: "A quick daily word puzzle for your second monitor. Guess the word in six tries — takes under 2 minutes. Free to play, new puzzle every day, no subscription needed.",
+  keywords:    ["daily word puzzle", "quick word game", "free daily puzzle game", "word puzzle at work", "brain game for work break", "second monitor game", "unique puzzle game online", "games to play between meetings"],
   alternates:  { canonical: "https://secondmonitorgames.com/games/decode" },
   openGraph: {
-    title:       "Decode — Free Daily Word Puzzle",
-    description: "Guess the five-letter word in six tries. New puzzle every day — free, no subscription needed.",
+    title:       "Decode — Free Daily Word Puzzle Game",
+    description: "A quick daily word puzzle for your second monitor. Guess the word in six tries — under 2 minutes, free.",
     url:         "https://secondmonitorgames.com/games/decode",
     type:        "website",
   },
   twitter: {
     card:        "summary_large_image",
-    title:       "Decode — Free Daily Word Puzzle",
-    description: "Guess the five-letter word in six tries. New puzzle every day — free.",
+    title:       "Decode — Free Daily Word Puzzle Game",
+    description: "A quick daily word puzzle for your second monitor. Guess the word in six tries — free, under 2 minutes.",
   },
 };
 

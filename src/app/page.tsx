@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import GameCard from "@/components/game/GameCard";
 
 export const metadata: Metadata = {
-  title:       "Free Daily Puzzle Games — Play Today",
-  description: "Free daily puzzle games for your second monitor. New word puzzles, brain games, and strategy challenges every day. No subscription needed — play free online.",
+  title:       "Daily Card Games & Puzzles for Your Second Monitor — Play Free",
+  description: "Quick daily card games, strategy puzzles, and brain challenges built for work breaks. Play free on your second monitor — new challenges every day, no subscription needed.",
   alternates:  { canonical: "https://secondmonitorgames.com" },
   openGraph: {
-    title:       "Second Monitor Games — Free Daily Puzzle Games",
-    description: "New word puzzles, brain games, and strategy challenges every day. Free to play — no subscription needed.",
+    title:       "Second Monitor Games — Daily Card Games & Puzzles for Work Breaks",
+    description: "Quick daily card games and strategy puzzles built for work breaks. Free to play — new challenges every day.",
     url:         "https://secondmonitorgames.com",
     type:        "website",
   },

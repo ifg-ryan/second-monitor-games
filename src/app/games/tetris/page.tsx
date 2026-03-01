@@ -1,13 +1,13 @@
 import TetrisClient from './TetrisClient';
 
 export const metadata = {
-  title:       "Tetris — Free Online Block Puzzle Game",
-  description: "The classic block puzzle game, free to play online. Clear lines, beat your daily high score, and survive as long as you can. New challenge every day.",
-  keywords:    ["tetris online", "free tetris game", "block puzzle game", "online puzzle game free", "arcade puzzle game", "classic block game"],
+  title:       "Tetris — Free Quick Arcade Game for Work Breaks",
+  description: "The classic block-stacking game, free to play in your browser. Beat your daily high score in minutes. Perfect for a quick break on your second monitor — no download needed.",
+  keywords:    ["free tetris online", "quick arcade game", "block game at work", "browser game no download", "second monitor arcade game", "free game work break", "fast arcade puzzle"],
   alternates:  { canonical: "https://secondmonitorgames.com/games/tetris" },
   openGraph: {
-    title:       "Tetris — Free Online Block Puzzle Game",
-    description: "The classic block puzzle game, free to play online. Clear lines and beat your daily high score.",
+    title:       "Tetris — Free Quick Arcade Game for Work Breaks",
+    description: "Classic Tetris, free in your browser. Beat your daily high score — perfect for a quick break on your second monitor.",
     url:         "https://secondmonitorgames.com/games/tetris",
     type:        "website",
   },
