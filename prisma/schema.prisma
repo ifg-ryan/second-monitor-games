@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model LeaderboardScore {
+  id        String   @id @default(cuid())
+  game      String
+  userId    String
+  userName  String
+  score     Int
+  lines     Int      @default(0)
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([game, userId])
+  @@index([game, score])
+}

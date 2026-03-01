@@ -60,37 +60,6 @@
       transition: color 0.4s;
     }
 
-    /* Name input */
-    #name-section { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
-
-    #name-input {
-      padding: 10px 20px;
-      font-size: 15px;
-      font-family: var(--font);
-      background: var(--panel-bg);
-      color: var(--text);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      text-align: center;
-      outline: none;
-      width: 280px;
-      transition: border-color 0.2s, background 0.4s, color 0.4s;
-    }
-
-    #name-input:focus { border-color: var(--accent); }
-    #name-input::placeholder { color: var(--muted); opacity: 0.7; }
-
-    #name-greeting {
-      font-size: 15px;
-      font-weight: bold;
-      color: var(--accent);
-      min-height: 20px;
-      opacity: 0;
-      transition: opacity 0.3s, color 0.4s;
-    }
-
-    #name-greeting.visible { opacity: 1; }
-
     /* Style cards */
     .section-label {
       font-size: 10px;
@@ -152,47 +121,14 @@
     .menu-hint { font-size: 10px; color: var(--muted); line-height: 2.2; transition: color 0.4s; }
     .menu-hint em { font-style: normal; color: var(--accent); transition: color 0.4s; }
 
-    /* Leaderboard (menu) */
-    #lb-section { width: 100%; }
-
-    #lb-table {
-      max-height: 218px;
-      overflow-y: auto;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      transition: border-color 0.4s;
+    #menu-status {
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 18px;
+      transition: color 0.4s;
     }
 
-    #lb-table::-webkit-scrollbar { width: 5px; }
-    #lb-table::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    .lb-row {
-      display: flex;
-      align-items: center;
-      padding: 6px 12px;
-      font-size: 11px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: background 0.15s;
-    }
-
-    .lb-row:last-child { border-bottom: none; }
-    .lb-row:nth-child(even) { background: rgba(255,255,255,0.03); }
-
-    .lb-row.lb-you {
-      background: rgba(0,0,0,0) !important;
-      border-left: 3px solid var(--accent);
-    }
-
-    .lb-rank { width: 28px; font-size: 10px; color: var(--muted); flex-shrink: 0; }
-    .lb-rank.gold   { color: #ffd700; font-weight: bold; }
-    .lb-rank.silver { color: #c0c0c0; font-weight: bold; }
-    .lb-rank.bronze { color: #cd7f32; font-weight: bold; }
-
-    .lb-name  { flex: 1; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 6px; }
-    .lb-you .lb-name { color: var(--accent); }
-
-    .lb-score { width: 68px; text-align: right; color: var(--accent); font-weight: bold; font-size: 12px; flex-shrink: 0; }
-    .lb-meta  { width: 76px; text-align: right; color: var(--muted); font-size: 10px; flex-shrink: 0; }
+    #menu-status a { color: var(--accent); text-decoration: none; font-weight: bold; }
 
     /* ─── Game Screen ────────────────────────────────────────── */
     #game-screen { display: none; gap: 18px; align-items: flex-start; }
@@ -292,19 +228,6 @@
     #overlay .big   { font-size: 18px; color: var(--text); transition: color 0.4s; }
     #overlay .rank  { font-size: 13px; color: var(--accent); font-weight: bold; transition: color 0.4s; }
 
-    /* Mini leaderboard inside overlay */
-    #overlay-lb {
-      width: 100%;
-      font-size: 10px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 6px 0;
-      max-height: 130px;
-      overflow-y: auto;
-    }
-
-    #overlay-lb .lb-row { padding: 3px 8px; font-size: 10px; }
-
     .gbtn {
       padding: 9px 24px;
       font-size: 12px;
@@ -335,11 +258,7 @@
     <div id="menu-subtitle">Stack · Clear · Score</div>
   </div>
 
-  <div id="name-section">
-    <input id="name-input" type="text" maxlength="20"
-           placeholder="Enter your name to play..." autocomplete="off" spellcheck="false" />
-    <div id="name-greeting"></div>
-  </div>
+  <div id="menu-status"></div>
 
   <div>
     <div class="section-label">Choose Your Style</div>
@@ -353,10 +272,6 @@
     &nbsp; <em>Space</em> Hard Drop &nbsp; <em>P</em> Pause
   </p>
 
-  <div id="lb-section">
-    <div class="section-label">Leaderboard</div>
-    <div id="lb-table"></div>
-  </div>
 </div>
 
 <!-- ═══════════════════ GAME ═══════════════════ -->
@@ -454,50 +369,8 @@ function applyTheme(id) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// LEADERBOARD
+// UTILITIES
 // ═══════════════════════════════════════════════════════════════
-
-const DEFAULT_LEADERBOARD = [
-  { name: 'TetrisMaximus',       score: 28800, lines: 68, level: 7, you: false },
-  { name: 'BlockDropper_99',     score: 24600, lines: 58, level: 6, you: false },
-  { name: 'QuantumStacker',      score: 21200, lines: 50, level: 6, you: false },
-  { name: 'GridGoblin_X',        score: 17900, lines: 43, level: 5, you: false },
-  { name: 'ClearMaster3K',       score: 15500, lines: 37, level: 4, you: false },
-  { name: 'Professor_Plop',      score: 11800, lines: 28, level: 3, you: false },
-  { name: 'Dropazoidal_Dan',     score: 9400,  lines: 23, level: 3, you: false },
-  { name: 'BlockBusting_Bertha', score: 7200,  lines: 18, level: 2, you: false },
-  { name: 'LineClear_Larry',     score: 4600,  lines: 12, level: 2, you: false },
-  { name: 'NeonNinja_88',        score: 2900,  lines:  7, level: 1, you: false },
-  { name: 'SpeedStack_Suzy',     score: 1800,  lines:  5, level: 1, you: false },
-  { name: 'S_Piece_Sally',       score:  900,  lines:  3, level: 1, you: false },
-];
-
-let leaderboard = [];
-
-function loadLeaderboard() {
-  try {
-    const saved = localStorage.getItem('tetris-lb');
-    leaderboard = saved ? JSON.parse(saved) : DEFAULT_LEADERBOARD.map(e => ({ ...e }));
-  } catch {
-    leaderboard = DEFAULT_LEADERBOARD.map(e => ({ ...e }));
-  }
-}
-
-function saveLeaderboard() {
-  try { localStorage.setItem('tetris-lb', JSON.stringify(leaderboard)); } catch { /* quota */ }
-}
-
-// Returns the 1-based rank the entry landed at (after insertion)
-function addToLeaderboard(name, sc, ln, lv) {
-  // Clear any old "you" flags so only the latest run is highlighted
-  leaderboard.forEach(e => { e.you = false; });
-  leaderboard.push({ name, score: sc, lines: ln, level: lv, you: true });
-  leaderboard.sort((a, b) => b.score - a.score);
-  leaderboard = leaderboard.slice(0, 15);
-  saveLeaderboard();
-  const idx = leaderboard.findIndex(e => e.you);
-  return idx === -1 ? -1 : idx + 1; // 1-based, or -1 if sliced out of top 15
-}
 
 // Prevent XSS when injecting user-supplied text into innerHTML
 function escapeHTML(str) {
@@ -508,39 +381,12 @@ function escapeHTML(str) {
     .replace(/"/g, '&quot;');
 }
 
-function rankClass(i) {
-  if (i === 0) return 'gold';
-  if (i === 1) return 'silver';
-  if (i === 2) return 'bronze';
-  return '';
-}
-
-function lbRowHTML(entry, index) {
-  const you  = entry.you ? ' lb-you' : '';
-  const rc   = rankClass(index);
-  const rnk  = `<span class="lb-rank ${rc}">#${index + 1}</span>`;
-  const name = `<span class="lb-name">${escapeHTML(entry.name)}</span>`;
-  const sc   = `<span class="lb-score">${entry.score.toLocaleString()}</span>`;
-  const meta = `<span class="lb-meta">Lv${entry.level} · ${entry.lines}L</span>`;
-  return `<div class="lb-row${you}">${rnk}${name}${sc}${meta}</div>`;
-}
-
-function renderLeaderboard(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = leaderboard.map((e, i) => lbRowHTML(e, i)).join('');
-  // Scroll the "you" row into view in the menu table
-  if (containerId === 'lb-table') {
-    const youRow = el.querySelector('.lb-you');
-    if (youRow) youRow.scrollIntoView({ block: 'nearest' });
-  }
-}
-
 // ═══════════════════════════════════════════════════════════════
 // MENU BUILD
 // ═══════════════════════════════════════════════════════════════
 
 let playerName = 'Player';
+let isLoggedIn = false;
 
 function buildMenu() {
   // Style cards
@@ -568,41 +414,10 @@ function buildMenu() {
     wrap.appendChild(card);
   }
   applyTheme('cyberpunk');
-
-  // Name input — live greeting, name persistence
-  const nameInput    = document.getElementById('name-input');
-  const greetingEl   = document.getElementById('name-greeting');
-
-  const savedName = localStorage.getItem('tetris-player-name') || '';
-  if (savedName) {
-    nameInput.value = savedName;
-    playerName = savedName;
-    greetingEl.textContent = `Welcome back, ${savedName}!`;
-    greetingEl.classList.add('visible');
-  }
-
-  nameInput.addEventListener('input', () => {
-    const v = nameInput.value.trim();
-    playerName = v || 'Player';
-    if (v) {
-      greetingEl.textContent = `Welcome, ${v}!`;
-      greetingEl.classList.add('visible');
-      localStorage.setItem('tetris-player-name', v);
-    } else {
-      greetingEl.classList.remove('visible');
-      localStorage.removeItem('tetris-player-name');
-    }
-  });
-
-  // Load leaderboard and render
-  loadLeaderboard();
-  renderLeaderboard('lb-table');
 }
 
 document.getElementById('menu-start-btn').addEventListener('click', () => {
-  // Sync playerName from input at start time (handles empty input gracefully)
-  const raw = document.getElementById('name-input').value.trim();
-  playerName = raw || 'Player';
+  // playerName is set via postMessage PLAYER_INFO from the parent frame
   document.getElementById('menu-screen').style.display = 'none';
   document.getElementById('game-screen').classList.add('active');
   startGame();
@@ -613,7 +428,6 @@ document.getElementById('back-btn').addEventListener('click', () => {
   document.getElementById('game-screen').classList.remove('active');
   const ms = document.getElementById('menu-screen');
   ms.style.display = 'flex';
-  renderLeaderboard('lb-table');
 });
 
 // ═══════════════════════════════════════════════════════════════
@@ -1037,24 +851,28 @@ function endGame() {
   if (!gameRunning) return;
   stopGame();
 
-  const rank = addToLeaderboard(playerName, score, lines, level);
+  // Notify parent frame — it will submit the score to the site-wide leaderboard API
+  window.parent.postMessage(
+    { type: 'GAME_OVER', score, lines, level },
+    window.location.origin
+  );
 
-  let rankLine;
-  if (rank === 1)      rankLine = `<p class="rank">New High Score! You are #1!</p>`;
-  else if (rank <= 5)  rankLine = `<p class="rank">You ranked #${rank} on the leaderboard!</p>`;
-  else if (rank <= 10) rankLine = `<p class="rank">You ranked #${rank} — nice run!</p>`;
-  else if (rank > 0)   rankLine = `<p class="rank">You ranked #${rank} — keep stacking!</p>`;
-  else                 rankLine = `<p>Keep playing to crack the top 15!</p>`;
-
-  // Build mini top-5 leaderboard for the overlay
-  const miniLb = leaderboard.slice(0, 5).map((e, i) => lbRowHTML(e, i)).join('');
+  const saveMsg = isLoggedIn
+    ? `<p class="rank" id="save-status">Score saved to leaderboard!</p>`
+    : `<p style="font-size:11px; color:var(--muted)">
+         <a href="/sign-in" target="_parent" style="color:var(--accent); text-decoration:none; font-weight:bold;">Sign in</a>
+         to save your score to the leaderboard
+       </p>`;
 
   overlay.innerHTML = `
     <h1>Game Over</h1>
     <p class="big">${escapeHTML(playerName)} — ${score.toLocaleString()} pts</p>
     <p>Lines: ${lines} &nbsp;|&nbsp; Level: ${level}</p>
-    ${rankLine}
-    <div id="overlay-lb">${miniLb}</div>
+    ${saveMsg}
+    <a href="/leaderboard" target="_parent"
+       style="font-size:11px; color:var(--accent); text-decoration:none; font-weight:bold; opacity:0.85;">
+      🏆 View Leaderboard
+    </a>
     <button class="gbtn" id="replay-btn">Play Again</button>
     <p class="ctrl"><em>P</em> pause &nbsp; <em>← →</em> move &nbsp; <em>↑</em> rotate &nbsp; <em>Space</em> drop</p>
   `;
@@ -1103,8 +921,6 @@ function handleKey(key) {
 }
 
 document.addEventListener('keydown', e => {
-  // Don't intercept arrow keys if the name input is focused
-  if (document.activeElement === document.getElementById('name-input')) return;
   if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
   if (e.key === 'p' || e.key === 'P') { togglePause(); return; }
   if (HELD.has(e.key)) return;
@@ -1124,12 +940,48 @@ document.addEventListener('keyup', e => {
 });
 
 // ═══════════════════════════════════════════════════════════════
+// POSTMESSAGE — receive player info from parent frame
+// ═══════════════════════════════════════════════════════════════
+
+window.addEventListener('message', (e) => {
+  if (e.origin !== window.location.origin) return;
+  if (e.data?.type !== 'PLAYER_INFO') return;
+
+  clearTimeout(_playerInfoTimeout);
+
+  const { name, isLoggedIn: loggedIn } = e.data;
+  playerName = name || 'Player';
+  isLoggedIn = !!loggedIn;
+
+  const statusEl = document.getElementById('menu-status');
+  if (!statusEl) return;
+
+  if (isLoggedIn) {
+    statusEl.innerHTML = `Welcome, <span style="color:var(--accent); font-weight:bold;">${escapeHTML(playerName)}</span>! Your scores will be saved.`;
+  } else {
+    statusEl.innerHTML = `<a href="/sign-in" target="_parent">Sign in</a> to save your scores to the leaderboard.`;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════════════
 
 buildMenu();
 board = createBoard();
 draw();
+
+// Signal parent that the game is ready to receive player info
+window.parent.postMessage({ type: 'READY' }, window.location.origin);
+
+// Fallback: if no PLAYER_INFO arrives within 2 s (e.g. Clerk unavailable on dev),
+// show the guest "sign in" prompt so the UI is never empty.
+const _playerInfoTimeout = setTimeout(() => {
+  const statusEl = document.getElementById('menu-status');
+  if (statusEl && !statusEl.innerHTML.trim()) {
+    statusEl.innerHTML = `<a href="/sign-in" target="_parent">Sign in</a> to save your scores to the leaderboard.`;
+  }
+}, 2000);
 </script>
 </body>
 </html>

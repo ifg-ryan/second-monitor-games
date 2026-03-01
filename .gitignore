@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# local SQLite dev database — never commit this
+*.db
+*.db-journal
+
+# prisma SQLite migrations (we use db push for postgres)
+/prisma/migrations

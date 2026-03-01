@@ -68,6 +68,19 @@ export default function Navbar() {
             Archive
           </a>
           <a
+            href="/leaderboard"
+            className="nav-link-muted"
+            style={{
+              borderRadius: "6px",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              padding: "8px 16px",
+              textDecoration: "none",
+            }}
+          >
+            🏆 Leaderboard
+          </a>
+          <a
             href="/pricing"
             className="nav-link-muted"
             style={{
