@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    ================================================================
+    SMG RULES v1.2 — LAYER 1 + LAYER 2 + LAYER 3 + LAYER 4 TEMPLATE
+    ================================================================
+    Search "GAME DEV:" to find every place you need to customise.
+
+    Layer 1 rules:
+      [1] Seed          — djb2 hash of UTC date, DAILY_SEED provided
+      [2] GAME_CONFIG   — fill in name/displayName/gameType/launchDate
+      [3] Already-played — handled automatically; implement startGame()
+      [4] GAME_OVER     — call fireGameOver() exactly once
+      [5] Responsive    — desktop notice below 768px (do not remove)
+      [6] Share button  — clipboard; customise buildShareText()
+      [7] GAME_READY    — fires automatically in init()
+      [8] smgVersion    — in GAME_CONFIG; do not change the value
+
+    Layer 2 additions:
+      [A] Streak        — tracked automatically on fireGameOver()
+      [B] How-to-play   — modal; fill in GAME_CONFIG.howToPlay[]
+      [C] Game types    — "puzzle" (one daily) | "arcade" (N tries/day)
+
+    Layer 3 additions:
+      [9]  Stats        — gamesPlayed, gamesWon, dist tracked automatically
+      [10] Stats modal  — 📊 button; distribution chart for puzzle games
+
+    Layer 4 additions (Monetization):
+      [11] User tier    — free / trial / subscriber via USER_STATUS postMessage
+      [12] Preroll ad   — shown to free users before play; 5 s skip countdown
+      [13] Archive gate — locks past puzzles for free users; ARCHIVE_GATE_HIT
+      [14] Upsell modal — streak milestones + result CTA for free users
+      [15] Endroll ad   — banner in result screen for free users
+    ================================================================
+  -->
+  <!-- GAME DEV: update title to match GAME_CONFIG.displayName -->
+  <title>Second Monitor — Game Name</title>
+  <style>
+    /* ============================================================
+       BASE STYLES — keep these, extend below the divider
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #121213;
+      --surface:    #1a1a1b;
+      --border:     #3a3a3c;
+      --text:       #ffffff;
+      --text-muted: #818384;
+      --correct:    #538d4e;
+      --present:    #b59f3b;
+      --absent:     #3a3a3c;
+      --accent:     #538d4e;   /* GAME DEV: change per game */
+      --radius:     6px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    /* ---- Header ---- */
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 49px;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+    }
+
+    #header-left, #header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 60px;
+    }
+    #header-right { justify-content: flex-end; }
+
+    #game-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      flex: 1;
+      text-align: center;
+    }
+
+    .header-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .header-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+    #puzzle-num {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ---- Rule 5: desktop notice ---- */
+    #desktop-notice {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 200;
+      text-align: center;
+      padding: 40px;
+    }
+    #desktop-notice strong { font-size: 1.1rem; }
+    #desktop-notice p { color: var(--text-muted); font-size: 0.9rem; max-width: 320px; }
+    @media (max-width: 768px) { #desktop-notice { display: flex; } }
+
+    /* ---- Game area ---- */
+    #game-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 49px);
+      padding: 20px;
+    }
+
+    /* ---- Result screen ---- */
+    #result-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 50;
+      text-align: center;
+      padding: 40px;
+    }
+    #result-screen.active { display: flex; }
+
+    #result-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #result-detail { color: var(--text-muted); font-size: 0.9rem; }
+
+    #result-streak {
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 1.4em; /* holds space even when empty */
+    }
+
+    #result-share-text {
+      font-family: monospace;
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    #result-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    #result-buttons button {
+      padding: 12px 28px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: opacity 0.15s;
+    }
+    #result-buttons button:hover { opacity: 0.85; }
+    #share-btn    { background: var(--accent); color: #fff; }
+    #continue-btn { background: var(--border);  color: var(--text); }
+
+    /* ---- Layer 2B: How-to-play modal ---- */
+    #how-to-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    #how-to-modal.active { display: flex; }
+
+    .how-to-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .how-to-card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .how-to-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .how-to-close:hover { color: var(--text); }
+
+    .how-to-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .how-to-steps li {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      border-left: 2px solid var(--border);
+      padding-left: 12px;
+    }
+
+    .how-to-steps li strong { color: var(--text); }
+
+    /* Coloured tiles for use inside how-to-play instructions */
+    .htile {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin: 0 1px;
+    }
+    .htile.correct { background: var(--correct); color: #fff; }
+    .htile.present { background: var(--present); color: #fff; }
+    .htile.absent  { background: var(--absent);  color: var(--text-muted); }
+    .htile.neutral { background: var(--border);  color: var(--text); }
+
+    /* ---- Layer 2C: Arcade lockout screen ---- */
+    #lockout-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 60;
+      text-align: center;
+      padding: 40px;
+    }
+    #lockout-screen.active { display: flex; }
+
+    #lockout-icon { font-size: 2.5rem; }
+
+    #lockout-screen h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #lockout-screen p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
+
+    #lockout-timer {
+      font-size: 1.6rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    #lockout-upgrade {
+      margin-top: 8px;
+      padding: 11px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #lockout-upgrade:hover { opacity: 0.85; }
+
+    /* ---- Tries badge (arcade, in header) ---- */
+    #tries-badge {
+      display: none;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 3px 9px;
+      white-space: nowrap;
+    }
+
+    /* ---- Layer 3: Stats modal ---- */
+    #stats-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    #stats-modal.active { display: flex; }
+
+    .stats-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .stats-card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .stats-close:hover { color: var(--text); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .dist-section h3 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .dist-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .dist-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      min-width: 14px;
+      text-align: right;
+      color: var(--text-muted);
+    }
+
+    .dist-bar-wrap {
+      flex: 1;
+      height: 22px;
+    }
+
+    .dist-bar {
+      height: 100%;
+      background: var(--border);
+      border-radius: 3px;
+      min-width: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      box-sizing: border-box;
+      transition: width 0.3s ease;
+    }
+    .dist-bar.active-row { background: var(--accent); }
+
+    /* ---- Layer 4: Preroll ad screen ---- */
+    #preroll-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 80;
+      text-align: center;
+      padding: 40px;
+    }
+    #preroll-screen.active { display: flex; }
+
+    .preroll-ad-area {
+      width: 100%;
+      max-width: 480px;
+      min-height: 200px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .preroll-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      max-width: 480px;
+      height: 32px;
+      gap: 10px;
+    }
+
+    #preroll-countdown {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    #preroll-skip {
+      display: none;
+      padding: 6px 16px;
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      transition: opacity 0.15s;
+    }
+    #preroll-skip:hover { opacity: 0.8; }
+
+    /* ---- Layer 4: Archive gate ---- */
+    #archive-gate {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 70;
+      text-align: center;
+      padding: 40px;
+    }
+    #archive-gate.active { display: flex; }
+
+    #archive-gate-icon { font-size: 2.5rem; }
+
+    #archive-gate h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #archive-gate p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
+
+    .archive-gate-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #archive-trial-btn {
+      padding: 11px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #archive-trial-btn:hover { opacity: 0.85; }
+
+    #archive-today-btn {
+      padding: 11px 24px;
+      background: none;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    #archive-today-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+    /* ---- Layer 4: Upsell modal ---- */
+    #upsell-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      align-items: center;
+      justify-content: center;
+      z-index: 110;
+      padding: 20px;
+    }
+    #upsell-modal.active { display: flex; }
+
+    .upsell-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .upsell-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .upsell-close:hover { color: var(--text); }
+
+    #upsell-emoji { font-size: 2.2rem; line-height: 1; }
+
+    #upsell-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    #upsell-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .upsell-perks {
+      list-style: none;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .upsell-perks li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .upsell-perks li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    #upsell-cta-btn {
+      width: 100%;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin-top: 4px;
+    }
+    #upsell-cta-btn:hover { opacity: 0.85; }
+
+    .upsell-dismiss {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .upsell-dismiss:hover { color: var(--text); }
+
+    /* ---- Layer 4: Subscription badge (in header) ---- */
+    #subscription-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      display: none;
+    }
+    #subscription-badge.badge-subscriber { background: var(--accent);  color: #fff; display: inline; }
+    #subscription-badge.badge-trial      { background: var(--present); color: #fff; display: inline; }
+    #subscription-badge.badge-free       { display: none; }
+
+    /* ---- Layer 4: Result screen extras ---- */
+    #result-cta {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    #result-cta.active { display: flex; }
+
+    #result-cta-btn {
+      padding: 11px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #result-cta-btn:hover { opacity: 0.85; }
+
+    .result-cta-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    #endroll-ad {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      min-height: 80px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    #endroll-ad.active { display: flex; }
+
+    .ad-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       GAME DEV: add your game-specific styles below this line
+    ============================================================ */
+
+  </style>
+</head>
+<body>
+
+  <!-- Rule 5: desktop notice — do not remove -->
+  <div id="desktop-notice">
+    <strong>Best experienced on desktop</strong>
+    <p>Please open Second Monitor on a larger screen for the best experience.</p>
+  </div>
+
+  <!-- Layer 4: Upsell modal — do not remove, content set by showUpsellModal() -->
+  <div id="upsell-modal">
+    <div class="upsell-card">
+      <button class="upsell-close" id="upsell-close-btn" aria-label="Close">✕</button>
+      <div id="upsell-emoji"></div>
+      <div id="upsell-title"></div>
+      <div id="upsell-body"></div>
+      <ul class="upsell-perks">
+        <li>No ads, ever</li>
+        <li>Full archive — thousands of past puzzles</li>
+        <li>All games included</li>
+      </ul>
+      <button id="upsell-cta-btn"></button>
+      <button class="upsell-dismiss" id="upsell-dismiss-btn">Maybe later</button>
+    </div>
+  </div>
+
+  <!-- Layer 3: stats modal — do not remove, content built by buildStatsContent() -->
+  <div id="stats-modal">
+    <div class="stats-card">
+      <button class="stats-close" id="stats-close-btn" aria-label="Close">✕</button>
+      <h2>Statistics</h2>
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="dist-section" id="dist-section">
+        <h3>Guess Distribution</h3>
+        <div id="dist-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layer 2B: how-to-play modal — do not remove, content filled from GAME_CONFIG -->
+  <div id="how-to-modal">
+    <div class="how-to-card">
+      <button class="how-to-close" id="how-to-close-btn" aria-label="Close">✕</button>
+      <h2>How to Play</h2>
+      <ul class="how-to-steps" id="how-to-steps"></ul>
+    </div>
+  </div>
+
+  <!-- Layer 2C: arcade lockout screen — do not remove -->
+  <div id="lockout-screen">
+    <div id="lockout-icon">🔒</div>
+    <h2>All done for today</h2>
+    <p id="lockout-message"></p>
+    <div id="lockout-timer"></div>
+    <button id="lockout-upgrade">Unlock Unlimited Play</button>
+  </div>
+
+  <!-- Layer 4: Preroll ad screen — do not remove -->
+  <div id="preroll-screen">
+    <div class="preroll-ad-area">
+      <span class="ad-label">Advertisement</span>
+    </div>
+    <div class="preroll-footer">
+      <span id="preroll-countdown"></span>
+      <button id="preroll-skip">Skip Ad ›</button>
+    </div>
+  </div>
+
+  <!-- Layer 4: Archive gate — do not remove -->
+  <div id="archive-gate">
+    <div id="archive-gate-icon">🔒</div>
+    <h2>Subscriber Only</h2>
+    <p>This puzzle is from the archive. Subscribe to access thousands of past puzzles ad-free.</p>
+    <div class="archive-gate-buttons">
+      <button id="archive-trial-btn">Start Free Trial</button>
+      <button id="archive-today-btn">Play Today's Puzzle</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="header">
+    <div id="header-left">
+      <button class="header-btn" id="help-btn" aria-label="How to play">?</button>
+    </div>
+    <h1 id="game-title"></h1>
+    <div id="header-right">
+      <span id="subscription-badge" class="badge-free"></span>
+      <span id="tries-badge"></span>
+      <button class="header-btn" id="stats-btn" aria-label="Statistics">📊</button>
+      <span id="puzzle-num"></span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       GAME DEV: replace placeholder with your game UI.
+       Keep #game-container as the root wrapper.
+  ============================================================ -->
+  <div id="game-container">
+    <p style="color:var(--text-muted);font-size:0.9rem;letter-spacing:0.05em;text-align:center;">
+      Your game UI goes here.<br>
+      Remove this and add your own inside #game-container.
+    </p>
+  </div>
+
+  <!-- Rule 4/6: result screen — do not remove -->
+  <div id="result-screen">
+    <div id="result-title"></div>
+    <div id="result-detail"></div>
+    <div id="result-streak"></div>
+    <div id="result-share-text"></div>
+    <div id="result-buttons">
+      <button id="share-btn">Share Result</button>
+      <button id="continue-btn">Continue</button>
+    </div>
+    <!-- Layer 4: upsell CTA for free users -->
+    <div id="result-cta">
+      <button id="result-cta-btn">Start Free Trial</button>
+      <span class="result-cta-sub">Go ad-free · Unlock the full archive</span>
+    </div>
+    <!-- Layer 4: endroll ad for free users -->
+    <div id="endroll-ad">
+      <div class="ad-slot-area">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // SMG RULES v1.2 — LAYER 1 + LAYER 2 + LAYER 3 + LAYER 4
+    // ============================================================
+
+    // ----------------------------------------------------------
+    // Rule 2: GAME_CONFIG — GAME DEV: fill in all fields
+    // ----------------------------------------------------------
+    const GAME_CONFIG = {
+      name:        "game-name",    // lowercase, hyphenated; drives localStorage keys
+      displayName: "Game Name",    // shown in header
+      gameType:    "puzzle",       // "puzzle" | "arcade"
+      launchDate:  "YYYY-MM-DD",   // UTC date of Day #1
+      smgVersion:  "1.2",          // Rule 8: do not change
+      dailyTries:  3,              // arcade only: attempts allowed per day
+      isArchive:   false,          // Layer 4: true when showing a past puzzle
+      howToPlay:   [               // Layer 2B: instruction strings (HTML supported)
+        // GAME DEV: replace these with your game's instructions
+        "Example rule one — <strong>keep it short</strong>.",
+        "Example rule two.",
+        "Example rule three.",
+      ],
+    };
+
+    // ----------------------------------------------------------
+    // Rule 1: Seed utilities
+    // ----------------------------------------------------------
+    function getDailyDateString() {
+      return new Date().toISOString().split("T")[0];
+    }
+
+    function getYesterdayString() {
+      const d = new Date();
+      d.setUTCDate(d.getUTCDate() - 1);
+      return d.toISOString().split("T")[0];
+    }
+
+    function djb2Hash(str) {
+      let hash = 5381;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    }
+
+    function getPuzzleNumber() {
+      const launch = new Date(GAME_CONFIG.launchDate + "T00:00:00Z");
+      if (isNaN(launch.getTime())) return 1;
+      const today = new Date(getDailyDateString() + "T00:00:00Z");
+      return Math.max(1, Math.floor((today - launch) / 86400000) + 1);
+    }
+
+    const TODAY_UTC  = getDailyDateString();
+    const YESTERDAY  = getYesterdayString();
+    const PUZZLE_NUM = getPuzzleNumber();
+    const DAILY_SEED = djb2Hash(TODAY_UTC);
+
+    // ----------------------------------------------------------
+    // Rule 3: localStorage keys
+    // ----------------------------------------------------------
+    const LS_LAST_PLAYED  = `smg_${GAME_CONFIG.name}_lastPlayed`;
+    const LS_LAST_RESULT  = `smg_${GAME_CONFIG.name}_lastResult`;
+    // Layer 2A: streak
+    const LS_STREAK       = `smg_${GAME_CONFIG.name}_streak`;
+    const LS_MAX_STREAK   = `smg_${GAME_CONFIG.name}_maxStreak`;
+    const LS_LAST_WON     = `smg_${GAME_CONFIG.name}_lastWon`;
+    // Layer 2C: arcade tries
+    const LS_TRIES_DATE   = `smg_${GAME_CONFIG.name}_triesDate`;
+    const LS_TRIES_USED   = `smg_${GAME_CONFIG.name}_triesUsed`;
+    // Layer 2B: how-to seen
+    const LS_SEEN_HOW_TO  = `smg_${GAME_CONFIG.name}_seenHowTo`;
+    // Layer 3: stats
+    const LS_STATS         = `smg_${GAME_CONFIG.name}_stats`;
+    // Layer 4: streak upsell seen milestone
+    const LS_STREAK_UPSELL = `smg_${GAME_CONFIG.name}_streakUpsellSeen`;
+
+    // ----------------------------------------------------------
+    // Layer 4: User tier runtime
+    // Tier is set by the parent page via USER_STATUS postMessage.
+    // Defaults to "free" so the game works standalone / direct URL.
+    // ----------------------------------------------------------
+    let USER_TIER       = "free";   // "free" | "trial" | "subscriber"
+    let TRIAL_DAYS_LEFT = 0;
+    let _tierResolve    = null;
+    const _adCallbacks  = {};
+
+    window.addEventListener("message", e => {
+      const { type, payload } = e.data || {};
+      if (type === "USER_STATUS") {
+        USER_TIER       = payload?.tier          || "free";
+        TRIAL_DAYS_LEFT = payload?.trialDaysLeft || 0;
+        if (_tierResolve) { _tierResolve(); _tierResolve = null; }
+      } else if (type === "AD_COMPLETE") {
+        const cb = _adCallbacks[payload?.slot];
+        if (cb) { delete _adCallbacks[payload.slot]; cb(); }
+      }
+    });
+
+    function isPaidUser() {
+      return USER_TIER === "subscriber" || USER_TIER === "trial";
+    }
+
+    // Resolves when USER_STATUS arrives, or after `ms` ms (default 1500).
+    function waitForUserStatus(ms = 1500) {
+      return new Promise(resolve => {
+        const t = setTimeout(resolve, ms);
+        _tierResolve = () => { clearTimeout(t); resolve(); };
+      });
+    }
+
+    // ============================================================
+    // GAME DEV: your game logic goes in this section.
+    //
+    //   DAILY_SEED  — deterministic int for today (use % to index arrays)
+    //   PUZZLE_NUM  — today's puzzle number
+    //   TODAY_UTC   — "YYYY-MM-DD"
+    //
+    // Call fireGameOver({ score, completed, shareText, guessCount }) exactly once.
+    // ============================================================
+
+    // ============================================================
+    // END GAME DEV SECTION
+    // ============================================================
+
+    // ----------------------------------------------------------
+    // Layer 2A: Streak tracking
+    // ----------------------------------------------------------
+    function getStreak()    { return parseInt(localStorage.getItem(LS_STREAK)     || "0"); }
+    function getMaxStreak() { return parseInt(localStorage.getItem(LS_MAX_STREAK) || "0"); }
+
+    function updateStreak(won) {
+      if (!won) {
+        localStorage.setItem(LS_STREAK, "0");
+        return 0;
+      }
+      const lastWon = localStorage.getItem(LS_LAST_WON) || "";
+      let streak = (lastWon === YESTERDAY) ? getStreak() + 1 : 1;
+      const maxStreak = Math.max(streak, getMaxStreak());
+      localStorage.setItem(LS_STREAK,     String(streak));
+      localStorage.setItem(LS_MAX_STREAK, String(maxStreak));
+      localStorage.setItem(LS_LAST_WON,   TODAY_UTC);
+      return streak;
+    }
+
+    // ----------------------------------------------------------
+    // Layer 3: Stats tracking (Rule 9)
+    // ----------------------------------------------------------
+    function getStats() {
+      const raw = localStorage.getItem(LS_STATS);
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      return {
+        gamesPlayed: 0,
+        gamesWon:    0,
+        dist:        { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "X": 0 },
+        lastDistKey: null,
+      };
+    }
+
+    function updateStats({ completed, guessCount = null }) {
+      const stats = getStats();
+      stats.gamesPlayed++;
+      if (completed) stats.gamesWon++;
+      const key = (completed && guessCount !== null) ? String(guessCount) : "X";
+      if (stats.dist[key] !== undefined) stats.dist[key]++;
+      stats.lastDistKey = key;
+      localStorage.setItem(LS_STATS, JSON.stringify(stats));
+      return stats;
+    }
+
+    // ----------------------------------------------------------
+    // Layer 2C: Arcade tries tracking
+    // ----------------------------------------------------------
+    function getTriesUsed() {
+      if (localStorage.getItem(LS_TRIES_DATE) !== TODAY_UTC) {
+        localStorage.setItem(LS_TRIES_DATE, TODAY_UTC);
+        localStorage.setItem(LS_TRIES_USED, "0");
+        return 0;
+      }
+      return parseInt(localStorage.getItem(LS_TRIES_USED) || "0");
+    }
+
+    function incrementTriesUsed() {
+      const used = getTriesUsed() + 1;
+      localStorage.setItem(LS_TRIES_USED, String(used));
+      return used;
+    }
+
+    function isArcadeLockedOut() {
+      return GAME_CONFIG.gameType === "arcade" &&
+             getTriesUsed() >= (GAME_CONFIG.dailyTries || 3);
+    }
+
+    function getTriesRemaining() {
+      return Math.max(0, (GAME_CONFIG.dailyTries || 3) - getTriesUsed());
+    }
+
+    // ----------------------------------------------------------
+    // Rule 6: share text builder
+    // GAME DEV: pass your emoji grid string.
+    // ----------------------------------------------------------
+    function buildShareText(emojiGrid = "") {
+      return [
+        `Second Monitor ${GAME_CONFIG.displayName} #${PUZZLE_NUM}`,
+        emojiGrid,
+        "secondmonitorgames.com",
+      ].filter(Boolean).join("\n");
+    }
+
+    // ----------------------------------------------------------
+    // Rule 4: GAME_OVER — call exactly once when game ends
+    //   guessCount — number of guesses used (puzzle only; pass null for arcade)
+    // ----------------------------------------------------------
+    function fireGameOver({ score, completed, shareText, guessCount = null }) {
+      // Arcade: increment tries before saving
+      if (GAME_CONFIG.gameType === "arcade") incrementTriesUsed();
+
+      // Save play record
+      localStorage.setItem(LS_LAST_PLAYED, TODAY_UTC);
+      localStorage.setItem(LS_LAST_RESULT, JSON.stringify({ score, completed, shareText }));
+
+      // Layer 2A: update streak
+      const streak = updateStreak(completed);
+
+      // Layer 3: update stats (Rule 9)
+      updateStats({ completed, guessCount });
+
+      // Layer 4: streak milestone upsell
+      checkStreakUpsell(streak);
+
+      // Post message
+      window.parent.postMessage({
+        type: "GAME_OVER",
+        payload: {
+          game:         GAME_CONFIG.name,
+          gameType:     GAME_CONFIG.gameType,
+          smgVersion:   GAME_CONFIG.smgVersion,
+          date:         TODAY_UTC,
+          puzzleNumber: PUZZLE_NUM,
+          score,
+          completed,
+          shareText,
+          streak,
+          maxStreak:    getMaxStreak(),
+          tier:         USER_TIER,          // Layer 4
+        },
+      }, "*");
+
+      showResultScreen({ score, completed, shareText, streak });
+    }
+
+    // ----------------------------------------------------------
+    // Rule 7: GAME_READY — fires automatically in init()
+    // ----------------------------------------------------------
+    function fireGameReady(alreadyPlayed, lockedOut = false) {
+      window.parent.postMessage({
+        type: "GAME_READY",
+        payload: {
+          game:           GAME_CONFIG.name,
+          smgVersion:     GAME_CONFIG.smgVersion,
+          puzzleNumber:   PUZZLE_NUM,
+          alreadyPlayed,
+          lockedOut,
+          ...(GAME_CONFIG.gameType === "arcade" && {
+            triesRemaining: getTriesRemaining(),
+            dailyTries:     GAME_CONFIG.dailyTries,
+          }),
+        },
+      }, "*");
+    }
+
+    // ----------------------------------------------------------
+    // Layer 4: postMessage helpers
+    // ----------------------------------------------------------
+    function fireAdRequested(slot) {
+      window.parent.postMessage({
+        type: "AD_REQUESTED",
+        payload: { slot, game: GAME_CONFIG.name },
+      }, "*");
+    }
+
+    function fireArchiveGateHit() {
+      window.parent.postMessage({
+        type: "ARCHIVE_GATE_HIT",
+        payload: { game: GAME_CONFIG.name, puzzleNumber: PUZZLE_NUM },
+      }, "*");
+    }
+
+    function fireUpgradeRequested(source = "") {
+      window.parent.postMessage({
+        type: "UPGRADE_REQUESTED",
+        payload: { game: GAME_CONFIG.name, source },
+      }, "*");
+    }
+
+    // ----------------------------------------------------------
+    // Layer 4: Preroll ad (free users only, before first play)
+    // ----------------------------------------------------------
+    function showPreroll() {
+      return new Promise(resolve => {
+        const screen  = document.getElementById("preroll-screen");
+        const skipBtn = document.getElementById("preroll-skip");
+        const countEl = document.getElementById("preroll-countdown");
+
+        screen.classList.add("active");
+        fireAdRequested("preroll");
+
+        let done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          clearInterval(ticker);
+          screen.classList.remove("active");
+          resolve();
+        }
+
+        _adCallbacks["preroll"] = finish;
+
+        let secs = 5;
+        skipBtn.style.display = "none";
+        countEl.style.display = "inline";
+        countEl.textContent   = `Skip ad in ${secs}s`;
+
+        const ticker = setInterval(() => {
+          secs--;
+          if (secs <= 0) {
+            clearInterval(ticker);
+            countEl.style.display = "none";
+            skipBtn.style.display = "flex";
+          } else {
+            countEl.textContent = `Skip ad in ${secs}s`;
+          }
+        }, 1000);
+
+        skipBtn.addEventListener("click", finish, { once: true });
+      });
+    }
+
+    // ----------------------------------------------------------
+    // Layer 4: Archive gate (free users on archive puzzles)
+    // ----------------------------------------------------------
+    function showArchiveGate() {
+      document.getElementById("archive-gate").classList.add("active");
+    }
+
+    document.getElementById("archive-trial-btn").addEventListener("click", () => {
+      fireUpgradeRequested("archive-gate");
+    });
+
+    document.getElementById("archive-today-btn").addEventListener("click", () => {
+      window.parent.postMessage({
+        type: "NAVIGATE_TODAY",
+        payload: { game: GAME_CONFIG.name },
+      }, "*");
+    });
+
+    // ----------------------------------------------------------
+    // Layer 4: Upsell modal
+    // ----------------------------------------------------------
+    const upsellModal = document.getElementById("upsell-modal");
+
+    function showUpsellModal({
+      emoji    = "⭐",
+      title    = "",
+      body     = "",
+      ctaLabel = "Start Free Trial",
+      source   = "",
+    } = {}) {
+      document.getElementById("upsell-emoji").textContent = emoji;
+      document.getElementById("upsell-title").textContent = title;
+      document.getElementById("upsell-body").textContent  = body;
+      const ctaBtn = document.getElementById("upsell-cta-btn");
+      ctaBtn.textContent = ctaLabel;
+      ctaBtn.onclick = () => { closeUpsellModal(); fireUpgradeRequested(source); };
+      upsellModal.classList.add("active");
+    }
+
+    function closeUpsellModal() { upsellModal.classList.remove("active"); }
+
+    document.getElementById("upsell-close-btn").addEventListener("click", closeUpsellModal);
+    document.getElementById("upsell-dismiss-btn").addEventListener("click", closeUpsellModal);
+    upsellModal.addEventListener("click", e => { if (e.target === upsellModal) closeUpsellModal(); });
+
+    // ----------------------------------------------------------
+    // Layer 4: Subscription badge (in header)
+    // ----------------------------------------------------------
+    function updateHeaderBadge() {
+      const badge = document.getElementById("subscription-badge");
+      badge.className = "";
+      if (USER_TIER === "subscriber") {
+        badge.textContent = "Subscriber";
+        badge.classList.add("badge-subscriber");
+      } else if (USER_TIER === "trial") {
+        const days = TRIAL_DAYS_LEFT > 0 ? ` · ${TRIAL_DAYS_LEFT}d left` : "";
+        badge.textContent = `Trial${days}`;
+        badge.classList.add("badge-trial");
+      } else {
+        badge.classList.add("badge-free");
+      }
+    }
+
+    // ----------------------------------------------------------
+    // Layer 4: Result extras (endroll ad + upsell CTA for free users)
+    // ----------------------------------------------------------
+    function showResultExtras() {
+      if (isPaidUser()) return;
+      // Endroll ad
+      const endroll = document.getElementById("endroll-ad");
+      endroll.classList.add("active");
+      fireAdRequested("endroll");
+      // Upsell CTA
+      document.getElementById("result-cta-btn").onclick = () => {
+        fireUpgradeRequested("result-screen");
+      };
+      document.getElementById("result-cta").classList.add("active");
+    }
+
+    // ----------------------------------------------------------
+    // Layer 4: Streak milestone upsell
+    // ----------------------------------------------------------
+    const STREAK_MILESTONES = [3, 7, 14, 30];
+
+    function checkStreakUpsell(streak) {
+      if (isPaidUser()) return;
+      const lastSeen  = parseInt(localStorage.getItem(LS_STREAK_UPSELL) || "0");
+      const milestone = STREAK_MILESTONES.find(m => streak >= m && m > lastSeen);
+      if (!milestone) return;
+      localStorage.setItem(LS_STREAK_UPSELL, String(milestone));
+      setTimeout(() => {
+        showUpsellModal({
+          emoji:    "🔥",
+          title:    `${streak}-day streak!`,
+          body:     "You're on a roll. Subscribe to go ad-free and unlock the full archive.",
+          ctaLabel: "Start Free Trial",
+          source:   `streak-milestone-${milestone}`,
+        });
+      }, 800);
+    }
+
+    // ----------------------------------------------------------
+    // Result screen
+    // ----------------------------------------------------------
+    const resultScreen = document.getElementById("result-screen");
+
+    function showResultScreen({ score, completed, shareText, streak = 0 }) {
+      const isPuzzle = GAME_CONFIG.gameType === "puzzle";
+      const isArcade = GAME_CONFIG.gameType === "arcade";
+
+      document.getElementById("result-title").textContent =
+        completed ? "Well Done!" : "Better luck tomorrow";
+
+      let detail = isPuzzle ? `Puzzle #${PUZZLE_NUM}` : `Score: ${score}`;
+      if (isArcade) {
+        const remaining = getTriesRemaining();
+        detail += remaining > 0
+          ? `  ·  ${remaining} ${remaining === 1 ? "try" : "tries"} left today`
+          : "  ·  No tries left today";
+      }
+      document.getElementById("result-detail").textContent = detail;
+
+      // Layer 2A: streak display
+      const streakEl = document.getElementById("result-streak");
+      streakEl.textContent = streak >= 2 ? `🔥 ${streak} day streak` :
+                             streak === 1 ? "🔥 1 day streak"        : "";
+
+      document.getElementById("result-share-text").textContent = shareText;
+
+      document.getElementById("share-btn").textContent =
+        isPuzzle ? "Share Result" : "Share Score";
+
+      resultScreen.classList.add("active");
+
+      // Layer 4: ads + upsell CTA for free users
+      showResultExtras();
+    }
+
+    document.getElementById("share-btn").addEventListener("click", () => {
+      const text = document.getElementById("result-share-text").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById("share-btn");
+        const label = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => { btn.textContent = label; }, 1500);
+      });
+    });
+
+    document.getElementById("continue-btn").addEventListener("click", () => {
+      resultScreen.classList.remove("active");
+      // Layer 4: reset result extras for next viewing
+      document.getElementById("result-cta").classList.remove("active");
+      document.getElementById("endroll-ad").classList.remove("active");
+    });
+
+    // ----------------------------------------------------------
+    // Layer 2B: How-to-play modal
+    // ----------------------------------------------------------
+    const howToModal = document.getElementById("how-to-modal");
+
+    function openHowTo() { howToModal.classList.add("active"); }
+
+    function closeHowTo() {
+      howToModal.classList.remove("active");
+      localStorage.setItem(LS_SEEN_HOW_TO, "1");
+    }
+
+    document.getElementById("help-btn").addEventListener("click", openHowTo);
+    document.getElementById("how-to-close-btn").addEventListener("click", closeHowTo);
+    howToModal.addEventListener("click", e => { if (e.target === howToModal) closeHowTo(); });
+
+    function buildHowToContent() {
+      const steps = document.getElementById("how-to-steps");
+      steps.innerHTML = "";
+      (GAME_CONFIG.howToPlay || []).forEach(step => {
+        const li = document.createElement("li");
+        li.innerHTML = step; // supports simple HTML like <strong>, coloured .htile spans
+        steps.appendChild(li);
+      });
+    }
+
+    // ----------------------------------------------------------
+    // Layer 3: Stats modal (Rule 10)
+    // ----------------------------------------------------------
+    const statsModal = document.getElementById("stats-modal");
+
+    function openStats() {
+      buildStatsContent();
+      statsModal.classList.add("active");
+    }
+
+    function closeStats() { statsModal.classList.remove("active"); }
+
+    document.getElementById("stats-btn").addEventListener("click", openStats);
+    document.getElementById("stats-close-btn").addEventListener("click", closeStats);
+    statsModal.addEventListener("click", e => { if (e.target === statsModal) closeStats(); });
+
+    function buildStatsContent() {
+      const stats    = getStats();
+      const winPct   = stats.gamesPlayed > 0
+        ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100)
+        : 0;
+      const streak    = getStreak();
+      const maxStreak = getMaxStreak();
+
+      // 4-stat grid
+      const grid = document.getElementById("stats-grid");
+      grid.innerHTML = [
+        { value: stats.gamesPlayed,  label: "Played"  },
+        { value: winPct + "%",       label: "Win %"   },
+        { value: streak,             label: "Streak"  },
+        { value: maxStreak,          label: "Best"    },
+      ].map(s =>
+        `<div class="stat-box">
+           <span class="stat-value">${s.value}</span>
+           <span class="stat-label">${s.label}</span>
+         </div>`
+      ).join("");
+
+      // Distribution (puzzle only)
+      const distSection = document.getElementById("dist-section");
+      if (GAME_CONFIG.gameType !== "puzzle") {
+        distSection.style.display = "none";
+        return;
+      }
+      distSection.style.display = "";
+
+      const dist  = stats.dist;
+      const keys  = ["1","2","3","4","5","6","X"];
+      const max   = Math.max(1, ...keys.map(k => dist[k] || 0));
+      const chart = document.getElementById("dist-chart");
+      chart.innerHTML = keys.map(k => {
+        const count   = dist[k] || 0;
+        const width   = Math.round((count / max) * 100);
+        const isToday = (k === stats.lastDistKey);
+        return `<div class="dist-row">
+          <span class="dist-label">${k}</span>
+          <div class="dist-bar-wrap">
+            <div class="dist-bar${isToday ? " active-row" : ""}" style="width:${Math.max(width, 0)}%">
+              ${count}
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    // ----------------------------------------------------------
+    // Layer 2C: Arcade lockout screen
+    // ----------------------------------------------------------
+    const lockoutScreen = document.getElementById("lockout-screen");
+    let lockoutTimerInterval = null;
+
+    function showLockoutScreen() {
+      const dailyTries = GAME_CONFIG.dailyTries || 3;
+      document.getElementById("lockout-message").textContent =
+        `You've used all ${dailyTries} ${dailyTries === 1 ? "try" : "tries"} for today. Come back tomorrow!`;
+      lockoutScreen.classList.add("active");
+      startLockoutTimer();
+    }
+
+    function startLockoutTimer() {
+      function tick() {
+        const now = new Date();
+        const midnight = new Date(Date.UTC(
+          now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1
+        ));
+        const ms = midnight - now;
+        const h = Math.floor(ms / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        const s = Math.floor((ms % 60000) / 1000);
+        const pad = n => String(n).padStart(2, "0");
+        document.getElementById("lockout-timer").textContent =
+          `${pad(h)}:${pad(m)}:${pad(s)}`;
+      }
+      tick();
+      lockoutTimerInterval = setInterval(tick, 1000);
+    }
+
+    document.getElementById("lockout-upgrade").addEventListener("click", () => {
+      fireUpgradeRequested("lockout-screen");
+    });
+
+    // ----------------------------------------------------------
+    // Layer 2C: Update header tries badge (arcade only)
+    // ----------------------------------------------------------
+    function updateTriesBadge() {
+      if (GAME_CONFIG.gameType !== "arcade") return;
+      const remaining = getTriesRemaining();
+      const badge = document.getElementById("tries-badge");
+      badge.style.display = "inline";
+      badge.textContent = `${remaining}/${GAME_CONFIG.dailyTries || 3} tries`;
+    }
+
+    // ----------------------------------------------------------
+    // Rule 3: already-played handler
+    // GAME DEV: implement restoreCompletedState() for puzzle games.
+    // ----------------------------------------------------------
+    function handleAlreadyPlayed(savedResult) {
+      if (GAME_CONFIG.gameType === "puzzle") {
+        // GAME DEV: restore completed board to locked state, then show result
+        // restoreCompletedState(savedResult);
+        const streak = getStreak();
+        showResultScreen({ ...savedResult, streak });
+      }
+      // Arcade: game still runs; tries badge in header shows what's left
+    }
+
+    // ----------------------------------------------------------
+    // Init (async — Layer 4 two-phase)
+    // ----------------------------------------------------------
+    async function init() {
+      // ---- Phase 1: structural setup (runs immediately) ----
+      document.getElementById("game-title").textContent =
+        GAME_CONFIG.displayName.toUpperCase();
+      document.getElementById("puzzle-num").textContent = `#${PUZZLE_NUM}`;
+
+      buildHowToContent();
+
+      const alreadyPlayed   = localStorage.getItem(LS_LAST_PLAYED) === TODAY_UTC;
+      const arcadeLockedOut = isArcadeLockedOut();
+
+      // Rule 7: signal ready before waiting for tier
+      fireGameReady(alreadyPlayed, arcadeLockedOut);
+
+      // Layer 4: wait up to 1.5 s for parent to deliver USER_STATUS
+      await waitForUserStatus(1500);
+
+      // ---- Phase 2: tier-dependent UI ----
+      updateHeaderBadge();
+
+      // Layer 4: archive gate blocks free users on past puzzles
+      if (GAME_CONFIG.isArchive && !isPaidUser()) {
+        showArchiveGate();
+        fireArchiveGateHit();
+        return;
+      }
+
+      // Layer 2C: arcade lockout
+      if (arcadeLockedOut) {
+        showLockoutScreen();
+        return;
+      }
+
+      // Layer 2C: update tries badge for arcade
+      updateTriesBadge();
+
+      // Layer 4: preroll for free users (skip if already played today)
+      if (!isPaidUser() && !alreadyPlayed) {
+        await showPreroll();
+      }
+
+      // Rule 3: already played?
+      if (alreadyPlayed) {
+        const savedResult = JSON.parse(localStorage.getItem(LS_LAST_RESULT) || "{}");
+        handleAlreadyPlayed(savedResult);
+      }
+
+      // Layer 2B: first-visit how-to auto-show
+      if (!localStorage.getItem(LS_SEEN_HOW_TO)) openHowTo();
+
+      // Start the game
+      startGame(alreadyPlayed);
+    }
+
+    // ----------------------------------------------------------
+    // GAME DEV: implement startGame()
+    //   alreadyPlayed — true if puzzle already done today
+    //   For puzzle: return early (board restored by handleAlreadyPlayed)
+    //   For arcade: always run (player gets dailyTries attempts)
+    // ----------------------------------------------------------
+    function startGame(alreadyPlayed) {
+      if (alreadyPlayed && GAME_CONFIG.gameType === "puzzle") return;
+      // GAME DEV: initialise and start your game here
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

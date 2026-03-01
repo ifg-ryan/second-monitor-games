@@ -48,3 +48,6 @@ next-env.d.ts
 
 # prisma SQLite migrations (we use db push for postgres)
 /prisma/migrations
+
+# clerk configuration (can include secrets)
+/.clerk/
