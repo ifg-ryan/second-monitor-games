@@ -47,9 +47,11 @@
     :root {
       --bg:         #121213;
       --surface:    #1a1a1b;
+      --surface-2:  #252526;
       --border:     #3a3a3c;
       --text:       #ffffff;
       --text-muted: #818384;
+      --text-dim:   #b0b0b3;
       --correct:    #538d4e;
       --present:    #b59f3b;
       --absent:     #3a3a3c;
@@ -148,58 +150,167 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.88);
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      flex-direction: column;
-      gap: 14px;
       z-index: 50;
-      text-align: center;
-      padding: 40px;
+      padding: 40px 20px;
+      overflow-y: auto;
     }
     #result-screen.active { display: flex; }
 
+    #result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 420px;
+      width: 100%;
+      overflow: hidden;
+      animation: result-slide-up 0.28s ease;
+      margin: auto;
+    }
+
+    @keyframes result-slide-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card header */
+    #result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    #result-status-icon { font-size: 1.1rem; line-height: 1; }
+
     #result-title {
-      font-size: 1.5rem;
+      flex: 1;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    #result-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+    #result-close-btn:hover { color: var(--text); }
+
+    /* Score section */
+    #result-score-section {
+      padding: 18px 18px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    #result-score-section.win-state {
+      background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    }
+    .result-score-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .result-score-label {
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      color: var(--text-muted);
     }
-
-    #result-detail { color: var(--text-muted); font-size: 0.9rem; }
-
-    #result-streak {
-      font-size: 1rem;
+    .result-score-value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .result-score-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 10px;
+    }
+    #result-milestone {
+      font-size: 0.85rem;
       font-weight: 600;
-      min-height: 1.4em; /* holds space even when empty */
+      min-height: 1.3em;
+      margin-bottom: 12px;
     }
-
-    #result-share-text {
-      font-family: monospace;
-      font-size: 1rem;
-      line-height: 1.6;
-      white-space: pre;
-    }
-
-    #result-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    #result-buttons button {
-      padding: 12px 28px;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
+    #result-share-btn {
+      width: 100%;
+      padding: 10px 16px;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       transition: opacity 0.15s;
     }
-    #result-buttons button:hover { opacity: 0.85; }
-    #share-btn    { background: var(--accent); color: #fff; }
-    #continue-btn { background: var(--border);  color: var(--text); }
+    #result-share-btn:hover { opacity: 0.8; }
+
+    /* Stats section */
+    #result-stats-section {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .result-stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .result-stat-label { font-size: 0.8rem; color: var(--text-muted); }
+    .result-stat-value { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .result-stats-divider { height: 1px; background: var(--border); }
+
+    /* Action buttons */
+    #result-action-buttons {
+      display: flex;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    #result-home-btn {
+      flex: 1;
+      padding: 10px 14px;
+      background: none;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    #result-home-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    #result-play-again-btn {
+      flex: 1;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #result-play-again-btn:hover { opacity: 0.85; }
+    #result-play-again-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* Hidden share text holder */
+    #result-share-text { display: none; }
 
     /* ---- Layer 2B: How-to-play modal ---- */
     #how-to-modal {
@@ -727,46 +838,56 @@
     /* ---- Layer 4: Result screen extras ---- */
     #result-cta {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
+      padding: 0 16px 12px;
     }
-    #result-cta.active { display: flex; }
+    #result-cta.active { display: block; }
 
     #result-cta-btn {
-      padding: 11px 28px;
-      background: var(--accent);
-      color: #fff;
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--present);
+      color: #0d0d18;
       border: none;
-      border-radius: var(--radius);
+      border-radius: 8px;
       font-size: 0.88rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
       cursor: pointer;
       transition: opacity 0.15s;
     }
     #result-cta-btn:hover { opacity: 0.85; }
 
-    .result-cta-sub {
-      font-size: 0.75rem;
+    #result-leaderboard-wrap { padding: 0 16px 12px; }
+
+    #result-leaderboard-btn {
+      width: 100%;
+      padding: 10px 16px;
+      background: none;
       color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
     }
+    #result-leaderboard-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
     #endroll-ad {
       display: none;
+      padding: 0 16px 16px;
+    }
+    #endroll-ad.active { display: block; }
+
+    .ad-slot-area {
       width: 100%;
-      max-width: 400px;
       min-height: 80px;
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 8px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 4px;
     }
-    #endroll-ad.active { display: flex; }
 
     .ad-label {
       font-size: 0.65rem;
@@ -886,24 +1007,55 @@
 
   <!-- Rule 4/6: result screen — do not remove -->
   <div id="result-screen">
-    <div id="result-title"></div>
-    <div id="result-detail"></div>
-    <div id="result-streak"></div>
-    <div id="result-share-text"></div>
-    <div id="result-buttons">
-      <button id="share-btn">Share Result</button>
-      <button id="continue-btn">Continue</button>
-    </div>
-    <!-- Layer 4: upsell CTA for free users -->
-    <div id="result-cta">
-      <button id="result-cta-btn">Start Free Trial</button>
-      <span class="result-cta-sub">Go ad-free · Unlock the full archive</span>
-    </div>
-    <!-- Layer 4: endroll ad for free users -->
-    <div id="endroll-ad">
-      <div class="ad-slot-area">
-        <span class="ad-label">Advertisement</span>
+    <div id="result-card">
+
+      <!-- Card header -->
+      <div id="result-card-header">
+        <span id="result-status-icon"></span>
+        <div id="result-title"></div>
+        <button id="result-close-btn" aria-label="Close">✕</button>
       </div>
+
+      <!-- Score section -->
+      <div id="result-score-section">
+        <div class="result-score-row">
+          <span class="result-score-label" id="result-score-label">Score</span>
+          <span class="result-score-value" id="result-score-value">—</span>
+        </div>
+        <div class="result-score-divider"></div>
+        <div id="result-milestone"></div>
+        <button id="result-share-btn">🗨️ Share Result</button>
+      </div>
+
+      <!-- Stats section — populated by buildResultStatRows() -->
+      <div id="result-stats-section"></div>
+
+      <!-- Action buttons -->
+      <div id="result-action-buttons">
+        <button id="result-home-btn">← Home</button>
+        <button id="result-play-again-btn">🔒 Play Again</button>
+      </div>
+
+      <!-- Layer 4: subscribe CTA (free users only) -->
+      <div id="result-cta">
+        <button id="result-cta-btn">🎲 Subscribe to play the archives</button>
+      </div>
+
+      <!-- Leaderboard button (always shown) -->
+      <div id="result-leaderboard-wrap">
+        <button id="result-leaderboard-btn">View leaderboards</button>
+      </div>
+
+      <!-- Layer 4: endroll ad (free users only) -->
+      <div id="endroll-ad">
+        <div class="ad-slot-area">
+          <span class="ad-label">Advertisement</span>
+        </div>
+      </div>
+
+      <!-- Hidden: clipboard share text -->
+      <div id="result-share-text"></div>
+
     </div>
   </div>
 
@@ -923,6 +1075,10 @@
       smgVersion:  "1.2",          // Rule 8: do not change
       dailyTries:  3,              // arcade only: attempts allowed per day
       isArchive:   false,          // Layer 4: true when showing a past puzzle
+      scoreLabel:  "Score",        // GAME DEV: label above score value in result card
+      resultStats: [               // GAME DEV: extra stat rows shown in result card
+        // { label: "Turns used", getValue: () => turnsUsed }
+      ],
       howToPlay:   [               // Layer 2B: instruction strings (HTML supported)
         // GAME DEV: replace these with your game's instructions
         "Example rule one — <strong>keep it short</strong>.",
@@ -983,6 +1139,8 @@
     const LS_STATS         = `smg_${GAME_CONFIG.name}_stats`;
     // Layer 4: streak upsell seen milestone
     const LS_STREAK_UPSELL = `smg_${GAME_CONFIG.name}_streakUpsellSeen`;
+    // Layer 4: best score (new high score detection in result card)
+    const LS_BEST_SCORE    = `smg_${GAME_CONFIG.name}_bestScore`;
 
     // ----------------------------------------------------------
     // Layer 4: User tier runtime
@@ -1311,19 +1469,32 @@
     }
 
     // ----------------------------------------------------------
+    // Layer 4: Best score tracking (new high score detection)
+    // ----------------------------------------------------------
+    function checkAndUpdateBestScore(score) {
+      if (typeof score !== "number" || isNaN(score)) return false;
+      const prev = parseFloat(localStorage.getItem(LS_BEST_SCORE) ?? "-Infinity");
+      if (score > prev) {
+        localStorage.setItem(LS_BEST_SCORE, String(score));
+        return true;
+      }
+      return false;
+    }
+
+    // ----------------------------------------------------------
     // Layer 4: Result extras (endroll ad + upsell CTA for free users)
     // ----------------------------------------------------------
     function showResultExtras() {
-      if (isPaidUser()) return;
-      // Endroll ad
-      const endroll = document.getElementById("endroll-ad");
-      endroll.classList.add("active");
-      fireAdRequested("endroll");
-      // Upsell CTA
-      document.getElementById("result-cta-btn").onclick = () => {
-        fireUpgradeRequested("result-screen");
-      };
-      document.getElementById("result-cta").classList.add("active");
+      if (!isPaidUser()) {
+        // Endroll ad
+        document.getElementById("endroll-ad").classList.add("active");
+        fireAdRequested("endroll");
+        // Upsell CTA
+        document.getElementById("result-cta-btn").onclick = () => {
+          fireUpgradeRequested("result-screen");
+        };
+        document.getElementById("result-cta").classList.add("active");
+      }
     }
 
     // ----------------------------------------------------------
@@ -1353,53 +1524,154 @@
     // ----------------------------------------------------------
     const resultScreen = document.getElementById("result-screen");
 
-    function showResultScreen({ score, completed, shareText, streak = 0 }) {
-      const isPuzzle = GAME_CONFIG.gameType === "puzzle";
-      const isArcade = GAME_CONFIG.gameType === "arcade";
+    // Build stat rows for the result card stats section.
+    // Returns an array of { label, value } | { divider: true } objects.
+    function buildResultStatRows({ streak }) {
+      const extra = [];
 
-      document.getElementById("result-title").textContent =
-        completed ? "Well Done!" : "Better luck tomorrow";
-
-      let detail = isPuzzle ? `Puzzle #${PUZZLE_NUM}` : `Score: ${score}`;
-      if (isArcade) {
-        const remaining = getTriesRemaining();
-        detail += remaining > 0
-          ? `  ·  ${remaining} ${remaining === 1 ? "try" : "tries"} left today`
-          : "  ·  No tries left today";
+      // Streak row
+      if (streak >= 1) {
+        extra.push({ label: "Streak", value: `🔥 ${streak}` });
       }
-      document.getElementById("result-detail").textContent = detail;
 
-      // Layer 2A: streak display
-      const streakEl = document.getElementById("result-streak");
-      streakEl.textContent = streak >= 2 ? `🔥 ${streak} day streak` :
-                             streak === 1 ? "🔥 1 day streak"        : "";
+      // Game-specific stats from GAME_CONFIG.resultStats
+      (GAME_CONFIG.resultStats || []).forEach(stat => {
+        try {
+          extra.push({ label: stat.label, value: String(stat.getValue ? stat.getValue() : "") });
+        } catch (_) {}
+      });
 
-      document.getElementById("result-share-text").textContent = shareText;
+      const rows = [{ label: `Puzzle #${PUZZLE_NUM}`, value: null }];
+      if (extra.length > 0) {
+        rows.push({ divider: true });
+        rows.push(...extra);
+      }
+      return rows;
+    }
 
-      document.getElementById("share-btn").textContent =
-        isPuzzle ? "Share Result" : "Share Score";
+    function showResultScreen({ score, completed, shareText, streak = 0 }) {
+      const isPuzzle  = GAME_CONFIG.gameType === "puzzle";
+      const isArcade  = GAME_CONFIG.gameType === "arcade";
+      const hasScore  = typeof score === "number" && !isNaN(score);
+      const isNewBest = completed && hasScore && checkAndUpdateBestScore(score);
+
+      // ── Header ──────────────────────────────────────────────────
+      document.getElementById("result-status-icon").textContent = completed ? "✅" : "❌";
+      document.getElementById("result-title").textContent =
+        completed ? "Puzzle complete!" : (isPuzzle ? "Better luck tomorrow" : "Game over");
+
+      // ── Score section ───────────────────────────────────────────
+      document.getElementById("result-score-section")
+        .classList.toggle("win-state", !!completed);
+
+      document.getElementById("result-score-label").textContent =
+        GAME_CONFIG.scoreLabel || "Score";
+
+      document.getElementById("result-score-value").textContent =
+        hasScore ? score.toLocaleString() : "—";
+
+      // Milestone message
+      let milestone = "";
+      if (completed) {
+        if (isNewBest && hasScore)   milestone = "🏆 New high score!";
+        else if (streak >= 3)        milestone = `🔥 ${streak}-day streak!`;
+        else if (streak >= 1)        milestone = "🔥 Streak alive!";
+      }
+      document.getElementById("result-milestone").textContent = milestone;
+
+      // Share button label
+      document.getElementById("result-share-btn").textContent =
+        isPuzzle ? "🗨️ Share Result" : "🗨️ Share Score";
+
+      // Store share text (hidden — used by clipboard copy)
+      document.getElementById("result-share-text").textContent = shareText || "";
+
+      // ── Stats section ───────────────────────────────────────────
+      const statsSection = document.getElementById("result-stats-section");
+      statsSection.innerHTML = "";
+      buildResultStatRows({ streak }).forEach(row => {
+        if (row.divider) {
+          const el = document.createElement("div");
+          el.className = "result-stats-divider";
+          statsSection.appendChild(el);
+        } else if (row.value === null) {
+          // Label-only row (puzzle number)
+          const el = document.createElement("div");
+          el.className = "result-stat-row";
+          el.innerHTML = `<span class="result-stat-label">${row.label}</span>`;
+          statsSection.appendChild(el);
+        } else {
+          const el = document.createElement("div");
+          el.className = "result-stat-row";
+          el.innerHTML =
+            `<span class="result-stat-label">${row.label}</span>` +
+            `<span class="result-stat-value">${row.value}</span>`;
+          statsSection.appendChild(el);
+        }
+      });
+
+      // ── Play again button ───────────────────────────────────────
+      const playAgainBtn = document.getElementById("result-play-again-btn");
+      if (isPuzzle) {
+        playAgainBtn.textContent = "🔒 Played Today";
+        playAgainBtn.disabled = true;
+      } else {
+        const remaining = getTriesRemaining();
+        if (remaining > 0) {
+          playAgainBtn.textContent = `▶ Play Again (${remaining} left)`;
+          playAgainBtn.disabled = false;
+        } else {
+          playAgainBtn.textContent = "🔒 Out of tries";
+          playAgainBtn.disabled = true;
+        }
+      }
 
       resultScreen.classList.add("active");
-
-      // Layer 4: ads + upsell CTA for free users
       showResultExtras();
     }
 
-    document.getElementById("share-btn").addEventListener("click", () => {
+    // Share button — copies share text to clipboard
+    document.getElementById("result-share-btn").addEventListener("click", () => {
       const text = document.getElementById("result-share-text").textContent;
       navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById("share-btn");
-        const label = btn.textContent;
-        btn.textContent = "Copied!";
-        setTimeout(() => { btn.textContent = label; }, 1500);
-      });
+        const btn = document.getElementById("result-share-btn");
+        const prev = btn.textContent;
+        btn.textContent = "✓ Copied!";
+        setTimeout(() => { btn.textContent = prev; }, 1500);
+      }).catch(() => {});
     });
 
-    document.getElementById("continue-btn").addEventListener("click", () => {
+    // Close (✕) button
+    document.getElementById("result-close-btn").addEventListener("click", () => {
       resultScreen.classList.remove("active");
-      // Layer 4: reset result extras for next viewing
       document.getElementById("result-cta").classList.remove("active");
       document.getElementById("endroll-ad").classList.remove("active");
+    });
+
+    // Home button — navigate out of game
+    document.getElementById("result-home-btn").addEventListener("click", () => {
+      window.parent.postMessage({
+        type: "NAVIGATE_HOME",
+        payload: { game: GAME_CONFIG.name },
+      }, "*");
+      resultScreen.classList.remove("active");
+    });
+
+    // Play again button — arcade only; puzzle is always disabled
+    document.getElementById("result-play-again-btn").addEventListener("click", () => {
+      if (GAME_CONFIG.gameType === "arcade" && getTriesRemaining() > 0) {
+        resultScreen.classList.remove("active");
+        document.getElementById("result-cta").classList.remove("active");
+        document.getElementById("endroll-ad").classList.remove("active");
+      }
+    });
+
+    // Leaderboard button
+    document.getElementById("result-leaderboard-btn").addEventListener("click", () => {
+      window.parent.postMessage({
+        type: "NAVIGATE_LEADERBOARD",
+        payload: { game: GAME_CONFIG.name },
+      }, "*");
     });
 
     // ----------------------------------------------------------
