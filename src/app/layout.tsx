@@ -93,7 +93,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                var t = localStorage.getItem('smg-theme');
+                var t = localStorage.getItem('smg-theme-v2');
                 document.documentElement.setAttribute(
                   'data-theme',
                   t === 'dark' ? 'dark' : 'light'

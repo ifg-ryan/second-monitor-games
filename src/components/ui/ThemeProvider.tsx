@@ -23,7 +23,7 @@ export default function ThemeProvider({
 
   useEffect(() => {
     // Sync React state with whatever the inline script already applied
-    const stored = localStorage.getItem("smg-theme");
+    const stored = localStorage.getItem("smg-theme-v2");
     if (stored === "dark") {
       setTheme("dark");
     }
@@ -33,7 +33,7 @@ export default function ThemeProvider({
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("smg-theme", next);
+    localStorage.setItem("smg-theme-v2", next);
   };
 
   return (
