@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { SignOutButton } from "@clerk/nextjs";
 import { getSubscriptionStatus } from "@/lib/subscription";
+import ManageButton from "./ManageButton";
+import UsernameSection from "./UsernameSection";
 
 export const metadata: Metadata = {
-  title:   "Account — Second Monitor Games",
-  robots:  { index: false, follow: false },
+  title:  "Account — Second Monitor Games",
+  robots: { index: false, follow: false },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -22,7 +25,6 @@ function formatDate(date: Date | null): string {
 
 function planLabel(planId: string | null): string {
   if (!planId) return "Unknown";
-  // Match our known price IDs; fall back to a generic label
   if (planId === process.env.STRIPE_PRICE_ANNUAL)  return "Annual ($39.99/yr)";
   if (planId === process.env.STRIPE_PRICE_MONTHLY) return "Monthly ($4.99/mo)";
   return "Subscriber";
@@ -30,7 +32,6 @@ function planLabel(planId: string | null): string {
 
 function statusBadge(status: string | null, cancelAtPeriodEnd: boolean) {
   if (!status) return { label: "None", color: "var(--text-muted)" };
-
   if (status === "trialing")  return { label: "Trial",  color: "#c9a84c" };
   if (status === "active" && cancelAtPeriodEnd)
     return { label: "Cancels at period end", color: "#c9a84c" };
@@ -49,65 +50,70 @@ export default async function AccountPage() {
   const sub = await getSubscriptionStatus(userId);
   const { label: badgeLabel, color: badgeColor } = statusBadge(sub.status, sub.cancelAtPeriodEnd);
 
+  const cardStyle = {
+    background:   "var(--surface)",
+    border:       "1px solid var(--border)",
+    borderRadius: "16px",
+    padding:      "32px",
+    marginBottom: "16px",
+  };
+
+  const sectionLabelStyle = {
+    display:       "inline-block",
+    background:    "var(--accent-dim)",
+    color:         "var(--accent)",
+    fontSize:      "11px",
+    fontWeight:    700,
+    letterSpacing: "0.12em",
+    padding:       "4px 12px",
+    borderRadius:  "4px",
+    textTransform: "uppercase" as const,
+    marginBottom:  "20px",
+  };
+
   return (
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
       <div
         className="max-w-2xl mx-auto px-6"
         style={{ paddingTop: "72px", paddingBottom: "80px" }}
       >
-        {/* ── Header ─────────────────────────────────────────────── */}
-        <div style={{ marginBottom: "40px" }}>
-          <div
+        {/* ── Page heading ────────────────────────────────────────── */}
+        <div style={{ marginBottom: "32px" }}>
+          <h1
             style={{
-              display:       "inline-block",
-              background:    "var(--accent-dim)",
-              color:         "var(--accent)",
-              fontSize:      "11px",
-              fontWeight:    700,
-              letterSpacing: "0.12em",
-              padding:       "4px 12px",
-              borderRadius:  "4px",
-              textTransform: "uppercase",
-              marginBottom:  "20px",
+              fontFamily: "var(--font-dm-serif)",
+              color:      "var(--text)",
+              fontSize:   "clamp(1.75rem, 4vw, 2.25rem)",
+              lineHeight: 1.15,
             }}
           >
             Account
-          </div>
-          <h1
-            style={{
-              fontFamily:   "var(--font-dm-serif)",
-              color:        "var(--text)",
-              fontSize:     "clamp(1.75rem, 4vw, 2.25rem)",
-              lineHeight:   1.15,
-            }}
-          >
-            Your subscription
           </h1>
         </div>
 
-        {/* ── Subscription card ──────────────────────────────────── */}
-        <div
-          style={{
-            background:   "var(--surface)",
-            border:       "1px solid var(--border)",
-            borderRadius: "16px",
-            padding:      "32px",
-            marginBottom: "24px",
-          }}
-        >
+        {/* ── Card 1: Profile ─────────────────────────────────────── */}
+        <div style={cardStyle}>
+          <div style={sectionLabelStyle}>Profile</div>
+          <UsernameSection initial={sub.username} />
+        </div>
+
+        {/* ── Card 2: Subscription ────────────────────────────────── */}
+        <div style={cardStyle}>
+          <div style={sectionLabelStyle}>Subscription</div>
+
           {sub.isActive ? (
             <>
-              {/* Status row */}
+              {/* Plan + status row */}
               <div
                 style={{
-                  display:         "flex",
-                  alignItems:      "center",
-                  justifyContent:  "space-between",
-                  flexWrap:        "wrap",
-                  gap:             "12px",
-                  marginBottom:    "28px",
-                  paddingBottom:   "24px",
-                  borderBottom:    "1px solid var(--border)",
+                  display:       "flex",
+                  alignItems:    "center",
+                  justifyContent: "space-between",
+                  flexWrap:      "wrap",
+                  gap:           "12px",
+                  marginBottom:  "28px",
+                  paddingBottom: "24px",
+                  borderBottom:  "1px solid var(--border)",
                 }}
               >
                 <div>
@@ -120,13 +126,13 @@ export default async function AccountPage() {
                 </div>
                 <div
                   style={{
-                    background:    `${badgeColor}18`,
-                    color:         badgeColor,
-                    fontSize:      "0.8rem",
-                    fontWeight:    700,
-                    padding:       "5px 14px",
-                    borderRadius:  "20px",
-                    whiteSpace:    "nowrap",
+                    background:   `${badgeColor}18`,
+                    color:        badgeColor,
+                    fontSize:     "0.8rem",
+                    fontWeight:   700,
+                    padding:      "5px 14px",
+                    borderRadius: "20px",
+                    whiteSpace:   "nowrap",
                   }}
                 >
                   {badgeLabel}
@@ -148,11 +154,12 @@ export default async function AccountPage() {
                 />
               </div>
 
-              {/* Manage button */}
-              <ManageButton />
+              {/* Manage billing */}
+              <div style={{ marginTop: "28px", paddingTop: "24px", borderTop: "1px solid var(--border)" }}>
+                <ManageButton />
+              </div>
             </>
           ) : (
-            /* No active subscription */
             <div style={{ textAlign: "center", padding: "20px 0" }}>
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🔓</div>
               <h2
@@ -189,9 +196,36 @@ export default async function AccountPage() {
           )}
         </div>
 
-        <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", textAlign: "center", lineHeight: 1.6 }}>
-          Billing is handled securely by Stripe. Cancel anytime — your access continues until the end of your billing period.
-        </p>
+        {/* ── Footer: billing note + sign out ─────────────────────── */}
+        <div
+          style={{
+            display:        "flex",
+            alignItems:     "center",
+            justifyContent: "space-between",
+            flexWrap:       "wrap",
+            gap:            "12px",
+            marginTop:      "8px",
+          }}
+        >
+          <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", lineHeight: 1.6 }}>
+            Billing handled securely by Stripe. Cancel anytime.
+          </p>
+          <SignOutButton redirectUrl="/">
+            <button
+              style={{
+                background: "none",
+                border:     "none",
+                color:      "var(--text-muted)",
+                fontSize:   "0.8rem",
+                cursor:     "pointer",
+                padding:    "4px 0",
+              }}
+            >
+              Sign out
+            </button>
+          </SignOutButton>
+        </div>
+
       </div>
     </div>
   );
@@ -216,7 +250,3 @@ function DetailRow({ label, value, note }: { label: string; value: string; note?
     </div>
   );
 }
-
-// Client component for the Manage Subscription button
-// (needs to call the API and redirect — small island of interactivity)
-import ManageButton from "./ManageButton";

@@ -901,6 +901,15 @@
     ============================================================ */
 
   </style>
+
+  <!-- Google Analytics — replace G-JS6BS4JMNB with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JS6BS4JMNB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JS6BS4JMNB');
+  </script>
 </head>
 <body>
 
@@ -1314,6 +1323,16 @@
           tier:         USER_TIER,          // Layer 4
         },
       }, "*");
+
+      // Google Analytics: track game completion
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'game_complete', {
+          game_name:     GAME_CONFIG.name,
+          puzzle_number: PUZZLE_NUM,
+          completed:     completed,
+          score:         score,
+        });
+      }
 
       showResultScreen({ score, completed, shareText, streak });
     }
@@ -1842,6 +1861,14 @@
 
       // Rule 7: signal ready before waiting for tier
       fireGameReady(alreadyPlayed, arcadeLockedOut);
+
+      // Google Analytics: track game view
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'game_view', {
+          game_name:     GAME_CONFIG.name,
+          puzzle_number: PUZZLE_NUM,
+        });
+      }
 
       // Layer 4: wait up to 1.5 s for parent to deliver USER_STATUS
       await waitForUserStatus(1500);

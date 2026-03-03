@@ -1,5 +1,6 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import AccountButton from "@/components/layout/AccountButton";
 
 export default function Navbar() {
   return (
@@ -118,19 +119,7 @@ export default function Navbar() {
             </a>
           </SignedOut>
           <SignedIn>
-            <a
-              href="/account"
-              className="hidden sm:block nav-link-muted"
-              style={{
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                padding: "8px 16px",
-                textDecoration: "none",
-              }}
-            >
-              Account
-            </a>
-            <UserButton afterSignOutUrl="/" />
+            <AccountButton />
           </SignedIn>
           <ThemeToggle />
         </div>

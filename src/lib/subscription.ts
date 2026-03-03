@@ -16,6 +16,7 @@ export interface SubscriptionInfo {
   trialEnd: Date | null;
   currentPeriodEnd: Date | null;
   cancelAtPeriodEnd: boolean;
+  username: string | null;
 }
 
 const ACTIVE_STATUSES: SubscriptionStatus[] = ["trialing", "active"];
@@ -38,6 +39,7 @@ export async function getSubscriptionStatus(clerkId: string): Promise<Subscripti
       trialEnd: null,
       currentPeriodEnd: null,
       cancelAtPeriodEnd: false,
+      username: user?.username ?? null,
     };
   }
 
@@ -51,6 +53,7 @@ export async function getSubscriptionStatus(clerkId: string): Promise<Subscripti
     trialEnd: sub.trialEnd,
     currentPeriodEnd: sub.currentPeriodEnd,
     cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
+    username: user.username ?? null,
   };
 }
 

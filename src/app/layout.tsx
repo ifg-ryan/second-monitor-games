@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ThemeProvider from "@/components/ui/ThemeProvider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -131,7 +132,8 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased flex flex-col min-h-screen">
-        <ClerkProvider>
+        <GoogleAnalytics />
+        <ClerkProvider afterSignUpUrl="/onboard">
           <ThemeProvider>
             <Navbar />
             <main className="flex-1">{children}</main>
