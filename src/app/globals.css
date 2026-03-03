@@ -1,29 +1,33 @@
 @import "tailwindcss";
 
-/* ── Dark theme (default) ───────────────────────────────── */
+/* ── Dark theme (default) — Iron Fox aligned ────────────── */
 :root {
-  --bg:           #0d0d18;
-  --surface:      #14141f;
-  --surface-2:    #1c1c2e;
-  --border:       #2a2a45;
+  --bg:           #0d1812;
+  --surface:      #131f18;
+  --surface-2:    #1b2c22;
+  --border:       #1e3228;
   --accent:       #e8a838;
   --accent-hover: #f0bc55;
   --accent-dim:   rgba(232, 168, 56, 0.12);
+  --accent-red:   #d4572a;
+  --accent-blue:  #4a8fc4;
   --text:         #f0eee8;
-  --text-muted:   #6b6b8a;
-  --text-dim:     #9898b8;
+  --text-muted:   #6b8a72;
+  --text-dim:     #8aaa90;
 }
 
-/* ── Light theme ────────────────────────────────────────── */
+/* ── Light theme — Iron Fox cream ───────────────────────── */
 html[data-theme="light"] {
-  --bg:           #f4f1ec;
-  --surface:      #ffffff;
-  --surface-2:    #ede9e3;
-  --border:       #d8d0c8;
-  --accent:       #b07d0e;
-  --accent-hover: #c98f10;
-  --accent-dim:   rgba(176, 125, 14, 0.12);
-  --text:         #1c1a17;
+  --bg:           #e8e3d5;
+  --surface:      #f2ede4;
+  --surface-2:    #ddd8cc;
+  --border:       #c8bfaf;
+  --accent:       #c89018;
+  --accent-hover: #daa020;
+  --accent-dim:   rgba(200, 144, 24, 0.12);
+  --accent-red:   #d4572a;
+  --accent-blue:  #4a8fc4;
+  --text:         #1c2a1e;
   --text-muted:   #6b5e4e;
   --text-dim:     #8a7a68;
 }
