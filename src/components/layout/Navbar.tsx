@@ -119,21 +119,16 @@ export default function Navbar() {
           </SignedOut>
           <SignedIn>
             <a
-              href="/pricing"
+              href="/account"
+              className="hidden sm:block nav-link-muted"
               style={{
-                background: "var(--accent)",
-                color: "#0d0d18",
-                borderRadius: "8px",
                 fontSize: "0.875rem",
-                fontWeight: 700,
+                fontWeight: 500,
                 padding: "8px 16px",
                 textDecoration: "none",
-                whiteSpace: "nowrap",
-                transition: "opacity 0.2s",
               }}
-              className="hover:opacity-90"
             >
-              Subscribe — $4.99/mo
+              Account
             </a>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>

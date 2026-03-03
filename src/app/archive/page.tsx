@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { auth } from "@clerk/nextjs/server";
+import { isSubscribed } from "@/lib/subscription";
 
 export const metadata: Metadata = {
   title:       "Archive — Second Monitor Games",
@@ -95,9 +97,23 @@ const GAMES = [
   },
 ];
 
+// ── Gating helper (pure — exported for testing) ───────────────────────────────
+
+/**
+ * Returns the href for a past archive item.
+ * Subscribers get a date-parameterised game link; others are sent to /pricing.
+ */
+export function getArchivePastHref(gameHref: string, dateStr: string, subscribed: boolean): string {
+  if (!subscribed) return "/pricing";
+  return `${gameHref}?date=${dateStr}`;
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default function ArchivePage() {
+export default async function ArchivePage() {
+  const { userId } = await auth();
+  const subscribed = userId ? await isSubscribed(userId) : false;
+
   const allPuzzleDays = Object.fromEntries(
     GAMES.map((g) => [g.id, getPuzzleDays(g.launchDate)])
   );
@@ -143,27 +159,29 @@ export default function ArchivePage() {
             </p>
           </div>
 
-          {/* Subscribe CTA */}
-          <div style={{ flexShrink: 0 }}>
-            <a
-              href="/pricing"
-              style={{
-                display:        "inline-flex",
-                alignItems:     "center",
-                gap:            "8px",
-                background:     "var(--accent)",
-                color:          "#0d0d18",
-                fontWeight:     700,
-                fontSize:       "0.9rem",
-                padding:        "12px 28px",
-                borderRadius:   "9px",
-                textDecoration: "none",
-                whiteSpace:     "nowrap",
-              }}
-            >
-              🔓 Unlock Archive — $4.99/mo
-            </a>
-          </div>
+          {/* Subscribe CTA — only shown to non-subscribers */}
+          {!subscribed && (
+            <div style={{ flexShrink: 0 }}>
+              <a
+                href="/subscribe"
+                style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  gap:            "8px",
+                  background:     "var(--accent)",
+                  color:          "#0d0d18",
+                  fontWeight:     700,
+                  fontSize:       "0.9rem",
+                  padding:        "12px 28px",
+                  borderRadius:   "9px",
+                  textDecoration: "none",
+                  whiteSpace:     "nowrap",
+                }}
+              >
+                🔓 Unlock Archive — $4.99/mo
+              </a>
+            </div>
+          )}
         </div>
 
         {/* ── Games ─────────────────────────────────────────────── */}
@@ -252,7 +270,7 @@ export default function ArchivePage() {
                       return (
                         <div key={day.dateStr} style={{ position: "relative" }}>
                           {isToday ? (
-                            /* Today — free, playable */
+                            /* Today — free, always playable */
                             <a
                               href={game.href}
                               style={{
@@ -265,26 +283,34 @@ export default function ArchivePage() {
                                 transition:     "border-color 0.15s, background 0.15s",
                               }}
                             >
-                              <div
-                                style={{
-                                  fontSize:      "9px",
-                                  fontWeight:    700,
-                                  letterSpacing: "0.08em",
-                                  textTransform: "uppercase",
-                                  color:         game.tagColor,
-                                  marginBottom:  "5px",
-                                }}
-                              >
+                              <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: game.tagColor, marginBottom: "5px" }}>
                                 Today · Free
                               </div>
-                              <div
-                                style={{
-                                  color:      "var(--text)",
-                                  fontWeight: 600,
-                                  fontSize:   "0.8rem",
-                                  marginBottom: "3px",
-                                }}
-                              >
+                              <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.8rem", marginBottom: "3px" }}>
+                                {day.label}
+                              </div>
+                              <div style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                                #{day.puzzleNumber}
+                              </div>
+                            </a>
+                          ) : subscribed ? (
+                            /* Past — subscriber, unlocked */
+                            <a
+                              href={getArchivePastHref(game.href, day.dateStr, true)}
+                              style={{
+                                display:        "block",
+                                background:     `${game.tagColor}10`,
+                                border:         `1px solid ${game.tagColor}40`,
+                                borderRadius:   "9px",
+                                padding:        "12px 14px",
+                                textDecoration: "none",
+                                transition:     "border-color 0.15s, background 0.15s",
+                              }}
+                            >
+                              <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", marginBottom: "5px" }}>
+                                ✓ Unlocked
+                              </div>
+                              <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.8rem", marginBottom: "3px" }}>
                                 {day.label}
                               </div>
                               <div style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
@@ -292,7 +318,7 @@ export default function ArchivePage() {
                               </div>
                             </a>
                           ) : (
-                            /* Past — locked behind subscription */
+                            /* Past — not subscribed, locked */
                             <a
                               href="/pricing"
                               style={{
@@ -306,29 +332,10 @@ export default function ArchivePage() {
                                 transition:     "opacity 0.15s, border-color 0.15s",
                               }}
                             >
-                              <div
-                                style={{
-                                  fontSize:      "9px",
-                                  fontWeight:    700,
-                                  letterSpacing: "0.08em",
-                                  textTransform: "uppercase",
-                                  color:         "var(--text-muted)",
-                                  marginBottom:  "5px",
-                                  display:       "flex",
-                                  alignItems:    "center",
-                                  gap:           "4px",
-                                }}
-                              >
+                              <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: "5px", display: "flex", alignItems: "center", gap: "4px" }}>
                                 <span>🔒</span> Subscribers
                               </div>
-                              <div
-                                style={{
-                                  color:        "var(--text-muted)",
-                                  fontWeight:   500,
-                                  fontSize:     "0.8rem",
-                                  marginBottom: "3px",
-                                }}
-                              >
+                              <div style={{ color: "var(--text-muted)", fontWeight: 500, fontSize: "0.8rem", marginBottom: "3px" }}>
                                 {day.label}
                               </div>
                               <div style={{ color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.7 }}>
@@ -346,62 +353,64 @@ export default function ArchivePage() {
           })}
         </div>
 
-        {/* ── Bottom CTA ────────────────────────────────────────── */}
-        <div
-          style={{
-            marginTop:    "64px",
-            background:   "var(--surface)",
-            border:       "1px solid var(--border)",
-            borderRadius: "16px",
-            padding:      "40px",
-            textAlign:    "center",
-          }}
-        >
-          <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🔓</div>
-          <h2
+        {/* ── Bottom CTA — only shown to non-subscribers ───────── */}
+        {!subscribed && (
+          <div
             style={{
-              fontFamily:   "var(--font-dm-serif)",
-              color:        "var(--text)",
-              fontSize:     "1.5rem",
-              marginBottom: "10px",
+              marginTop:    "64px",
+              background:   "var(--surface)",
+              border:       "1px solid var(--border)",
+              borderRadius: "16px",
+              padding:      "40px",
+              textAlign:    "center",
             }}
           >
-            Unlock the full archive
-          </h2>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.7, maxWidth: "420px", margin: "0 auto 24px" }}>
-            Subscribe for $4.99/month to play every past puzzle, go ad-free,
-            and unlock full stats and leaderboards.
-          </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <a
-              href="/pricing"
+            <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🔓</div>
+            <h2
               style={{
-                display:        "inline-flex",
-                alignItems:     "center",
-                gap:            "8px",
-                background:     "var(--accent)",
-                color:          "#0d0d18",
-                fontWeight:     700,
-                fontSize:       "0.95rem",
-                padding:        "13px 32px",
-                borderRadius:   "10px",
-                textDecoration: "none",
+                fontFamily:   "var(--font-dm-serif)",
+                color:        "var(--text)",
+                fontSize:     "1.5rem",
+                marginBottom: "10px",
               }}
             >
-              See plans →
-            </a>
-            <a
-              href="/"
-              style={{
-                color:          "var(--text-muted)",
-                fontSize:       "0.875rem",
-                textDecoration: "none",
-              }}
-            >
-              Play today&apos;s free games instead
-            </a>
+              Unlock the full archive
+            </h2>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.7, maxWidth: "420px", margin: "0 auto 24px" }}>
+              Subscribe for $4.99/month to play every past puzzle, go ad-free,
+              and unlock full stats and leaderboards.
+            </p>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <a
+                href="/subscribe"
+                style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  gap:            "8px",
+                  background:     "var(--accent)",
+                  color:          "#0d0d18",
+                  fontWeight:     700,
+                  fontSize:       "0.95rem",
+                  padding:        "13px 32px",
+                  borderRadius:   "10px",
+                  textDecoration: "none",
+                }}
+              >
+                Start free trial →
+              </a>
+              <a
+                href="/"
+                style={{
+                  color:          "var(--text-muted)",
+                  fontSize:       "0.875rem",
+                  textDecoration: "none",
+                }}
+              >
+                Play today&apos;s free games instead
+              </a>
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
