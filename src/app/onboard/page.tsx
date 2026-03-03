@@ -4,6 +4,31 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
+// Mirror the server-side word filter on the client for instant feedback
+const BAD_WORDS = [
+  "ass","asshole","bastard","bitch","cock","cocksucker","cum","cunt","dick",
+  "dildo","fag","faggot","fuck","fucker","fucking","gangbang","handjob","horny",
+  "jizz","masturbat","milf","nipple","orgasm","penis","porn","pussy","rape",
+  "rapist","sex","shit","slut","tit","tits","twat","vagina","whore",
+  "chink","coon","gook","kike","negro","nigga","nigger","redskin","spic",
+  "towelhead","wetback","zipperhead","kkk","nazi","neonazi","whitepride",
+  "whitepower","skinhead","retard","tranny",
+];
+
+function normalize(s: string): string {
+  return s.toLowerCase()
+    .replace(/0/g,"o").replace(/1/g,"i").replace(/3/g,"e").replace(/4/g,"a")
+    .replace(/5/g,"s").replace(/7/g,"t").replace(/8/g,"b").replace(/@/g,"a")
+    .replace(/\$/g,"s").replace(/!/g,"i").replace(/[^a-z]/g,"");
+}
+
+function hasBadWord(username: string): boolean {
+  const n = normalize(username);
+  return BAD_WORDS.some((w) => n.includes(normalize(w)));
+}
+
+const USERNAME_RE = /^[a-zA-Z0-9_]{3,20}$/;
+
 export default function OnboardPage() {
   const router = useRouter();
   const { isLoaded, isSignedIn } = useUser();
@@ -16,7 +41,7 @@ export default function OnboardPage() {
     if (isLoaded && !isSignedIn) router.replace("/sign-in?redirect_url=/onboard");
   }, [isLoaded, isSignedIn, router]);
 
-  // Check if user already has a username — skip onboarding
+  // Skip if user already has a username
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
     fetch("/api/user/me")
@@ -25,8 +50,25 @@ export default function OnboardPage() {
       .catch(() => {});
   }, [isLoaded, isSignedIn, router]);
 
+  // Real-time client-side validation
+  function validate(val: string): string {
+    if (val.length === 0)       return "";
+    if (val.length < 3)         return "Too short — minimum 3 characters.";
+    if (!USERNAME_RE.test(val)) return "Letters, numbers, and underscores only.";
+    if (hasBadWord(val))        return "That username isn't allowed. Please choose another.";
+    return "";
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    setUsername(val);
+    setError(validate(val));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const clientErr = validate(username);
+    if (clientErr) { setError(clientErr); return; }
     setError("");
     setSaving(true);
     try {
@@ -42,6 +84,8 @@ export default function OnboardPage() {
       setSaving(false);
     }
   }
+
+  const isValid = username.length >= 3 && USERNAME_RE.test(username) && !hasBadWord(username);
 
   if (!isLoaded) return null;
 
@@ -78,10 +122,10 @@ export default function OnboardPage() {
           </div>
           <h1
             style={{
-              fontFamily: "var(--font-dm-serif)",
-              color:      "var(--text)",
-              fontSize:   "1.75rem",
-              lineHeight: 1.2,
+              fontFamily:   "var(--font-dm-serif)",
+              color:        "var(--text)",
+              fontSize:     "1.75rem",
+              lineHeight:   1.2,
               marginBottom: "10px",
             }}
           >
@@ -97,14 +141,14 @@ export default function OnboardPage() {
           <div style={{ marginBottom: "8px" }}>
             <div
               style={{
-                display:       "flex",
-                alignItems:    "center",
-                background:    "var(--surface)",
-                border:        `1px solid ${error ? "#e05252" : "var(--border)"}`,
-                borderRadius:  "10px",
-                padding:       "0 16px",
-                height:        "52px",
-                gap:           "8px",
+                display:      "flex",
+                alignItems:   "center",
+                background:   "var(--surface)",
+                border:       `1px solid ${error ? "#e05252" : "var(--border)"}`,
+                borderRadius: "10px",
+                padding:      "0 16px",
+                height:       "52px",
+                gap:          "8px",
               }}
             >
               <span style={{ color: "var(--text-muted)", fontSize: "1rem", userSelect: "none" }}>@</span>
@@ -112,7 +156,7 @@ export default function OnboardPage() {
                 autoFocus
                 type="text"
                 value={username}
-                onChange={(e) => { setUsername(e.target.value); setError(""); }}
+                onChange={handleChange}
                 placeholder="yourname"
                 maxLength={20}
                 style={{
@@ -138,19 +182,19 @@ export default function OnboardPage() {
 
           <button
             type="submit"
-            disabled={saving || username.length < 3}
+            disabled={saving || !isValid}
             style={{
-              width:          "100%",
-              background:     "var(--accent)",
-              color:          "#0d0d18",
-              fontWeight:     700,
-              fontSize:       "0.95rem",
-              padding:        "14px",
-              borderRadius:   "10px",
-              border:         "none",
-              cursor:         saving || username.length < 3 ? "not-allowed" : "pointer",
-              opacity:        saving || username.length < 3 ? 0.6 : 1,
-              transition:     "opacity 0.15s",
+              width:        "100%",
+              background:   "var(--accent)",
+              color:        "#0d0d18",
+              fontWeight:   700,
+              fontSize:     "0.95rem",
+              padding:      "14px",
+              borderRadius: "10px",
+              border:       "none",
+              cursor:       saving || !isValid ? "not-allowed" : "pointer",
+              opacity:      saving || !isValid ? 0.6 : 1,
+              transition:   "opacity 0.15s",
             }}
           >
             {saving ? "Saving…" : "Save & continue →"}
