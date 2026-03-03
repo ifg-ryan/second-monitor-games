@@ -41,7 +41,7 @@ async function upsertSubscription(subscription: Stripe.Subscription) {
   });
 
   const priceId = subscription.items.data[0]?.price.id ?? "";
-  const currentPeriodEnd = toDate(subscription.current_period_end)!;
+  const currentPeriodEnd = toDate(subscription.items.data[0]?.current_period_end)!;
   const trialEnd = toDate(subscription.trial_end);
 
   // Upsert Subscription
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
     switch (event.type) {
       // Checkout completed — subscription is now live (possibly in trial)
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.CheckoutSession;
+        const session = event.data.object as Stripe.Checkout.Session;
         if (session.mode !== "subscription" || !session.subscription) break;
 
         const subscriptionId = typeof session.subscription === "string"
