@@ -18,14 +18,14 @@ export default function ThemeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // Default to dark; the inline script in layout.tsx prevents any flash
-  const [theme, setTheme] = useState<Theme>("dark");
+  // Default to light; the inline script in layout.tsx prevents any flash
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     // Sync React state with whatever the inline script already applied
     const stored = localStorage.getItem("smg-theme");
-    if (stored === "light") {
-      setTheme("light");
+    if (stored === "dark") {
+      setTheme("dark");
     }
   }, []);
 

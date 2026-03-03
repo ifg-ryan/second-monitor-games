@@ -96,7 +96,7 @@ export default function RootLayout({
                 var t = localStorage.getItem('smg-theme');
                 document.documentElement.setAttribute(
                   'data-theme',
-                  t === 'light' ? 'light' : 'dark'
+                  t === 'dark' ? 'dark' : 'light'
                 );
               } catch (e) {}
             `,
