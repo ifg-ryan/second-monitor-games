@@ -3,6 +3,16 @@ import { NextResponse } from "next/server";
 import stripeClient from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
+const ALLOWED_ORIGINS = [
+  "https://secondmonitorgames.com",
+  "http://localhost:3000",
+];
+
+function safeOrigin(request: Request): string {
+  const raw = request.headers.get("origin") ?? "";
+  return ALLOWED_ORIGINS.includes(raw) ? raw : "https://secondmonitorgames.com";
+}
+
 export async function POST(request: Request) {
   // ── Auth ──────────────────────────────────────────────────────────────────
   const { userId } = await auth();
@@ -24,7 +34,7 @@ export async function POST(request: Request) {
   }
 
   // ── Create Stripe Customer Portal session ─────────────────────────────────
-  const origin = request.headers.get("origin") ?? "https://secondmonitorgames.com";
+  const origin = safeOrigin(request);
 
   const session = await stripeClient.billingPortal.sessions.create({
     customer:   user.stripeCustomerId,

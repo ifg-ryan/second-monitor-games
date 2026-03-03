@@ -11,13 +11,13 @@ describe("getArchivePastHref", () => {
   const gameHref = "/games/decode";
   const dateStr  = "2026-02-15";
 
-  it("returns /pricing for a non-subscriber", () => {
-    expect(getArchivePastHref(gameHref, dateStr, false)).toBe("/pricing");
+  it("returns /subscribe for a non-subscriber", () => {
+    expect(getArchivePastHref(gameHref, dateStr, false)).toBe("/subscribe");
   });
 
-  it("returns /pricing for a non-subscriber regardless of date", () => {
-    expect(getArchivePastHref(gameHref, "2026-01-01", false)).toBe("/pricing");
-    expect(getArchivePastHref(gameHref, "2025-12-31", false)).toBe("/pricing");
+  it("returns /subscribe for a non-subscriber regardless of date", () => {
+    expect(getArchivePastHref(gameHref, "2026-01-01", false)).toBe("/subscribe");
+    expect(getArchivePastHref(gameHref, "2025-12-31", false)).toBe("/subscribe");
   });
 
   it("returns a date-parameterised game link for a subscriber", () => {

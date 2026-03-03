@@ -88,7 +88,7 @@ describe("POST /api/billing-portal", () => {
     });
   });
 
-  it("uses the request origin for return_url", async () => {
+  it("falls back to production URL for non-whitelisted origins", async () => {
     mockAuth.mockResolvedValue({ userId: "clerk_abc" } as never);
     mockFindUnique.mockResolvedValue({ stripeCustomerId: "cus_test_123" } as never);
     mockPortalCreate.mockResolvedValue({ url: "https://billing.stripe.com/session/abc" } as never);
@@ -96,7 +96,19 @@ describe("POST /api/billing-portal", () => {
     await POST(makeRequest("https://custom-origin.com"));
 
     expect(mockPortalCreate).toHaveBeenCalledWith(
-      expect.objectContaining({ return_url: "https://custom-origin.com/account" })
+      expect.objectContaining({ return_url: "https://secondmonitorgames.com/account" })
+    );
+  });
+
+  it("uses localhost origin when running locally", async () => {
+    mockAuth.mockResolvedValue({ userId: "clerk_abc" } as never);
+    mockFindUnique.mockResolvedValue({ stripeCustomerId: "cus_test_123" } as never);
+    mockPortalCreate.mockResolvedValue({ url: "https://billing.stripe.com/session/local" } as never);
+
+    await POST(makeRequest("http://localhost:3000"));
+
+    expect(mockPortalCreate).toHaveBeenCalledWith(
+      expect.objectContaining({ return_url: "http://localhost:3000/account" })
     );
   });
 });

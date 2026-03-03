@@ -3,6 +3,18 @@ import { NextResponse } from "next/server";
 import stripe from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
+// Whitelist of origins allowed to initiate a checkout.
+// The Origin header is user-controlled, so we never trust it blindly.
+const ALLOWED_ORIGINS = [
+  "https://secondmonitorgames.com",
+  "http://localhost:3000",
+];
+
+function safeOrigin(request: Request): string {
+  const raw = request.headers.get("origin") ?? "";
+  return ALLOWED_ORIGINS.includes(raw) ? raw : "https://secondmonitorgames.com";
+}
+
 const PRICE_IDS: Record<string, string> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY!,
   annual:  process.env.STRIPE_PRICE_ANNUAL!,
@@ -61,7 +73,7 @@ export async function POST(request: Request) {
   }
 
   // ── Create Stripe Checkout session ────────────────────────────────────────
-  const origin = request.headers.get("origin") ?? "https://secondmonitorgames.com";
+  const origin = safeOrigin(request);
 
   const session = await stripe.checkout.sessions.create({
     mode:                 "subscription",
