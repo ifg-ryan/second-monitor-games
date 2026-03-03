@@ -4,8 +4,8 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Leaderboard — Second Monitor Games',
-  description: 'Top scores across all Second Monitor Games.',
+  title: 'Daily Leaderboard — Top Scores | Second Monitor Games',
+  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Decode, Tetris, and The Escape.',
 };
 
 const MEDAL: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };

@@ -26,49 +26,48 @@ const GAMES = [
   {
     title: "The Escape",
     description:
-      "A dark card strategy game. Reveal anchors, manage your hand, and escape before the turns run out.",
+      "A dark card strategy game. Manage your hand, reveal anchors, and escape before the deck runs out.",
     tag: "Card Strategy",
     href: "/games/the-escape",
     accentColor: "#c9a84c",
-    bgGradient:
-      "linear-gradient(135deg, #0a0a0f 0%, #1a1a28 50%, #12100a 100%)",
+    bgGradient: "linear-gradient(135deg, #0a0a0f 0%, #1a1a28 50%, #12100a 100%)",
     icon: "🃏",
+    previewImage: "/images/previews/the-escape.png",
     featured: true,
-  },
-  {
-    title: "Tetris",
-    description:
-      "The classic block-stacking arcade game. Clear lines, beat your high score, and survive as long as you can.",
-    tag: "Arcade",
-    href: "/games/tetris",
-    accentColor: "#00c8ff",
-    bgGradient:
-      "linear-gradient(135deg, #0d1a2e 0%, #0a1420 50%, #060e1a 100%)",
-    icon: "🟦",
-    featured: false,
   },
   {
     title: "Decode",
     description:
-      "A daily word puzzle. Guess the five-letter word in six tries. Green, yellow, or grey — decode the pattern.",
-    tag: "Word Game",
+      "A daily word puzzle. Guess the five-letter word in six tries — new word every day, same for everyone.",
+    tag: "Daily Word Puzzle",
     href: "/games/decode",
     accentColor: "#538d4e",
-    bgGradient:
-      "linear-gradient(135deg, #121213 0%, #1a1a1b 50%, #0a0f0a 100%)",
+    bgGradient: "linear-gradient(135deg, #121213 0%, #1a1a1b 50%, #0a0f0a 100%)",
     icon: "🟩",
+    previewImage: "/images/previews/decode.png",
     featured: false,
     isNew: true,
   },
   {
+    title: "Tetris",
+    description:
+      "Classic block-stacking arcade. Choose your visual style, clear lines, and beat your high score.",
+    tag: "Arcade",
+    href: "/games/tetris",
+    accentColor: "#00c8ff",
+    bgGradient: "linear-gradient(135deg, #0d1a2e 0%, #0a1420 50%, #060e1a 100%)",
+    icon: "🟦",
+    previewImage: "/images/previews/tetris.png",
+    featured: false,
+  },
+  {
     title: "More Coming Soon",
     description:
-      "New games are in development. Subscribe to get notified when they launch.",
+      "New games in development. Subscribe to get notified when they launch.",
     tag: "Coming Soon",
     href: "#",
     accentColor: "#6b6b8a",
-    bgGradient:
-      "linear-gradient(135deg, #111118 0%, #16161f 100%)",
+    bgGradient: "linear-gradient(135deg, #111118 0%, #16161f 100%)",
     icon: "🎮",
     featured: false,
     comingSoon: true,
@@ -165,8 +164,7 @@ export default function Home() {
               lineHeight: 1.6,
             }}
           >
-            New puzzles every day. Play at your own pace — free with ads, or
-            subscribe for an ad-free experience.
+            New challenges every day. Free to play.
           </p>
         </div>
 
@@ -240,7 +238,7 @@ export default function Home() {
               </div>
             </div>
             <a
-              href="/pricing"
+              href="/subscribe"
               style={{
                 background: "var(--accent)",
                 color: "#0d0d18",

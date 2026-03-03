@@ -3,8 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { isSubscribed } from "@/lib/subscription";
 
 export const metadata: Metadata = {
-  title:       "Archive — Second Monitor Games",
-  description: "Browse every past puzzle and card game challenge. Subscribe to play any day's puzzle in the archive — new games every day at midnight UTC.",
+  title:       "Game Archive — Every Past Puzzle | Second Monitor Games",
+  description: "Browse every past daily puzzle on Second Monitor Games — Decode word puzzles, The Escape card game, and Tetris. Subscribe to replay any past challenge.",
   alternates:  { canonical: "https://secondmonitorgames.com/archive" },
   robots:      { index: true, follow: true },
 };
@@ -104,7 +104,7 @@ const GAMES = [
  * Subscribers get a date-parameterised game link; others are sent to /pricing.
  */
 export function getArchivePastHref(gameHref: string, dateStr: string, subscribed: boolean): string {
-  if (!subscribed) return "/pricing";
+  if (!subscribed) return "/subscribe";
   return `${gameHref}?date=${dateStr}`;
 }
 
@@ -320,7 +320,7 @@ export default async function ArchivePage() {
                           ) : (
                             /* Past — not subscribed, locked */
                             <a
-                              href="/pricing"
+                              href="/subscribe"
                               style={{
                                 display:        "block",
                                 background:     "var(--surface)",
