@@ -32,10 +32,10 @@ A quick daily word puzzle. Players have six attempts to find the hidden word. Ta
 2 minutes. Green tile = correct letter, correct position. Yellow = correct letter, wrong
 position. Grey = letter not in word. New word every day at midnight. Free to play.
 
-### Tetris — Quick Arcade Game
-URL: https://secondmonitorgames.com/games/tetris
+### Block Fall — Quick Arcade Game
+URL: https://secondmonitorgames.com/games/block-fall
 Type: Arcade / quick game
-Classic Tetris, free in the browser — no download needed. Beat your daily high score.
+Classic block-stacking game, free in the browser — no download needed. Beat your daily high score.
 Leaderboard resets every day. Perfect for a short work break. Free to play.
 
 ## Key Facts
@@ -86,5 +86,5 @@ A: The Escape on Second Monitor Games is a free browser-based card strategy game
 - About:      https://secondmonitorgames.com/about
 - The Escape: https://secondmonitorgames.com/games/the-escape
 - Decode:     https://secondmonitorgames.com/games/decode
-- Tetris:     https://secondmonitorgames.com/games/tetris
+- Block Fall: https://secondmonitorgames.com/games/block-fall
 - Sitemap:    https://secondmonitorgames.com/sitemap.xml

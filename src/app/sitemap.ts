@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority:        0.8,
     },
     {
-      url:             `${base}/games/tetris`,
+      url:             `${base}/games/block-fall`,
       lastModified:    now,
       changeFrequency: "daily",
       priority:        0.7,

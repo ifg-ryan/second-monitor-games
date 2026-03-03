@@ -2,9 +2,9 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-const VALID_GAMES = ['tetris', 'the-escape'];
+const VALID_GAMES = ['block-fall', 'the-escape'];
 
-// GET /api/leaderboard?game=tetris
+// GET /api/leaderboard?game=block-fall
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const game = searchParams.get('game');

@@ -47,7 +47,7 @@ export default function Footer() {
                 {[
                   { label: "The Escape", href: "/games/the-escape" },
                   { label: "Decode",     href: "/games/decode"     },
-                  { label: "Tetris",     href: "/games/tetris"     },
+                  { label: "Block Fall", href: "/games/block-fall" },
                 ].map((link) => (
                   <a
                     key={link.href}

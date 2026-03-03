@@ -4,7 +4,7 @@ import { isSubscribed } from "@/lib/subscription";
 
 export const metadata: Metadata = {
   title:       "Game Archive — Every Past Puzzle | Second Monitor Games",
-  description: "Browse every past daily puzzle on Second Monitor Games — Decode word puzzles, The Escape card game, and Tetris. Subscribe to replay any past challenge.",
+  description: "Browse every past daily puzzle on Second Monitor Games — Decode word puzzles, The Escape card game, and Block Fall. Subscribe to replay any past challenge.",
   alternates:  { canonical: "https://secondmonitorgames.com/archive" },
   robots:      { index: true, follow: true },
 };
@@ -85,12 +85,12 @@ const GAMES = [
     description: "Reveal anchors, manage your hand, and escape before the turns run out.",
   },
   {
-    id:          "tetris",
-    name:        "Tetris",
+    id:          "block-fall",
+    name:        "Block Fall",
     tag:         "Arcade",
     tagColor:    "#00c8ff",
     icon:        "🟦",
-    href:        "/games/tetris",
+    href:        "/games/block-fall",
     launchDate:  "2026-01-06",
     gameType:    "arcade" as const,
     description: "Daily high score challenge. Leaderboard resets every midnight.",
@@ -235,7 +235,7 @@ export default async function ArchivePage() {
                   {game.description}
                 </p>
 
-                {/* Tetris note */}
+                {/* Block Fall note */}
                 {game.gameType === "arcade" && (
                   <div
                     style={{
@@ -249,7 +249,7 @@ export default async function ArchivePage() {
                     }}
                   >
                     <strong style={{ color: "var(--text-dim)" }}>Arcade format: </strong>
-                    Tetris is a daily high-score challenge, not a fixed puzzle. The leaderboard
+                    Block Fall is a daily high-score challenge, not a fixed puzzle. The leaderboard
                     resets every midnight. Past day scores are preserved for subscribers — you can
                     see how you ranked on any previous day.
                   </div>

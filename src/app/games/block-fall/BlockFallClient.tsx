@@ -3,7 +3,7 @@
 import { useUser } from '@clerk/nextjs';
 import { useEffect, useRef, useCallback } from 'react';
 
-export default function TetrisClient() {
+export default function BlockFallClient() {
   const { user, isLoaded } = useUser();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   // Track whether the iframe has signalled it's ready
@@ -35,7 +35,7 @@ export default function TetrisClient() {
     }
   }, [isLoaded, sendPlayerInfo]);
 
-  // Listen for messages from the Tetris iframe
+  // Listen for messages from the Block Fall iframe
   useEffect(() => {
     const handleMessage = async (e: MessageEvent) => {
       // Security: only accept messages from our own iframe
@@ -59,7 +59,7 @@ export default function TetrisClient() {
           await fetch('/api/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ game: 'tetris', score, lines, level }),
+            body: JSON.stringify({ game: 'block-fall', score, lines, level }),
           });
         } catch (err) {
           console.error('Failed to submit score:', err);
@@ -74,8 +74,8 @@ export default function TetrisClient() {
   return (
     <iframe
       ref={iframeRef}
-      src="/games/tetris.html"
-      title="Tetris"
+      src="/games/block-fall.html"
+      title="Block Fall"
       style={{
         width: '100%',
         flex: 1,

@@ -30,8 +30,8 @@ describe("getArchivePastHref", () => {
     expect(getArchivePastHref("/games/the-escape", dateStr, true)).toBe(
       "/games/the-escape?date=2026-02-15"
     );
-    expect(getArchivePastHref("/games/tetris", dateStr, true)).toBe(
-      "/games/tetris?date=2026-02-15"
+    expect(getArchivePastHref("/games/block-fall", dateStr, true)).toBe(
+      "/games/block-fall?date=2026-02-15"
     );
   });
 

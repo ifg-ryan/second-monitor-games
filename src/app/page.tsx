@@ -49,15 +49,15 @@ const GAMES = [
     isNew: true,
   },
   {
-    title: "Tetris",
+    title: "Block Fall",
     description:
       "Classic block-stacking arcade. Choose your visual style, clear lines, and beat your high score.",
     tag: "Arcade",
-    href: "/games/tetris",
+    href: "/games/block-fall",
     accentColor: "#00c8ff",
     bgGradient: "linear-gradient(135deg, #0d1a2e 0%, #0a1420 50%, #060e1a 100%)",
     icon: "🟦",
-    previewImage: "/images/previews/tetris.png",
+    previewImage: "/images/previews/block-fall.png",
     featured: false,
   },
   {
@@ -98,8 +98,8 @@ export default function Home() {
       {
         "@type":    "ListItem",
         "position": 3,
-        "name":     "Tetris — Daily Arcade Puzzle",
-        "url":      "https://secondmonitorgames.com/games/tetris",
+        "name":     "Block Fall — Daily Arcade Game",
+        "url":      "https://secondmonitorgames.com/games/block-fall",
       },
     ],
   };

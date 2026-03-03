@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: "What games are available right now?",
-    a: "Currently: The Escape (daily card strategy), Decode (daily word puzzle), and Tetris (daily arcade). New games are added regularly — the site is actively growing.",
+    a: "Currently: The Escape (daily card strategy), Decode (daily word puzzle), and Block Fall (daily arcade). New games are added regularly — the site is actively growing.",
   },
   {
     q: "Can I play on my phone?",
@@ -220,10 +220,10 @@ export default function AboutPage() {
             },
             {
               icon:        "🟦",
-              name:        "Tetris",
+              name:        "Block Fall",
               type:        "Quick Arcade Game",
               color:       "#00c8ff",
-              href:        "/games/tetris",
+              href:        "/games/block-fall",
               description: "The classic block-stacking game, free in your browser. Clear lines, beat your daily high score, see how long you can survive. No download needed — just open and play. Daily leaderboard resets at midnight.",
             },
           ].map((game) => (

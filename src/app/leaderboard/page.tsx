@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Daily Leaderboard — Top Scores | Second Monitor Games',
-  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Decode, Tetris, and The Escape.',
+  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Decode, Block Fall, and The Escape.',
 };
 
 const MEDAL: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
@@ -18,7 +18,7 @@ export default async function LeaderboardPage() {
   const { userId } = await auth();
 
   const scores = await prisma.leaderboardScore.findMany({
-    where: { game: 'tetris' },
+    where: { game: 'block-fall' },
     orderBy: { score: 'desc' },
     take: 20,
     select: {
@@ -38,13 +38,13 @@ export default async function LeaderboardPage() {
     const inTop = scores.findIndex((s) => s.userId === userId);
     if (inTop === -1) {
       const personal = await prisma.leaderboardScore.findUnique({
-        where: { game_userId: { game: 'tetris', userId } },
+        where: { game_userId: { game: 'block-fall', userId } },
         select: { id: true, userId: true, userName: true, score: true, lines: true, level: true },
       });
       if (personal) {
         myEntry = personal;
         myRank = await prisma.leaderboardScore.count({
-          where: { game: 'tetris', score: { gt: personal.score } },
+          where: { game: 'block-fall', score: { gt: personal.score } },
         }) + 1;
       }
     }
@@ -86,7 +86,7 @@ export default async function LeaderboardPage() {
           marginBottom: '-1px',
           cursor: 'default',
         }}>
-          Tetris
+          Block Fall
         </div>
         {/* Coming Soon */}
         <div style={{
@@ -134,7 +134,7 @@ export default async function LeaderboardPage() {
             color: 'var(--text-muted)',
             fontSize: '0.9rem',
           }}>
-            No scores yet — play Tetris to be the first on the board!
+            No scores yet — play Block Fall to be the first on the board!
           </div>
         ) : (
           scores.map((entry, i) => {
@@ -283,10 +283,10 @@ export default async function LeaderboardPage() {
         </p>
       )}
 
-      {/* Play Tetris CTA */}
+      {/* Play Block Fall CTA */}
       <div style={{ marginTop: '32px', textAlign: 'center' }}>
         <a
-          href="/games/tetris"
+          href="/games/block-fall"
           style={{
             display: 'inline-block',
             background: 'var(--accent)',
@@ -299,7 +299,7 @@ export default async function LeaderboardPage() {
             transition: 'opacity 0.2s',
           }}
         >
-          Play Tetris →
+          Play Block Fall →
         </a>
       </div>
 

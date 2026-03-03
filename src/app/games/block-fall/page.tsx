@@ -1,14 +1,14 @@
-import TetrisClient from './TetrisClient';
+import BlockFallClient from './BlockFallClient';
 
 export const metadata = {
-  title:       "Tetris — Free Quick Arcade Game for Work Breaks",
+  title:       "Block Fall — Free Quick Arcade Game for Work Breaks",
   description: "The classic block-stacking game, free to play in your browser. Beat your daily high score in minutes. Perfect for a quick break on your second monitor — no download needed.",
-  keywords:    ["free tetris online", "quick arcade game", "block game at work", "browser game no download", "second monitor arcade game", "free game work break", "fast arcade puzzle"],
-  alternates:  { canonical: "https://secondmonitorgames.com/games/tetris" },
+  keywords:    ["block fall game", "quick arcade game", "block game at work", "browser game no download", "second monitor arcade game", "free game work break", "fast arcade puzzle"],
+  alternates:  { canonical: "https://secondmonitorgames.com/games/block-fall" },
   openGraph: {
-    title:       "Tetris — Free Quick Arcade Game for Work Breaks",
-    description: "Classic Tetris, free in your browser. Beat your daily high score — perfect for a quick break on your second monitor.",
-    url:         "https://secondmonitorgames.com/games/tetris",
+    title:       "Block Fall — Free Quick Arcade Game for Work Breaks",
+    description: "Classic block-stacking game, free in your browser. Beat your daily high score — perfect for a quick break on your second monitor.",
+    url:         "https://secondmonitorgames.com/games/block-fall",
     type:        "website",
   },
 };
@@ -21,7 +21,7 @@ function getTodayLabel() {
   });
 }
 
-export default function TetrisPage() {
+export default function BlockFallPage() {
   const today = getTodayLabel();
 
   return (
@@ -68,7 +68,7 @@ export default function TetrisPage() {
               fontSize: '1rem',
             }}
           >
-            Tetris
+            Block Fall
           </span>
           <span
             style={{
@@ -113,7 +113,7 @@ export default function TetrisPage() {
       </div>
 
       {/* ── Game (client component handles iframe + postMessage) ── */}
-      <TetrisClient />
+      <BlockFallClient />
     </div>
   );
 }
