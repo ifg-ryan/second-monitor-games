@@ -281,6 +281,12 @@ body {
   background: rgba(255,255,255,0.15);
   color: var(--text-primary);
 }
+#sort-btn {
+  background: rgba(255,255,255,0.15);
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 8px 16px;
+}
 
 /* Hand tray */
 #hand-tray {
@@ -853,6 +859,7 @@ body {
 
       <div id="controls">
         <button id="undo-btn" disabled>Undo</button>
+        <button id="sort-btn">Sort: Suit</button>
         <button id="score-btn" disabled>Score</button>
       </div>
 
@@ -950,7 +957,35 @@ const GameState = {
   isAnimating: false,
   nextCardId: 0,
   totalCardsPlaced: 0,
+  sortMode: 'suit', // 'suit' = suit then value, 'rank' = value only
 };
+
+// ═══════════════════════════════════════════
+// SECTION: Hand Sorting
+// ═══════════════════════════════════════════
+
+const SUIT_ORDER = { 'spades': 0, 'hearts': 1, 'clubs': 2, 'diamonds': 3, 'wild': 4 };
+
+function sortHand() {
+  GameState.hand.sort((a, b) => {
+    // Jokers always go to the end
+    if (a.isJoker && b.isJoker) return 0;
+    if (a.isJoker) return 1;
+    if (b.isJoker) return -1;
+
+    if (GameState.sortMode === 'suit') {
+      // Primary: suit order, secondary: rank ordinal
+      const suitDiff = SUIT_ORDER[a.suit] - SUIT_ORDER[b.suit];
+      if (suitDiff !== 0) return suitDiff;
+      return RANK_ORDINALS[a.rank] - RANK_ORDINALS[b.rank];
+    } else {
+      // Primary: rank ordinal, secondary: suit order
+      const rankDiff = RANK_ORDINALS[a.rank] - RANK_ORDINALS[b.rank];
+      if (rankDiff !== 0) return rankDiff;
+      return SUIT_ORDER[a.suit] - SUIT_ORDER[b.suit];
+    }
+  });
+}
 
 // ═══════════════════════════════════════════
 // SECTION: Deck & Card Logic
@@ -1504,8 +1539,6 @@ function initGame() {
   GameState.hand = drawCards(CONFIG.HAND_SIZE);
 }
 
-  </script>
-  <script>
 // ═══════════════════════════════════════════
 // SECTION: Board Rendering
 // ═══════════════════════════════════════════
@@ -1886,8 +1919,6 @@ function attachBoardCardDragListeners(cardEl, card, row, col) {
   }, { passive: false });
 }
 
-  </script>
-  <script>
 // ═══════════════════════════════════════════
 // SECTION A: Hand Tier Map
 // ═══════════════════════════════════════════
@@ -2276,8 +2307,6 @@ function initEffects() {
   ScreenShake.init();
 }
 
-  </script>
-  <script>
 // ═══════════════════════════════════════════
 // SECTION: Hand Rendering
 // ═══════════════════════════════════════════
@@ -2540,6 +2569,7 @@ async function drawPhase() {
     await animateDrawFromDeck(count);
 
     GameState.hand.push(...drawn);
+    sortHand();
     renderHand();
     updateHUD();
   }
@@ -2726,6 +2756,15 @@ document.getElementById('undo-btn').addEventListener('click', () => {
   undoLastPlacement();
 });
 
+document.getElementById('sort-btn').addEventListener('click', () => {
+  // Toggle sort mode
+  GameState.sortMode = GameState.sortMode === 'suit' ? 'rank' : 'suit';
+  document.getElementById('sort-btn').textContent =
+    GameState.sortMode === 'suit' ? 'Sort: Suit' : 'Sort: Rank';
+  sortHand();
+  renderHand();
+});
+
 document.getElementById('play-again-btn').addEventListener('click', () => {
   document.getElementById('game-over-modal').classList.add('hidden');
   startGame();
@@ -2735,9 +2774,13 @@ function startGame() {
   initGame();
   initEffects();
   renderBoard();
+  sortHand();
   renderHand();
   updateHUD();
   updateControls();
+  // Reset sort button label
+  document.getElementById('sort-btn').textContent =
+    GameState.sortMode === 'suit' ? 'Sort: Suit' : 'Sort: Rank';
 }
 
 startGame();
