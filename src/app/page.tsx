@@ -49,6 +49,19 @@ const GAMES = [
     isNew: true,
   },
   {
+    title: "Cryptogram",
+    description:
+      "Crack the daily code. Each number hides a letter — deduce the secret phrase using logic and letter banks.",
+    tag: "Code Breaker",
+    href: "/games/cryptogram",
+    accentColor: "#6c8eff",
+    bgGradient: "linear-gradient(135deg, #0a0e1a 0%, #141a30 50%, #0d1225 100%)",
+    icon: "🔢",
+    previewImage: "/images/previews/cryptogram.png",
+    featured: false,
+    isNew: true,
+  },
+  {
     title: "Block Fall",
     description:
       "Classic block-stacking arcade. Choose your visual style, clear lines, and beat your high score.",
