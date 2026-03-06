@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 // The Origin header is user-controlled, so we never trust it blindly.
 const ALLOWED_ORIGINS = [
   "https://secondmonitorgames.com",
-  "http://localhost:3000",
+  ...(process.env.NODE_ENV === "development" ? ["http://localhost:3000"] : []),
 ];
 
 function safeOrigin(request: Request): string {

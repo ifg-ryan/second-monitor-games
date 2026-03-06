@@ -1,3 +1,7 @@
+import { auth } from "@clerk/nextjs/server";
+import { getSubscriptionStatus } from "@/lib/subscription";
+import GameClient from "@/components/GameClient";
+
 export const metadata = {
   title:       "Decode — Free Daily Word Puzzle Game",
   description: "A quick daily word puzzle for your second monitor. Guess the word in six tries — takes under 2 minutes. Free to play, new puzzle every day, no subscription needed.",
@@ -24,8 +28,26 @@ function getTodayLabel() {
   });
 }
 
-export default function DecodePage() {
+async function getUserTier(): Promise<{ tier: "free" | "trial" | "subscriber"; trialDaysLeft: number }> {
+  const { userId } = await auth();
+  if (!userId) return { tier: "free", trialDaysLeft: 0 };
+
+  const sub = await getSubscriptionStatus(userId);
+  if (!sub.isActive) return { tier: "free", trialDaysLeft: 0 };
+
+  if (sub.status === "trialing") {
+    const daysLeft = sub.trialEnd
+      ? Math.max(0, Math.ceil((sub.trialEnd.getTime() - Date.now()) / 86400000))
+      : 0;
+    return { tier: "trial", trialDaysLeft: daysLeft };
+  }
+
+  return { tier: "subscriber", trialDaysLeft: 0 };
+}
+
+export default async function DecodePage() {
   const today = getTodayLabel();
+  const { tier, trialDaysLeft } = await getUserTier();
 
   const jsonLd = {
     "@context":           "https://schema.org",
@@ -128,17 +150,12 @@ export default function DecodePage() {
       </div>
 
       {/* ── Game iframe ─────────────────────────────────────── */}
-      <iframe
-        src="/games/decode.html"
-        title="Decode"
-        style={{
-          width: "100%",
-          flex: 1,
-          border: "none",
-          display: "block",
-          background: "#121213",
-        }}
-        allowFullScreen
+      <GameClient
+        gameSrc="/games/decode.html"
+        gameTitle="Decode"
+        bgColor="#121213"
+        tier={tier}
+        trialDaysLeft={trialDaysLeft}
       />
     </div>
   );

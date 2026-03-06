@@ -38,6 +38,30 @@ model Subscription {
   @@index([status])
 }
 
+// ── GameResult ──────────────────────────────────────────────────────────────
+// Stores every GAME_OVER postMessage from iframe games.
+// One row per user per game per day (upserts on replay for arcade).
+model GameResult {
+  id           String   @id @default(cuid())
+  game         String
+  gameType     String   // "puzzle" | "arcade"
+  userId       String
+  date         String   // YYYY-MM-DD (UTC)
+  puzzleNumber Int
+  score        Int
+  completed    Boolean
+  shareText    String?
+  streak       Int      @default(0)
+  maxStreak    Int      @default(0)
+  smgVersion   String   @default("1.1")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([game, userId, date])
+  @@index([game, date])
+  @@index([userId])
+}
+
 model LeaderboardScore {
   id        String   @id @default(cuid())
   game      String

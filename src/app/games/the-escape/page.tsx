@@ -1,3 +1,7 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { getSubscriptionStatus } from "@/lib/subscription";
+import GameClient from "@/components/GameClient";
+
 export const metadata = {
   title:       "The Escape — Daily Card Strategy Game",
   description: "A unique daily card strategy game for your second monitor. If you like Balatro or solitaire roguelikes, this is your daily fix — free, 5 minutes, new challenge every day.",
@@ -34,8 +38,35 @@ function getTodayLabel() {
   });
 }
 
-export default function TheEscapePage() {
+async function getUserTier(): Promise<{ tier: "free" | "trial" | "subscriber"; trialDaysLeft: number }> {
+  const { userId } = await auth();
+  if (!userId) return { tier: "free", trialDaysLeft: 0 };
+
+  const sub = await getSubscriptionStatus(userId);
+  if (!sub.isActive) return { tier: "free", trialDaysLeft: 0 };
+
+  if (sub.status === "trialing") {
+    const daysLeft = sub.trialEnd
+      ? Math.max(0, Math.ceil((sub.trialEnd.getTime() - Date.now()) / 86400000))
+      : 0;
+    return { tier: "trial", trialDaysLeft: daysLeft };
+  }
+
+  return { tier: "subscriber", trialDaysLeft: 0 };
+}
+
+async function getPlayerName(): Promise<string | undefined> {
+  const user = await currentUser();
+  if (!user) return undefined;
+  return user.fullName || user.firstName || user.username || undefined;
+}
+
+export default async function TheEscapePage() {
   const today = getTodayLabel();
+  const [{ tier, trialDaysLeft }, playerName] = await Promise.all([
+    getUserTier(),
+    getPlayerName(),
+  ]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 64px)" }}>
@@ -112,17 +143,13 @@ export default function TheEscapePage() {
       </div>
 
       {/* ── Game iframe ─────────────────────────────────────── */}
-      <iframe
-        src="/games/the-escape.html"
-        title="The Escape"
-        style={{
-          width: "100%",
-          flex: 1,
-          border: "none",
-          display: "block",
-          background: "#0a0a0f",
-        }}
-        allowFullScreen
+      <GameClient
+        gameSrc="/games/the-escape.html"
+        gameTitle="The Escape"
+        bgColor="#0a0a0f"
+        tier={tier}
+        trialDaysLeft={trialDaysLeft}
+        playerName={playerName}
       />
     </div>
   );

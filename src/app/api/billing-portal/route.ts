@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 const ALLOWED_ORIGINS = [
   "https://secondmonitorgames.com",
-  "http://localhost:3000",
+  ...(process.env.NODE_ENV === "development" ? ["http://localhost:3000"] : []),
 ];
 
 function safeOrigin(request: Request): string {
