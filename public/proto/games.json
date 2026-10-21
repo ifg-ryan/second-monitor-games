@@ -13,5 +13,10 @@
     "title": "Solitaire",
     "updated": "2026-10-21",
     "source": "9ab10e9"
+  },
+  "battle-cards": {
+    "title": "Battle Cards",
+    "updated": "2026-10-21",
+    "source": "ebbb016"
   }
 }
