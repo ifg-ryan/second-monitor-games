@@ -37,6 +37,27 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // AstroRogue is one self-contained file: its font and sound effects are
+        // embedded as data: URLs, which the site-wide policy blocks. Same policy,
+        // plus data: for fonts, media and fetch, for this one file only.
+        source: "/games/astro-rogue.html",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+              "style-src 'self' 'unsafe-inline'",
+              "font-src 'self' data:",
+              "img-src 'self' data: blob:",
+              "media-src 'self' data:",
+              "connect-src 'self' data: https://www.google-analytics.com",
+              "frame-ancestors 'self'",
+            ].join("; "),
+          },
+        ],
+      },
     ];
   },
 };
