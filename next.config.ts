@@ -3,6 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   serverExternalPackages: ['better-sqlite3'],
 
+  async redirects() {
+    return [
+      // AstroRogue moved to /proto/ with the other kit prototypes. Keep old links working.
+      { source: "/games/astro-rogue.html", destination: "/proto/astro-rogue.html", permanent: true },
+      { source: "/proto", destination: "/proto/index.html", permanent: false },
+    ];
+  },
+
   async headers() {
     return [
       {
@@ -38,21 +46,23 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // AstroRogue is one self-contained file: its font and sound effects are
-        // embedded as data: URLs, which the site-wide policy blocks. Same policy,
-        // plus data: for fonts, media and fetch, for this one file only.
-        source: "/games/astro-rogue.html",
+        // Prototypes from the Claude Games kit (published with its `npm run ship`).
+        // Each is one self-contained HTML file with its art, fonts, sounds and
+        // wasm embedded as data:/blob: URLs, which the site-wide policy blocks.
+        // Same policy plus those, for /proto/ only.
+        source: "/proto/:path*",
         headers: [
           {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
-              "style-src 'self' 'unsafe-inline'",
-              "font-src 'self' data:",
+              "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data: https://www.googletagmanager.com https://www.google-analytics.com",
+              "worker-src 'self' blob:",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: blob:",
-              "media-src 'self' data:",
-              "connect-src 'self' data: https://www.google-analytics.com",
+              "media-src 'self' data: blob:",
+              "connect-src 'self' data: blob: https://www.google-analytics.com",
               "frame-ancestors 'self'",
             ].join("; "),
           },
