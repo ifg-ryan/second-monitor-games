@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { PRICING_ENABLED } from "@/lib/features";
 
 interface GameClientProps {
   gameSrc: string;
@@ -78,7 +79,7 @@ export default function GameClient({
           break;
 
         case "UPGRADE_REQUESTED":
-          router.push("/subscribe");
+          router.push(PRICING_ENABLED ? "/subscribe" : "/");
           break;
 
         case "NAVIGATE_TODAY":

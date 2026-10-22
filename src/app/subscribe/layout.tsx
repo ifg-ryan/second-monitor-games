@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:       "Subscribe — Ad-Free Daily Games | Second Monitor Games",
@@ -8,5 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function SubscribeLayout({ children }: { children: React.ReactNode }) {
+  if (!PRICING_ENABLED) redirect("/");
   return children;
 }

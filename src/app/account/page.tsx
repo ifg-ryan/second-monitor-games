@@ -6,6 +6,7 @@ import { getSubscriptionStatus } from "@/lib/subscription";
 import ManageButton from "./ManageButton";
 import UsernameSection from "./UsernameSection";
 import AchievementsCard from "@/components/game/AchievementsCard";
+import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:  "Account — Second Monitor Games",
@@ -101,7 +102,8 @@ export default async function AccountPage() {
         {/* ── Achievements (kit games and site-wide) ──────────────── */}
         <AchievementsCard userId={userId} cardStyle={cardStyle} labelStyle={sectionLabelStyle} />
 
-        {/* ── Card 2: Subscription ────────────────────────────────── */}
+        {/* ── Card 2: Subscription (hidden while pricing is off, see src/lib/features.ts) ── */}
+        {PRICING_ENABLED && (
         <div style={cardStyle}>
           <div style={sectionLabelStyle}>Subscription</div>
 
@@ -199,6 +201,7 @@ export default async function AccountPage() {
             </div>
           )}
         </div>
+        )}
 
         {/* ── Footer: billing note + sign out ─────────────────────── */}
         <div
@@ -212,7 +215,7 @@ export default async function AccountPage() {
           }}
         >
           <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", lineHeight: 1.6 }}>
-            Billing handled securely by Stripe. Cancel anytime.
+            {PRICING_ENABLED ? "Billing handled securely by Stripe. Cancel anytime." : ""}
           </p>
           <SignOutButton redirectUrl="/">
             <button

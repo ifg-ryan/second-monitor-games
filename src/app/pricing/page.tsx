@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:       "Subscribe — Second Monitor Games",
@@ -69,6 +71,7 @@ const FAQS = [
 ];
 
 export default function PricingPage() {
+  if (!PRICING_ENABLED) redirect("/");
   return (
     <div style={{ background: "var(--bg)" }}>
 

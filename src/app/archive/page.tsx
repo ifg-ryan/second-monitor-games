@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 import { isSubscribed } from "@/lib/subscription";
+import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:       "Game Archive — Every Past Puzzle | Second Monitor Games",
@@ -112,7 +113,8 @@ export function getArchivePastHref(gameHref: string, dateStr: string, subscribed
 
 export default async function ArchivePage() {
   const { userId } = await auth();
-  const subscribed = userId ? await isSubscribed(userId) : false;
+  // With pricing off the whole archive is open (no lock, no subscribe prompts).
+  const subscribed = !PRICING_ENABLED || (userId ? await isSubscribed(userId) : false);
 
   const allPuzzleDays = Object.fromEntries(
     GAMES.map((g) => [g.id, getPuzzleDays(g.launchDate)])

@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { getSubscriptionStatus } from "@/lib/subscription";
+import { PRICING_ENABLED } from "@/lib/features";
 import GameClient from "@/components/GameClient";
 
 export const metadata = {
@@ -29,6 +30,8 @@ function getTodayLabel() {
 }
 
 async function getUserTier(): Promise<{ tier: "free" | "trial" | "subscriber"; trialDaysLeft: number }> {
+  // With pricing off everyone gets the full game.
+  if (!PRICING_ENABLED) return { tier: "subscriber", trialDaysLeft: 0 };
   const { userId } = await auth();
   if (!userId) return { tier: "free", trialDaysLeft: 0 };
 
