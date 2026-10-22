@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GameCard from "@/components/game/GameCard";
+import { KIT_GAMES, kitUrl } from "@/lib/kitGames";
 
 export const metadata: Metadata = {
   title:       "Free Card Games, Puzzles, Golf & Arcade for Your Second Monitor",
@@ -22,59 +23,25 @@ function getTodayLabel() {
   });
 }
 
+// Kit games come from public/proto/games.json (written by `npm run ship` in claude-games),
+// newest first; shipping a game with a game.json adds its card here automatically.
+const NEW_DAYS = 30;
+const KIT_CARDS = KIT_GAMES.map((g, i) => ({
+  title: g.title,
+  description: g.blurb,
+  tag: g.tag,
+  href: kitUrl(g.id),
+  accentColor: g.accent ?? "#ffd84a",
+  bgGradient: `linear-gradient(135deg, #14141c 0%, ${g.accent ?? "#444444"}55 100%)`,
+  icon: g.icon ?? "🎮",
+  previewImage: g.preview,
+  featured: i === 0,
+  isNew: !!g.updated && Date.now() - Date.parse(g.updated) < NEW_DAYS * 86400000,
+  cta: "Play",
+}));
+
 const GAMES = [
-  {
-    title: "Long Drive Range",
-    description:
-      "A 3D driving range. Pick from 12 clubs, nail the 3-click swing, and land it on the targets. Score is distance times accuracy.",
-    tag: "Golf",
-    href: "/proto/long-drive.html",
-    accentColor: "#7bbf4e",
-    bgGradient: "linear-gradient(135deg, #9fd3f0 0%, #7bbf4e 100%)",
-    icon: "⛳",
-    previewImage: "/images/previews/long-drive.jpg",
-    featured: true,
-    isNew: true,
-  },
-  {
-    title: "Solitaire",
-    description:
-      "Classic Klondike. Drag, double-click to send home, undo anytime, and win the famous bouncing-card finish.",
-    tag: "Card Classic",
-    href: "/proto/solitaire.html",
-    accentColor: "#4ade80",
-    bgGradient: "linear-gradient(135deg, #1f5b3a 0%, #164a2e 100%)",
-    icon: "♠️",
-    previewImage: "/images/previews/solitaire.jpg",
-    featured: false,
-    isNew: true,
-  },
-  {
-    title: "Battle Cards",
-    description:
-      "A quick minion battler. Spend mana, play creatures, trade attacks and bring the enemy hero to zero. Play the computer or a friend.",
-    tag: "Card Battle",
-    href: "/proto/battle-cards.html",
-    accentColor: "#ffd84a",
-    bgGradient: "linear-gradient(135deg, #2a2238 0%, #1c1726 100%)",
-    icon: "⚔️",
-    previewImage: "/images/previews/battle-cards.jpg",
-    featured: false,
-    isNew: true,
-  },
-  {
-    title: "AstroRogue",
-    description:
-      "Retro arcade shooter with a roguelite twist. Clear each round, pick 1 of 3 power-ups, survive as long as you can.",
-    tag: "Retro Arcade",
-    href: "/proto/astro-rogue.html",
-    accentColor: "#5ef2ff",
-    bgGradient: "linear-gradient(135deg, #05060a 0%, #101626 100%)",
-    icon: "🚀",
-    previewImage: "/images/previews/astro-rogue.jpg",
-    featured: false,
-    isNew: true,
-  },
+  ...KIT_CARDS,
   {
     title: "The Escape",
     description:
@@ -133,16 +100,7 @@ export default function Home() {
     "@type":    "ItemList",
     "name":     "Free Browser Games",
     "url":      "https://secondmonitorgames.com",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Long Drive Range — 3D Golf Driving Range", "url": "https://secondmonitorgames.com/proto/long-drive.html" },
-      { "@type": "ListItem", "position": 2, "name": "Solitaire — Classic Klondike", "url": "https://secondmonitorgames.com/proto/solitaire.html" },
-      { "@type": "ListItem", "position": 3, "name": "Battle Cards — Minion Card Battler", "url": "https://secondmonitorgames.com/proto/battle-cards.html" },
-      { "@type": "ListItem", "position": 4, "name": "AstroRogue — Retro Roguelite Shooter", "url": "https://secondmonitorgames.com/proto/astro-rogue.html" },
-      { "@type": "ListItem", "position": 5, "name": "The Escape — Daily Card Strategy Puzzle", "url": "https://secondmonitorgames.com/games/the-escape" },
-      { "@type": "ListItem", "position": 6, "name": "Decode — Free Daily Word Puzzle", "url": "https://secondmonitorgames.com/games/decode" },
-      { "@type": "ListItem", "position": 7, "name": "Cryptogram — Daily Code Breaker", "url": "https://secondmonitorgames.com/games/cryptogram" },
-      { "@type": "ListItem", "position": 8, "name": "Block Fall — Daily Arcade Game", "url": "https://secondmonitorgames.com/games/block-fall" },
-    ],
+    "itemListElement": GAMES.map((g, n) => ({ "@type": "ListItem", "position": n + 1, "name": `${g.title} — ${g.tag}`, "url": `https://secondmonitorgames.com${g.href}` })),
   };
 
   return (
@@ -179,7 +137,7 @@ export default function Home() {
               fontWeight: 600,
             }}
           >
-            ● 4 new games
+            ● {KIT_CARDS.filter((g) => g.isNew).length || KIT_CARDS.length} new games
           </span>
         </div>
       </div>

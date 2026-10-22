@@ -5,6 +5,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { getSubscriptionStatus } from "@/lib/subscription";
 import ManageButton from "./ManageButton";
 import UsernameSection from "./UsernameSection";
+import AchievementsCard from "@/components/game/AchievementsCard";
 
 export const metadata: Metadata = {
   title:  "Account — Second Monitor Games",
@@ -96,6 +97,9 @@ export default async function AccountPage() {
           <div style={sectionLabelStyle}>Profile</div>
           <UsernameSection initial={sub.username} />
         </div>
+
+        {/* ── Achievements (kit games and site-wide) ──────────────── */}
+        <AchievementsCard userId={userId} cardStyle={cardStyle} labelStyle={sectionLabelStyle} />
 
         {/* ── Card 2: Subscription ────────────────────────────────── */}
         <div style={cardStyle}>

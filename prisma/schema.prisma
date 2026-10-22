@@ -76,3 +76,36 @@ model LeaderboardScore {
   @@unique([game, userId])
   @@index([game, score])
 }
+
+// ── Kit games (Claude Games kit) ────────────────────────────────────────────
+// Best score per player per game for games built with the Claude Games kit
+// (served from /proto). Players are Clerk users or guests ("guest:<id>") who
+// post under a nickname. See src/app/api/kit/.
+model KitScore {
+  id        String   @id @default(cuid())
+  game      String
+  playerId  String   // Clerk user id, or "guest:<browser id>"
+  name      String
+  score     Int
+  plays     Int      @default(1)
+  isGuest   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([game, playerId])
+  @@index([game, score])
+  @@index([playerId])
+}
+
+// Achievements on a signed-in player's account. game is a kit game id, or
+// "site" for site-wide achievements (see src/lib/siteAchievements.ts).
+model Achievement {
+  id         String   @id @default(cuid())
+  userId     String   // Clerk user id
+  game       String
+  key        String
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, game, key])
+  @@index([userId])
+}

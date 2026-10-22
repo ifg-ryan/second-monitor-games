@@ -12,6 +12,8 @@ interface GameCardProps {
   featured?: boolean;
   comingSoon?: boolean;
   isNew?: boolean;
+  /** Button label (default "Play Today's Game" for the daily games). */
+  cta?: string;
 }
 
 export default function GameCard({
@@ -26,6 +28,7 @@ export default function GameCard({
   featured = false,
   comingSoon = false,
   isNew = false,
+  cta = "Play Today's Game",
 }: GameCardProps) {
   const previewHeight = featured ? 200 : 165;
 
@@ -163,7 +166,7 @@ export default function GameCard({
               }}
               className="game-play-btn"
             >
-              Play Today&apos;s Game
+              {cta}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M3 7h8M8 4l3 3-3 3" stroke="#0d0d18" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

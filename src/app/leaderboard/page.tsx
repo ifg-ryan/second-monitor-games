@@ -1,10 +1,11 @@
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
+import KitLeaderboards from '@/components/game/KitLeaderboards';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Daily Leaderboard — Top Scores | Second Monitor Games',
+  title: 'Leaderboards — Top Scores | Second Monitor Games',
   description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Decode, Block Fall, and The Escape.',
 };
 
@@ -67,6 +68,11 @@ export default async function LeaderboardPage() {
           Top scores across all games. Only your personal best counts.
         </p>
       </div>
+
+      {/* Kit games: one board each, linkable as /leaderboard#<game id> */}
+      <KitLeaderboards userId={userId ?? null} />
+
+      <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '1.4rem', color: 'var(--text)', marginBottom: '12px' }}>Block Fall</h2>
 
       {/* Game Tabs */}
       <div style={{

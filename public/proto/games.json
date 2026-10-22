@@ -2,7 +2,54 @@
   "astro-rogue": {
     "title": "AstroRogue",
     "updated": "2026-10-21",
-    "source": "e6c42c6"
+    "source": "e6c42c6",
+    "id": "astro-rogue",
+    "blurb": "Retro arcade shooter with a roguelite twist. Clear each round, pick 1 of 3 power-ups, survive as long as you can.",
+    "tag": "Retro Arcade",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#5ef2ff",
+    "icon": "🚀",
+    "score": {
+      "label": "points",
+      "max": 5000000
+    },
+    "achievements": [
+      {
+        "id": "first-powerup",
+        "name": "Power Up",
+        "description": "Pick your first power-up"
+      },
+      {
+        "id": "round-5",
+        "name": "Holding the Line",
+        "description": "Reach round 5"
+      },
+      {
+        "id": "round-10",
+        "name": "Last Defender",
+        "description": "Reach round 10"
+      },
+      {
+        "id": "maxed",
+        "name": "Maxed Out",
+        "description": "Take a power-up to its top level"
+      },
+      {
+        "id": "score-25k",
+        "name": "High Scorer",
+        "description": "Score 25,000 points in one run"
+      },
+      {
+        "id": "ufo-hunter",
+        "name": "UFO Hunter",
+        "description": "Destroy 10 UFOs",
+        "goal": 10
+      }
+    ],
+    "preview": "/images/previews/astro-rogue.jpg"
   },
   "kit": {
     "title": "Claude Games Kit",
@@ -12,16 +59,158 @@
   "solitaire": {
     "title": "Solitaire",
     "updated": "2026-10-21",
-    "source": "9ab10e9"
+    "source": "9ab10e9",
+    "id": "solitaire",
+    "blurb": "Classic Klondike. Drag, double-click to send home, undo anytime, and win the famous bouncing-card finish.",
+    "tag": "Card Classic",
+    "minutes": [
+      3,
+      8
+    ],
+    "accent": "#4ade80",
+    "icon": "♠️",
+    "score": {
+      "label": "points",
+      "max": 5000
+    },
+    "achievements": [
+      {
+        "id": "first-win",
+        "name": "Patience Pays",
+        "description": "Win a game"
+      },
+      {
+        "id": "aces",
+        "name": "Aces High",
+        "description": "Get all four aces onto the foundations"
+      },
+      {
+        "id": "no-undo",
+        "name": "No Take-Backs",
+        "description": "Win without using undo"
+      },
+      {
+        "id": "efficient",
+        "name": "Efficient",
+        "description": "Win in 120 moves or fewer"
+      },
+      {
+        "id": "card-shark",
+        "name": "Card Shark",
+        "description": "Win 5 games",
+        "goal": 5
+      }
+    ],
+    "preview": "/images/previews/solitaire.jpg"
   },
   "battle-cards": {
     "title": "Battle Cards",
     "updated": "2026-10-21",
-    "source": "ebbb016"
+    "source": "ebbb016",
+    "id": "battle-cards",
+    "blurb": "A quick minion battler. Spend mana, play creatures, trade attacks and bring the enemy hero to zero. Play the computer or a friend.",
+    "tag": "Card Battle",
+    "minutes": [
+      3,
+      6
+    ],
+    "accent": "#ffd84a",
+    "icon": "⚔️",
+    "score": {
+      "label": "points",
+      "max": 2000
+    },
+    "achievements": [
+      {
+        "id": "first-win",
+        "name": "First Victory",
+        "description": "Beat the computer"
+      },
+      {
+        "id": "flawless",
+        "name": "Flawless",
+        "description": "Win with 15 or more health left"
+      },
+      {
+        "id": "blitz",
+        "name": "Blitz",
+        "description": "Win within 8 of your turns"
+      },
+      {
+        "id": "dragon",
+        "name": "Dragon Rider",
+        "description": "Play a Dragon"
+      },
+      {
+        "id": "full-board",
+        "name": "Full Board",
+        "description": "Have 7 minions on the board"
+      },
+      {
+        "id": "champion",
+        "name": "Champion",
+        "description": "Beat the computer 10 times",
+        "goal": 10
+      }
+    ],
+    "preview": "/images/previews/battle-cards.jpg"
   },
   "long-drive": {
     "title": "Long Drive Range",
     "updated": "2026-10-22",
-    "source": "13236a8"
+    "source": "13236a8",
+    "id": "long-drive",
+    "blurb": "A 3D driving range. Pick from 12 clubs, nail the 3-click swing, and land it on the targets. Score is distance times accuracy.",
+    "tag": "Golf",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#7bbf4e",
+    "icon": "⛳",
+    "score": {
+      "label": "points",
+      "max": 12000
+    },
+    "achievements": [
+      {
+        "id": "first-target",
+        "name": "On Target",
+        "description": "Stop a ball on any target"
+      },
+      {
+        "id": "bullseye",
+        "name": "Bullseye",
+        "description": "Stop a ball in a bullseye"
+      },
+      {
+        "id": "big-drive",
+        "name": "Big Hitter",
+        "description": "Hit a ball 250 yards or more"
+      },
+      {
+        "id": "sharpshooter",
+        "name": "Sharpshooter",
+        "description": "Hit a target with 5 balls in one bucket"
+      },
+      {
+        "id": "high-roller",
+        "name": "High Roller",
+        "description": "Score 2,500 or more in one bucket"
+      },
+      {
+        "id": "full-bag",
+        "name": "Full Bag",
+        "description": "Hit a shot with all 12 clubs",
+        "goal": 12
+      },
+      {
+        "id": "range-rat",
+        "name": "Range Rat",
+        "description": "Hit 100 balls",
+        "goal": 100
+      }
+    ],
+    "preview": "/images/previews/long-drive.jpg"
   }
 }
