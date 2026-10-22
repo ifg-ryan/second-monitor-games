@@ -1,9 +1,7 @@
 {
   "astro-rogue": {
-    "title": "AstroRogue",
-    "updated": "2026-10-21",
-    "source": "e6c42c6",
     "id": "astro-rogue",
+    "title": "AstroRogue",
     "blurb": "Retro arcade shooter with a roguelite twist. Clear each round, pick 1 of 3 power-ups, survive as long as you can.",
     "tag": "Retro Arcade",
     "minutes": [
@@ -49,6 +47,8 @@
         "goal": 10
       }
     ],
+    "updated": "2026-10-22",
+    "source": "29a2cb9",
     "preview": "/images/previews/astro-rogue.jpg"
   },
   "kit": {
