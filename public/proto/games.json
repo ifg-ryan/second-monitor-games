@@ -104,10 +104,8 @@
     "preview": "/images/previews/solitaire.jpg"
   },
   "battle-cards": {
-    "title": "Battle Cards",
-    "updated": "2026-10-21",
-    "source": "ebbb016",
     "id": "battle-cards",
+    "title": "Battle Cards",
     "blurb": "A quick minion battler. Spend mana, play creatures, trade attacks and bring the enemy hero to zero. Play the computer or a friend.",
     "tag": "Card Battle",
     "minutes": [
@@ -153,6 +151,8 @@
         "goal": 10
       }
     ],
+    "updated": "2026-10-22",
+    "source": "29a2cb9",
     "preview": "/images/previews/battle-cards.jpg"
   },
   "long-drive": {
