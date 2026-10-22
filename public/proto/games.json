@@ -272,5 +272,59 @@
     "source": "485fba5",
     "preview": "/images/previews/snake-rogue.jpg",
     "added": "2026-10-22T02:01:50Z"
+  },
+  "high-noon": {
+    "id": "high-noon",
+    "title": "High Noon",
+    "blurb": "Quick-draw duels. Wait for DRAW!, then stop your aim on target before the outlaw fires. Each outlaw is faster.",
+    "tag": "Reflex",
+    "minutes": [
+      1,
+      3
+    ],
+    "accent": "#ff9a3d",
+    "icon": "🤠",
+    "score": {
+      "label": "bounty",
+      "max": 200000
+    },
+    "achievements": [
+      {
+        "id": "quick-draw",
+        "name": "Quick Draw",
+        "description": "Win a duel"
+      },
+      {
+        "id": "dead-eye",
+        "name": "Dead Eye",
+        "description": "Hit the dead centre of the target"
+      },
+      {
+        "id": "lightning",
+        "name": "Lightning Hands",
+        "description": "Win a duel in under 0.4 seconds"
+      },
+      {
+        "id": "legend",
+        "name": "Legend of the West",
+        "description": "Win 10 duels in one run"
+      },
+      {
+        "id": "steady",
+        "name": "Nerves of Steel",
+        "description": "Don't flinch at a fake-out, then win the duel",
+        "secret": true
+      },
+      {
+        "id": "bounty-hunter",
+        "name": "Bounty Hunter",
+        "description": "Win 100 duels in total",
+        "goal": 100
+      }
+    ],
+    "added": "2026-10-22T02:23:21.561Z",
+    "updated": "2026-10-22T02:23:21.561Z",
+    "source": "7ccbdff",
+    "preview": "/images/previews/high-noon.jpg"
   }
 }
