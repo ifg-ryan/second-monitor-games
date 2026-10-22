@@ -24,7 +24,7 @@ async function rankOf(game: string, score: number, lowerIsBetter: boolean): Prom
   return (await prisma.kitScore.count({ where: { game, score: lowerIsBetter ? { lt: score } : { gt: score } } })) + 1;
 }
 
-// GET /api/kit/score?game=long-drive&limit=10[&guestId=...]
+// GET /api/kit/score?game=range-rush&limit=10[&guestId=...]
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const game = kitGame(params.get('game'));
