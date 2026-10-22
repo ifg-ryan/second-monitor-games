@@ -156,10 +156,8 @@
     "preview": "/images/previews/battle-cards.jpg"
   },
   "long-drive": {
-    "title": "Long Drive Range",
-    "updated": "2026-10-22",
-    "source": "13236a8",
     "id": "long-drive",
+    "title": "Long Drive Range",
     "blurb": "A 3D driving range. Pick from 12 clubs, nail the 3-click swing, and land it on the targets. Score is distance times accuracy.",
     "tag": "Golf",
     "minutes": [
@@ -211,6 +209,8 @@
         "goal": 100
       }
     ],
+    "updated": "2026-10-22",
+    "source": "29a2cb9",
     "preview": "/images/previews/long-drive.jpg"
   }
 }
