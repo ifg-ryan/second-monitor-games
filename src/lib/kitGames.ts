@@ -21,6 +21,8 @@ export interface KitGame {
   icon?: string;
   preview?: string;
   updated?: string;
+  /** First shipped. Sorts the front page, so re-shipping a fix doesn't reorder it. */
+  added?: string;
   score: { label: string; max: number; lowerIsBetter?: boolean };
   achievements: KitAchievement[];
 }
@@ -31,7 +33,7 @@ type Entry = Partial<KitGame> & { title: string };
 export const KIT_GAMES: KitGame[] = Object.entries(data as unknown as Record<string, Entry>)
   .filter(([, g]) => g.score && g.blurb)
   .map(([id, g]) => ({ ...(g as KitGame), id, achievements: g.achievements ?? [] }))
-  .sort((a, b) => (b.updated ?? '').localeCompare(a.updated ?? ''));
+  .sort((a, b) => (b.added ?? b.updated ?? '').localeCompare(a.added ?? a.updated ?? ''));
 
 export function kitGame(id: string | null | undefined): KitGame | undefined {
   return KIT_GAMES.find((g) => g.id === id);

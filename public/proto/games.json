@@ -49,12 +49,14 @@
     ],
     "updated": "2026-10-22",
     "source": "29a2cb9",
-    "preview": "/images/previews/astro-rogue.jpg"
+    "preview": "/images/previews/astro-rogue.jpg",
+    "added": "2026-10-21T19:48:12Z"
   },
   "kit": {
     "title": "Claude Games Kit",
     "updated": "2026-10-22T01:42:05.457Z",
-    "source": "ead8bf4"
+    "source": "ead8bf4",
+    "added": "2026-10-21T19:56:26Z"
   },
   "solitaire": {
     "id": "solitaire",
@@ -101,7 +103,8 @@
     ],
     "updated": "2026-10-22",
     "source": "29a2cb9",
-    "preview": "/images/previews/solitaire.jpg"
+    "preview": "/images/previews/solitaire.jpg",
+    "added": "2026-10-21T23:02:57Z"
   },
   "long-drive": {
     "id": "long-drive",
@@ -159,7 +162,8 @@
     ],
     "updated": "2026-10-22T02:17:23.435Z",
     "source": "485fba5",
-    "preview": "/images/previews/long-drive.jpg"
+    "preview": "/images/previews/long-drive.jpg",
+    "added": "2026-10-22T00:35:46Z"
   },
   "golf-solitaire": {
     "id": "golf-solitaire",
@@ -212,7 +216,8 @@
     ],
     "updated": "2026-10-22T02:17:12.590Z",
     "source": "485fba5",
-    "preview": "/images/previews/golf-solitaire.jpg"
+    "preview": "/images/previews/golf-solitaire.jpg",
+    "added": "2026-10-22T01:40:35Z"
   },
   "snake-rogue": {
     "id": "snake-rogue",
@@ -265,6 +270,7 @@
     ],
     "updated": "2026-10-22T02:17:02.130Z",
     "source": "485fba5",
-    "preview": "/images/previews/snake-rogue.jpg"
+    "preview": "/images/previews/snake-rogue.jpg",
+    "added": "2026-10-22T02:01:50Z"
   }
 }

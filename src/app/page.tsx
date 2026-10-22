@@ -36,7 +36,7 @@ const KIT_CARDS = KIT_GAMES.map((g, i) => ({
   icon: g.icon ?? "🎮",
   previewImage: g.preview,
   featured: i === 0,
-  isNew: !!g.updated && Date.now() - Date.parse(g.updated) < NEW_DAYS * 86400000,
+  isNew: !!(g.added ?? g.updated) && Date.now() - Date.parse((g.added ?? g.updated)!) < NEW_DAYS * 86400000,
   cta: "Play",
 }));
 
