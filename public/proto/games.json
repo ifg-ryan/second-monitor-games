@@ -321,5 +321,59 @@
     "updated": "2026-10-22T13:33:32.779Z",
     "source": "94a4459",
     "preview": "/images/previews/range-rush.jpg"
+  },
+  "brick-rogue": {
+    "id": "brick-rogue",
+    "title": "Brick Rogue",
+    "blurb": "Breakout with a roguelite twist. Aim your serve, chain combos, pick an upgrade after every level, and keep the wall from reaching you.",
+    "tag": "Arcade",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#5ef2ff",
+    "icon": "🧱",
+    "score": {
+      "label": "points",
+      "max": 400000
+    },
+    "achievements": [
+      {
+        "id": "first-brick",
+        "name": "Crack",
+        "description": "Break a brick"
+      },
+      {
+        "id": "level-clear",
+        "name": "Clean Sweep",
+        "description": "Clear a level"
+      },
+      {
+        "id": "combo-10",
+        "name": "Chain Reaction",
+        "description": "Break 10 bricks without the ball touching the paddle"
+      },
+      {
+        "id": "level-5",
+        "name": "Deep Run",
+        "description": "Clear level 5"
+      },
+      {
+        "id": "sticky",
+        "name": "Sticky Fingers",
+        "description": "Take the Sticky Paddle",
+        "secret": true
+      },
+      {
+        "id": "demolition",
+        "name": "Demolition Crew",
+        "description": "Break 1,000 bricks in total",
+        "goal": 1000
+      }
+    ],
+    "added": "2026-10-22T16:26:18.046Z",
+    "updated": "2026-10-22T16:26:18.046Z",
+    "source": "0f3eb8c",
+    "preview": "/images/previews/brick-rogue.jpg"
   }
 }
