@@ -78,7 +78,6 @@ export default function Footer() {
                 {[
                   { label: "About",   href: "/about"   },
                   { label: "Archive", href: "/archive" },
-                  { label: "Pricing", href: "/pricing" },
                   { label: "Account", href: "/account" },
                   { label: "Terms",   href: "/terms"   },
                   { label: "Privacy", href: "/privacy" },
