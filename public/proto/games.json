@@ -326,5 +326,59 @@
     "updated": "2026-10-22T02:23:21.561Z",
     "source": "7ccbdff",
     "preview": "/images/previews/high-noon.jpg"
+  },
+  "range-rush": {
+    "id": "range-rush",
+    "title": "Range Rush",
+    "blurb": "60 seconds on the range. Hit the called target to build a combo, catch the golden flags, and fight the wind as it builds.",
+    "tag": "Golf",
+    "minutes": [
+      1,
+      2
+    ],
+    "accent": "#38c6d9",
+    "icon": "⛳",
+    "score": {
+      "label": "points",
+      "max": 60000
+    },
+    "achievements": [
+      {
+        "id": "on-call",
+        "name": "On Call",
+        "description": "Hit the called target"
+      },
+      {
+        "id": "heater",
+        "name": "Heater",
+        "description": "Reach a x5 combo"
+      },
+      {
+        "id": "golden-touch",
+        "name": "Golden Touch",
+        "description": "Hit a golden flag"
+      },
+      {
+        "id": "rush-hour",
+        "name": "Rush Hour",
+        "description": "Score 5,000 in one round"
+      },
+      {
+        "id": "buzzer-beater",
+        "name": "Buzzer Beater",
+        "description": "Hit the called target with a ball still flying when time runs out",
+        "secret": true
+      },
+      {
+        "id": "range-regular",
+        "name": "Range Regular",
+        "description": "Hit 100 called targets in total",
+        "goal": 100
+      }
+    ],
+    "added": "2026-10-22T13:33:32.779Z",
+    "updated": "2026-10-22T13:33:32.779Z",
+    "source": "94a4459",
+    "preview": "/images/previews/range-rush.jpg"
   }
 }
