@@ -18,5 +18,10 @@
     "title": "Battle Cards",
     "updated": "2026-10-21",
     "source": "ebbb016"
+  },
+  "long-drive": {
+    "title": "Long Drive Range",
+    "updated": "2026-10-22",
+    "source": "371dfcf"
   }
 }
