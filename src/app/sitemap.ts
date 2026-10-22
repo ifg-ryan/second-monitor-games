@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { KIT_GAMES } from "@/lib/kitGames";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://secondmonitorgames.com";
@@ -29,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority:        0.7,
     },
+    ...KIT_GAMES.map((g) => ({
+      url:             `${base}/play/${g.id}`,
+      lastModified:    now,
+      changeFrequency: "weekly" as const,
+      priority:        0.7,
+    })),
     {
       url:             `${base}/about`,
       lastModified:    now,

@@ -39,6 +39,12 @@ export function kitGame(id: string | null | undefined): KitGame | undefined {
   return KIT_GAMES.find((g) => g.id === id);
 }
 
+/** The game's page on the site (site bar, info bar, game). */
 export function kitUrl(id: string): string {
+  return `/play/${id}`;
+}
+
+/** The game file on its own (no site around it). */
+export function kitFile(id: string): string {
   return `/proto/${id}.html`;
 }
