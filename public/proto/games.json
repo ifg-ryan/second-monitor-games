@@ -57,10 +57,8 @@
     "source": "9ab10e9"
   },
   "solitaire": {
-    "title": "Solitaire",
-    "updated": "2026-10-21",
-    "source": "9ab10e9",
     "id": "solitaire",
+    "title": "Solitaire",
     "blurb": "Classic Klondike. Drag, double-click to send home, undo anytime, and win the famous bouncing-card finish.",
     "tag": "Card Classic",
     "minutes": [
@@ -101,6 +99,8 @@
         "goal": 5
       }
     ],
+    "updated": "2026-10-22",
+    "source": "29a2cb9",
     "preview": "/images/previews/solitaire.jpg"
   },
   "battle-cards": {
