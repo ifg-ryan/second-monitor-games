@@ -212,5 +212,58 @@
     "updated": "2026-10-22",
     "source": "29a2cb9",
     "preview": "/images/previews/long-drive.jpg"
+  },
+  "golf-solitaire": {
+    "id": "golf-solitaire",
+    "title": "Golf Solitaire",
+    "blurb": "Clear seven columns by playing cards one higher or one lower. Chain long runs, save your deck, and go for the hole in one. Two-minute rounds.",
+    "tag": "Card Puzzle",
+    "minutes": [
+      1,
+      3
+    ],
+    "accent": "#ffd84a",
+    "icon": "🏌️",
+    "score": {
+      "label": "points",
+      "max": 1000
+    },
+    "achievements": [
+      {
+        "id": "birdie",
+        "name": "Birdie",
+        "description": "Clear 25 cards in one round"
+      },
+      {
+        "id": "eagle",
+        "name": "Eagle",
+        "description": "Clear 30 cards in one round"
+      },
+      {
+        "id": "hole-in-one",
+        "name": "Hole in One",
+        "description": "Clear all 35 cards"
+      },
+      {
+        "id": "under-par",
+        "name": "Under Par",
+        "description": "Clear the board with 5 or more cards left in the deck",
+        "secret": true
+      },
+      {
+        "id": "chain",
+        "name": "On a Roll",
+        "description": "Play 10 cards in a row without drawing"
+      },
+      {
+        "id": "regular",
+        "name": "Club Member",
+        "description": "Play 20 rounds",
+        "goal": 20
+      }
+    ],
+    "updated": "2026-10-22T01:40:35.888Z",
+    "source": "ead8bf4",
+    "preview": "/images/previews/golf-solitaire.jpg"
   }
 }
