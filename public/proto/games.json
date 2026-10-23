@@ -538,5 +538,59 @@
     "updated": "2026-10-23T17:06:55.033Z",
     "source": "27ebff5",
     "preview": "/images/previews/hive.jpg"
+  },
+  "quartets": {
+    "id": "quartets",
+    "title": "Quartets",
+    "blurb": "Sixteen words, four hidden groups. Find them before four mistakes. A new board every day, every past one in the archive.",
+    "tag": "Daily Word",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#ba81c5",
+    "icon": "🟪",
+    "score": {
+      "label": "day streak",
+      "max": 100000
+    },
+    "achievements": [
+      {
+        "id": "solve",
+        "name": "Sorted",
+        "description": "Solve a puzzle"
+      },
+      {
+        "id": "perfect",
+        "name": "Flawless",
+        "description": "Solve a puzzle with no mistakes"
+      },
+      {
+        "id": "week",
+        "name": "Full Week",
+        "description": "Reach a 7-day streak"
+      },
+      {
+        "id": "regular",
+        "name": "Regular",
+        "description": "Solve 30 puzzles",
+        "goal": 30
+      },
+      {
+        "id": "close",
+        "name": "Close Call",
+        "description": "Solve with one mistake to spare"
+      },
+      {
+        "id": "purple",
+        "name": "Purple First",
+        "description": "Find the hardest group first",
+        "secret": true
+      }
+    ],
+    "added": "2026-10-23T17:07:05.420Z",
+    "updated": "2026-10-23T17:07:05.420Z",
+    "source": "27ebff5",
+    "preview": "/images/previews/quartets.jpg"
   }
 }
