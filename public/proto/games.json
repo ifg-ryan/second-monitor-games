@@ -375,5 +375,59 @@
     "updated": "2026-10-22T16:26:18.046Z",
     "source": "0f3eb8c",
     "preview": "/images/previews/brick-rogue.jpg"
+  },
+  "hand-rogue": {
+    "id": "hand-rogue",
+    "title": "Hand Rogue",
+    "blurb": "Play poker hands to beat a climbing target. Four hands, three discards, then pick a joker that bends the scoring. How many rounds can you clear?",
+    "tag": "Card Roguelite",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#ff5e7a",
+    "icon": "🃏",
+    "score": {
+      "label": "rounds",
+      "max": 40
+    },
+    "achievements": [
+      {
+        "id": "opening-bet",
+        "name": "Opening Bet",
+        "description": "Clear round 1"
+      },
+      {
+        "id": "high-roller",
+        "name": "High Roller",
+        "description": "Clear 8 rounds in one run"
+      },
+      {
+        "id": "big-hand",
+        "name": "Big Hand",
+        "description": "Score 5,000 chips with one hand"
+      },
+      {
+        "id": "full-table",
+        "name": "Full Table",
+        "description": "Hold 5 jokers at once"
+      },
+      {
+        "id": "royal",
+        "name": "Royal Flush",
+        "description": "Play 10, J, Q, K and A of one suit",
+        "secret": true
+      },
+      {
+        "id": "regular",
+        "name": "House Regular",
+        "description": "Play 20 runs",
+        "goal": 20
+      }
+    ],
+    "added": "2026-10-23T15:35:13.416Z",
+    "updated": "2026-10-23T15:35:13.416Z",
+    "source": "2d6801e",
+    "preview": "/images/previews/hand-rogue.jpg"
   }
 }
