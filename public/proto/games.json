@@ -484,5 +484,59 @@
     "updated": "2026-10-23T17:06:43.016Z",
     "source": "27ebff5",
     "preview": "/images/previews/fiver.jpg"
+  },
+  "hive": {
+    "id": "hive",
+    "title": "Hive",
+    "blurb": "Make words from seven letters. Every word needs the centre letter; find the pangram that uses them all. A new hive every day, every past one in the archive.",
+    "tag": "Daily Word",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#f7da21",
+    "icon": "🐝",
+    "score": {
+      "label": "day streak",
+      "max": 100000
+    },
+    "achievements": [
+      {
+        "id": "great",
+        "name": "Great",
+        "description": "Reach the Great rank on a puzzle"
+      },
+      {
+        "id": "pangram",
+        "name": "Pangram",
+        "description": "Find a word that uses all seven letters"
+      },
+      {
+        "id": "genius",
+        "name": "Genius",
+        "description": "Reach the Genius rank"
+      },
+      {
+        "id": "week",
+        "name": "Full Week",
+        "description": "Reach a 7-day streak"
+      },
+      {
+        "id": "regular",
+        "name": "Regular",
+        "description": "Reach Great on 30 puzzles",
+        "goal": 30
+      },
+      {
+        "id": "queen",
+        "name": "Queen Bee",
+        "description": "Find every word in a puzzle",
+        "secret": true
+      }
+    ],
+    "added": "2026-10-23T17:06:55.033Z",
+    "updated": "2026-10-23T17:06:55.033Z",
+    "source": "27ebff5",
+    "preview": "/images/previews/hive.jpg"
   }
 }
