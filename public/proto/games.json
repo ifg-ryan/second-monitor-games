@@ -429,5 +429,60 @@
     "updated": "2026-10-23T16:26:37.630Z",
     "source": "07b7c45",
     "preview": "/images/previews/hand-rogue.jpg"
+  },
+  "fiver": {
+    "id": "fiver",
+    "title": "Fiver",
+    "blurb": "Guess the five-letter word in six tries. Green is the right spot, yellow is in the word. A new word every day, and every past puzzle in the archive.",
+    "tag": "Daily Word",
+    "minutes": [
+      1,
+      4
+    ],
+    "accent": "#538d4e",
+    "icon": "🟩",
+    "score": {
+      "label": "day streak",
+      "max": 100000
+    },
+    "achievements": [
+      {
+        "id": "first",
+        "name": "First Word",
+        "description": "Solve a puzzle"
+      },
+      {
+        "id": "sharp",
+        "name": "Sharpshooter",
+        "description": "Solve in 2 guesses or fewer"
+      },
+      {
+        "id": "week",
+        "name": "Full Week",
+        "description": "Reach a 7-day streak"
+      },
+      {
+        "id": "archivist",
+        "name": "Archivist",
+        "description": "Solve 10 puzzles from the archive",
+        "goal": 10
+      },
+      {
+        "id": "regular",
+        "name": "Regular",
+        "description": "Solve 30 puzzles",
+        "goal": 30
+      },
+      {
+        "id": "clutch",
+        "name": "Clutch",
+        "description": "Solve on your last guess",
+        "secret": true
+      }
+    ],
+    "added": "2026-10-23T17:06:43.016Z",
+    "updated": "2026-10-23T17:06:43.016Z",
+    "source": "27ebff5",
+    "preview": "/images/previews/fiver.jpg"
   }
 }
