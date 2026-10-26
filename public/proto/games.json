@@ -592,5 +592,91 @@
     "updated": "2026-10-23T17:07:05.420Z",
     "source": "27ebff5",
     "preview": "/images/previews/quartets.jpg"
+  },
+  "the-escape": {
+    "id": "the-escape",
+    "title": "The Escape",
+    "blurb": "One deck, eleven turns. Play four cards with the Anchor as a poker hand, then promote one to be the next Anchor. Land a Royal Flush to escape.",
+    "tag": "Card Puzzle",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#e8c26a",
+    "icon": "👑",
+    "score": {
+      "label": "points",
+      "max": 10000000
+    },
+    "achievements": [
+      {
+        "id": "wild-child",
+        "name": "Wild Child",
+        "description": "Play a Wild Royal Flush on Turn 1"
+      },
+      {
+        "id": "distance",
+        "name": "Going the Distance",
+        "description": "Complete 100 Standard games",
+        "goal": 100
+      },
+      {
+        "id": "jack",
+        "name": "Jack of All Trades",
+        "description": "Play every hand type in one game (not Quints or Natural Royal)"
+      },
+      {
+        "id": "five-by-five",
+        "name": "Five by Five",
+        "description": "Score Quints 5 times",
+        "goal": 5
+      },
+      {
+        "id": "chain",
+        "name": "The Chain",
+        "description": "Score a Straight Flush 5 times",
+        "goal": 5
+      },
+      {
+        "id": "four-seasons",
+        "name": "Four Seasons",
+        "description": "Score Quads 4 times",
+        "goal": 4
+      },
+      {
+        "id": "pure-love",
+        "name": "100% Pure Love",
+        "description": "Finish a game with 1,000 or more points"
+      },
+      {
+        "id": "mph",
+        "name": "200 MPH",
+        "description": "Finish a game with 2,000 or more points"
+      },
+      {
+        "id": "beat",
+        "name": "Never Miss a Beat",
+        "description": "Score on every turn of a game, Normal or Hard"
+      },
+      {
+        "id": "bumblebee",
+        "name": "Flight of the Bumblebee",
+        "description": "Escape a Standard game by Turn 7, Normal or Hard"
+      },
+      {
+        "id": "countdown",
+        "name": "The Final Countdown",
+        "description": "Escape a Standard game on exactly Turn 11, Normal or Hard"
+      },
+      {
+        "id": "manual",
+        "name": "Manual Labor",
+        "description": "Escape a Standard game without Tools, Normal or Hard"
+      }
+    ],
+    "added": "2026-10-26T18:33:04.762Z",
+    "updated": "2026-10-26T18:33:04.762Z",
+    "source": "d1fd22c",
+    "preview": "/images/previews/the-escape.jpg"
   }
 }
