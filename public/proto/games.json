@@ -678,5 +678,60 @@
     "updated": "2026-10-26T18:53:03.868Z",
     "source": "09b4adc",
     "preview": "/images/previews/the-escape.jpg"
+  },
+  "word-gardens": {
+    "id": "word-gardens",
+    "title": "Word Gardens",
+    "blurb": "Swipe across the petals to make words and fill the board. Find bonus words for the jar, and climb from easy breezy boards to epic ones.",
+    "tag": "Word",
+    "minutes": [
+      1,
+      4
+    ],
+    "accent": "#7cc36a",
+    "icon": "🌷",
+    "score": {
+      "label": "puzzles solved",
+      "max": 100000
+    },
+    "achievements": [
+      {
+        "id": "first-bloom",
+        "name": "First Bloom",
+        "description": "Solve your first puzzle"
+      },
+      {
+        "id": "green-thumb",
+        "name": "Green Thumb",
+        "description": "Solve 25 puzzles",
+        "goal": 25
+      },
+      {
+        "id": "bonus-hunter",
+        "name": "Bonus Hunter",
+        "description": "Find 5 bonus words in one puzzle"
+      },
+      {
+        "id": "steady-hands",
+        "name": "Steady Hands",
+        "description": "Solve a hard or epic puzzle without shuffling"
+      },
+      {
+        "id": "epic",
+        "name": "Epic Bloom",
+        "description": "Solve an epic puzzle"
+      },
+      {
+        "id": "master-gardener",
+        "name": "Master Gardener",
+        "description": "Solve 100 puzzles",
+        "goal": 100,
+        "secret": true
+      }
+    ],
+    "added": "2026-10-26T19:32:52.669Z",
+    "updated": "2026-10-26T19:32:52.669Z",
+    "source": "e417e2e",
+    "preview": "/images/previews/word-gardens.jpg"
   }
 }
