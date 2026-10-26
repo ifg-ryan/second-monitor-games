@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     return [
       // AstroRogue moved to /proto/ with the other kit prototypes. Keep old links working.
       { source: "/games/astro-rogue.html", destination: "/proto/astro-rogue.html", permanent: true },
+      // Decode was cut in favour of Fiver (the kit's daily word game). Keep old links working.
+      { source: "/games/decode", destination: "/play/fiver", permanent: true },
+      { source: "/games/decode.html", destination: "/play/fiver", permanent: true },
       { source: "/proto", destination: "/proto/index.html", permanent: false },
     ];
   },

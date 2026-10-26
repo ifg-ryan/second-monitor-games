@@ -5,7 +5,7 @@ import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:       "Game Archive — Every Past Puzzle | Second Monitor Games",
-  description: "Browse every past daily puzzle on Second Monitor Games — Decode word puzzles, The Escape card game, and Block Fall. Subscribe to replay any past challenge.",
+  description: "Browse every past daily puzzle on Second Monitor Games — The Escape card game and Block Fall. Subscribe to replay any past challenge.",
   alternates:  { canonical: "https://secondmonitorgames.com/archive" },
   robots:      { index: true, follow: true },
 };
@@ -63,17 +63,6 @@ function getPuzzleDays(launchDateStr: string, limit = 60): PuzzleDay[] {
 // ── Game definitions ──────────────────────────────────────────────────────────
 
 const GAMES = [
-  {
-    id:          "decode",
-    name:        "Decode",
-    tag:         "Word Game",
-    tagColor:    "#538d4e",
-    icon:        "🟩",
-    href:        "/games/decode",
-    launchDate:  "2026-03-01",
-    gameType:    "puzzle" as const,
-    description: "Six tries. One word. Same puzzle for every player each day.",
-  },
   {
     id:          "the-escape",
     name:        "The Escape",

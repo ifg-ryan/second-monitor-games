@@ -55,18 +55,6 @@ const GAMES = [
     featured: false,
   },
   {
-    title: "Decode",
-    description:
-      "A daily word puzzle. Guess the five-letter word in six tries — new word every day, same for everyone.",
-    tag: "Daily Word Puzzle",
-    href: "/games/decode",
-    accentColor: "#538d4e",
-    bgGradient: "linear-gradient(135deg, #121213 0%, #1a1a1b 50%, #0a0f0a 100%)",
-    icon: "🟩",
-    previewImage: "/images/previews/decode.png",
-    featured: false,
-  },
-  {
     title: "Cryptogram",
     description:
       "Crack the daily code. Each number hides a letter — deduce the secret phrase using logic and letter banks.",

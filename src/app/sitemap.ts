@@ -13,12 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority:        1.0,
     },
     {
-      url:             `${base}/games/decode`,
-      lastModified:    now,
-      changeFrequency: "daily",
-      priority:        0.9,
-    },
-    {
       url:             `${base}/games/the-escape`,
       lastModified:    now,
       changeFrequency: "daily",

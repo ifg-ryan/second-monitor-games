@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Leaderboards — Top Scores | Second Monitor Games',
-  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Decode, Block Fall, and The Escape.',
+  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Fiver, Block Fall, and The Escape.',
 };
 
 const MEDAL: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };

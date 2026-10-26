@@ -43,11 +43,11 @@ const FAQ = [
   },
   {
     q: "What games are available right now?",
-    a: "Currently: The Escape (daily card strategy), Decode (daily word puzzle), and Block Fall (daily arcade). New games are added regularly — the site is actively growing.",
+    a: "Currently: The Escape (daily card strategy), Fiver (daily word puzzle), and Block Fall (daily arcade). New games are added regularly — the site is actively growing.",
   },
   {
     q: "Can I play on my phone?",
-    a: "The site is optimized for desktop — it's designed for a second monitor, not a small screen. Decode works reasonably well on mobile. Card and arcade games are better on a laptop or desktop.",
+    a: "The site is optimized for desktop — it's designed for a second monitor, not a small screen. Fiver works reasonably well on mobile. Card and arcade games are better on a laptop or desktop.",
   },
   {
     q: "Are there free games to play at work during a break?",
@@ -212,11 +212,11 @@ export default function AboutPage() {
             },
             {
               icon:        "🟩",
-              name:        "Decode",
+              name:        "Fiver",
               type:        "Daily Word Puzzle",
               color:       "#538d4e",
-              href:        "/games/decode",
-              description: "A quick daily word puzzle. Six attempts to find the hidden word — takes under 2 minutes. Green means right letter, right spot. Yellow means right letter, wrong spot. Grey means not in the word. New puzzle every day at midnight, same word for every player worldwide.",
+              href:        "/play/fiver",
+              description: "A quick daily word puzzle. Six tries to find the hidden five-letter word, new puzzle every day and the same word for every player. Missed a day? Past puzzles are in the archive.",
             },
             {
               icon:        "🟦",
