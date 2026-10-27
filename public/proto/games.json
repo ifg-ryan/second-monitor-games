@@ -682,7 +682,7 @@
   "word-gardens": {
     "id": "word-gardens",
     "title": "Word Gardens",
-    "blurb": "Swipe across the petals to make words and fill the board. Find bonus words for the jar, and climb from easy breezy boards to epic ones.",
+    "blurb": "Swipe across the petals to make words and fill the board. Find bonus words for the jar, climb from easy boards to epic ones, and stamp your card with a themed daily crossword.",
     "tag": "Word",
     "minutes": [
       1,
@@ -722,16 +722,14 @@
         "description": "Solve an epic puzzle"
       },
       {
-        "id": "master-gardener",
-        "name": "Master Gardener",
-        "description": "Solve 100 puzzles",
-        "goal": 100,
-        "secret": true
+        "id": "full-card",
+        "name": "Full Card",
+        "description": "Fill a daily stamp card"
       }
     ],
     "added": "2026-10-26T19:32:52.669Z",
-    "updated": "2026-10-27T01:21:33.569Z",
-    "source": "171a6da",
+    "updated": "2026-10-27T01:45:19.511Z",
+    "source": "cd49271",
     "preview": "/images/previews/word-gardens.jpg"
   }
 }
