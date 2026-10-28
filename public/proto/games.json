@@ -986,5 +986,59 @@
     "updated": "2026-10-28T23:08:21.289Z",
     "source": "74bc90a",
     "preview": "/images/previews/holdem-career.52bea181.jpg"
+  },
+  "homerun-derby": {
+    "id": "homerun-derby",
+    "title": "Home Run Derby",
+    "blurb": "10 balls. Every home run earns one back. Time the pitch, square it up and see how far a hot streak can carry you.",
+    "tag": "Sports",
+    "minutes": [
+      1,
+      4
+    ],
+    "accent": "#c8322b",
+    "icon": "⚾",
+    "score": {
+      "label": "feet",
+      "max": 200000
+    },
+    "achievements": [
+      {
+        "id": "first-homer",
+        "name": "Gone!",
+        "description": "Hit a home run"
+      },
+      {
+        "id": "moonshot",
+        "name": "Moonshot",
+        "description": "Hit a home run 450 feet or more"
+      },
+      {
+        "id": "hot-streak",
+        "name": "Hot Streak",
+        "description": "Hit 5 home runs in a row"
+      },
+      {
+        "id": "derby-king",
+        "name": "Derby King",
+        "description": "Hit 15 home runs in one round"
+      },
+      {
+        "id": "upper-deck",
+        "name": "Upper Deck",
+        "description": "Hit a home run 500 feet or more",
+        "secret": true
+      },
+      {
+        "id": "slugger",
+        "name": "Slugger",
+        "description": "Hit 100 home runs in total",
+        "goal": 100
+      }
+    ],
+    "added": "2026-10-28T23:32:28.448Z",
+    "updated": "2026-10-28T23:32:28.448Z",
+    "source": "2cd437c",
+    "preview": "/images/previews/homerun-derby.5ef980ca.jpg"
   }
 }
