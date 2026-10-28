@@ -17,11 +17,14 @@ describe('lab', () => {
     expect(labToken('fox-den')).toBeNull();
   });
 
-  it('checks the runner key', () => {
+  it('checks the runner key, forgiving stray spaces and quotes', async () => {
     const req = (h?: string) => new Request('https://x/api', { headers: h ? { authorization: h } : {} });
-    expect(isRunner(req('Bearer runner-secret'))).toBe(true);
-    expect(isRunner(req('Bearer wrong'))).toBe(false);
-    expect(isRunner(req())).toBe(false);
+    expect(await isRunner(req('Bearer runner-secret'))).toBe(true);
+    process.env.LAB_RUNNER_KEY = ' "runner-secret"\n';
+    expect(await isRunner(req('Bearer runner-secret '))).toBe(true);
+    expect(await isRunner(req('Bearer wrong'))).toBe(false);
+    expect(await isRunner(req())).toBe(false);
+    expect(await isRunner(req('Bearer not.a.realjwt'))).toBe(false);
   });
 
   it('keeps only known context fields', () => {

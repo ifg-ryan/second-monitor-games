@@ -8,13 +8,14 @@
 //
 // Env (Vercel):
 //   LAB_PASSCODE           what testers type at /lab to get in (also unlocks the Feedback button)
-//   LAB_RUNNER_KEY         shared secret the GitHub workflow sends to read and update the queue
+//   LAB_RUNNER_KEY         optional: a shared secret the runner may send instead (normally it proves itself with GitHub's OIDC token)
 //   GITHUB_DISPATCH_TOKEN  fine-grained GitHub token with Actions: write on ifg-ryan/claude-games
 //   LAB_REPO               optional, defaults to ifg-ryan/claude-games
 //
 //   if (!(await isTester())) return labDenied();
 //   await dispatch('apply');
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
@@ -59,10 +60,27 @@ export async function isTester(): Promise<boolean> {
   return !!real && !!got && same(got, sign(real));
 }
 
-export function isRunner(request: Request): boolean {
-  const key = process.env.LAB_RUNNER_KEY;
-  const got = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '';
-  return !!key && !!got && same(got, key);
+// The feedback workflow proves who it is with a GitHub OIDC token: signed by GitHub, for this repo's
+// feedback.yml, for this site. Nothing to copy between GitHub and Vercel.
+export const RUNNER_AUDIENCE = 'secondmonitorgames-lab';
+const githubKeys = createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'));
+
+export async function isGithubRunner(token: string): Promise<boolean> {
+  const repo = process.env.LAB_REPO ?? 'ifg-ryan/claude-games';
+  try {
+    const { payload } = await jwtVerify(token, githubKeys, { issuer: 'https://token.actions.githubusercontent.com', audience: RUNNER_AUDIENCE });
+    return payload.repository === repo && typeof payload.workflow_ref === 'string' && payload.workflow_ref.startsWith(`${repo}/.github/workflows/feedback.yml@refs/heads/main`);
+  } catch {
+    return false;
+  }
+}
+
+export async function isRunner(request: Request): Promise<boolean> {
+  const got = (request.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '').trim();
+  if (!got) return false;
+  if (got.split('.').length === 3) return isGithubRunner(got);
+  const key = (process.env.LAB_RUNNER_KEY ?? '').trim().replace(/^["']|["']$/g, '');
+  return !!key && same(got, key);
 }
 
 export const labDenied = () => NextResponse.json({ error: 'Not a tester' }, { status: 401 });

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { BUSY, RUNNER_RESULTS, cleanText, isRunner } from '@/lib/lab';
 
-// Used only by the claude-games feedback workflow (Authorization: Bearer LAB_RUNNER_KEY).
+// Used only by the claude-games feedback workflow (Authorization: Bearer <GitHub OIDC token>, see isRunner).
 //   GET  ?run=<id>       claim every queued note (they become "working", batch = run) and return them
 //   GET  ?batch=<id>     the notes in a batch (for Approve / Send back)
 //   GET  ?commit=<sha>   the notes a live commit applied (for Undo)
@@ -16,7 +16,7 @@ const shape = (rows: Row[]) => rows.map(({ audioType, ...r }) => ({ ...r, hasAud
 const SHA = /^[0-9a-f]{7,40}$/;
 
 export async function GET(request: Request) {
-  if (!isRunner(request)) return denied();
+  if (!(await isRunner(request))) return denied();
   const params = new URL(request.url).searchParams;
   const commit = params.get('commit');
   const batch = params.get('batch');
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isRunner(request)) return denied();
+  if (!(await isRunner(request))) return denied();
   const body = await request.json().catch(() => ({}));
   const results: Record<string, unknown>[] = Array.isArray(body?.results) ? body.results : [];
   const commit = typeof body?.commit === 'string' && SHA.test(body.commit) ? body.commit : null;
