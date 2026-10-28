@@ -99,6 +99,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
   }
 
   const push = () => call('/api/lab/push', 'POST', { ids: chosen.map((i) => i.id) });
+  const stop = (ids: string[]) => call('/api/lab/stop', 'POST', { ids });
   const approve = (batch: string) => call('/api/lab/review', 'POST', { batch, action: 'approve' });
   function sendBack(batch: string) {
     const comment = prompt('What should change? (goes back to the inbox with the notes)');
@@ -166,7 +167,10 @@ export default function LabQueue({ games }: { games: Game[] }) {
 
       {working.length > 0 && (
         <section>
-          <div style={heading}><h2 style={h2}>In progress <span style={count}>{working.length}</span></h2></div>
+          <div style={heading}>
+            <h2 style={h2}>In progress <span style={count}>{working.length}</span></h2>
+            {working.length > 1 && <button type="button" onClick={() => stop(working.map((i) => i.id))} style={{ ...btn, background: 'transparent', color: 'var(--accent-red)', border: '1px solid var(--accent-red)' }}>Stop all</button>}
+          </div>
           {working.map((i) => (
             <div key={i.id} style={row}>
               <span className="lab-pulse" style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--accent)', marginTop: '6px', flexShrink: 0 }} />
@@ -174,9 +178,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
                 <Meta game={title[i.game] ?? i.game} when={LABEL[i.status]} />
                 <Said item={i} />
               </div>
-              {Date.now() - new Date(i.updatedAt).getTime() > 20 * 60_000 && (
-                <button type="button" onClick={() => setStatus(i.id, 'new')} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)' }}>Back to inbox</button>
-              )}
+              <button type="button" onClick={() => stop([i.id])} style={{ ...btn, background: 'transparent', color: 'var(--accent-red)', border: '1px solid var(--accent-red)' }}>Stop</button>
             </div>
           ))}
         </section>

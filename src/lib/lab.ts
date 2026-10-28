@@ -98,3 +98,16 @@ export async function dispatch(mode: 'apply' | 'approve' | 'reject' | 'undo', re
   });
   if (!res.ok) throw new Error(`GitHub said ${res.status}: ${(await res.text()).slice(0, 200)}`);
 }
+
+/** Cancel a running GitHub Actions run of the feedback workflow. Throws when GitHub refuses. */
+export async function cancelRun(runId: string): Promise<void> {
+  const token = process.env.GITHUB_DISPATCH_TOKEN;
+  if (!token) throw new Error('GITHUB_DISPATCH_TOKEN is not set on the site');
+  const repo = process.env.LAB_REPO ?? 'ifg-ryan/claude-games';
+  const res = await fetch(`https://api.github.com/repos/${repo}/actions/runs/${runId}/cancel`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
+  });
+  // 409 means the run already finished, which is fine.
+  if (!res.ok && res.status !== 409) throw new Error(`GitHub said ${res.status}`);
+}

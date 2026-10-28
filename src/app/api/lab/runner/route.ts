@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { RUNNER_RESULTS, cleanText, isRunner } from '@/lib/lab';
+import { BUSY, RUNNER_RESULTS, cleanText, isRunner } from '@/lib/lab';
 
 // Used only by the claude-games feedback workflow (Authorization: Bearer LAB_RUNNER_KEY).
 //   GET  ?run=<id>       claim every queued note (they become "working", batch = run) and return them
 //   GET  ?batch=<id>     the notes in a batch (for Approve / Send back)
 //   GET  ?commit=<sha>   the notes a live commit applied (for Undo)
 //   POST { run, commit?, results: [{ id, status, note?, heard?, transcript? }] }   write back what happened.
-//        Fields left out are not changed.
+//        Fields left out are not changed. Only notes still in progress are updated, so a run
+//        someone pressed Stop on can't overwrite what they did.
 const denied = () => NextResponse.json({ error: 'Runner only' }, { status: 401 });
 const select = { id: true, game: true, text: true, context: true, audioType: true, status: true, createdAt: true } as const;
 type Row = { id: string; audioType: string | null } & Record<string, unknown>;
@@ -41,8 +42,8 @@ export async function POST(request: Request) {
     if ('heard' in r) data.heard = cleanText(r.heard, 1000);
     if ('transcript' in r) data.transcript = cleanText(r.transcript);
     if ((status === 'review' || status === 'live') && commit) data.commit = commit;
-    await prisma.feedback.update({ where: { id: r.id }, data }).catch(() => null);
-    updated++;
+    const res = await prisma.feedback.updateMany({ where: { id: r.id, status: { in: BUSY } }, data }).catch(() => ({ count: 0 }));
+    updated += res.count;
   }
   return NextResponse.json({ ok: true, updated });
 }
