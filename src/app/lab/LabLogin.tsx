@@ -24,6 +24,7 @@ export default function LabLogin() {
       />
       {error && <span style={{ color: 'var(--accent-red)', fontSize: '0.8rem' }}>{error}</span>}
       <button type="submit" style={{ ...btn, background: 'var(--accent)', color: '#1a1206', padding: '10px' }}>Enter</button>
+      <a href="/lab/guide" className="nav-link-muted" style={{ fontSize: '0.8rem', textAlign: 'center', textDecoration: 'none' }}>How the lab works</a>
     </form>
   );
 }

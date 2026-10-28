@@ -123,6 +123,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       <header style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
         <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', margin: 0 }}>Lab</h1>
+        <a href="/lab/guide" className="nav-link-muted" style={{ fontSize: '0.8rem', marginLeft: 'auto', marginRight: '16px', textDecoration: 'none' }}>Guide</a>
         <button type="button" onClick={() => fetch('/api/lab/login', { method: 'DELETE' }).then(() => location.reload())} className="nav-link-muted" style={{ background: 'none', border: 0, cursor: 'pointer', fontSize: '0.8rem' }}>Sign out</button>
       </header>
       {banner && <div style={{ ...card, borderColor: 'var(--accent-red)', color: 'var(--accent-red)', fontSize: '0.85rem' }}>{banner}</div>}
