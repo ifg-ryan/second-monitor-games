@@ -934,5 +934,57 @@
     "updated": "2026-10-28T16:08:59.704Z",
     "source": "edb8286",
     "preview": "/images/previews/treasure-tunnels.jpg"
+  },
+  "holdem-career": {
+    "id": "holdem-career",
+    "title": "Hold'em Career Manager",
+    "blurb": "Live one year as a touring tournament pro. Pick your events, plan the trips, survive the road and play the hands that matter.",
+    "tag": "Poker Manager",
+    "minutes": [
+      5,
+      15
+    ],
+    "accent": "#e3b341",
+    "icon": "🃏",
+    "score": {
+      "label": "dollars",
+      "max": 100000000
+    },
+    "achievements": [
+      {
+        "id": "first-cash",
+        "name": "In the Money",
+        "description": "Cash in a tournament"
+      },
+      {
+        "id": "final-table",
+        "name": "Final Table",
+        "description": "Make a final table"
+      },
+      {
+        "id": "champion",
+        "name": "Champion",
+        "description": "Win a tournament"
+      },
+      {
+        "id": "main-event",
+        "name": "Crown Contender",
+        "description": "Cash in The Desert Crown Main Event"
+      },
+      {
+        "id": "high-roller",
+        "name": "High Roller",
+        "description": "Play the Lotus Cup or The Leviathan"
+      },
+      {
+        "id": "clean",
+        "name": "Clean Hands",
+        "description": "Finish the year with Reputation 25 or higher"
+      }
+    ],
+    "added": "2026-10-28T17:32:07.623Z",
+    "updated": "2026-10-28T17:32:07.623Z",
+    "source": "78ed202",
+    "preview": "/images/previews/holdem-career.jpg"
   }
 }
