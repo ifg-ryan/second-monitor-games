@@ -780,5 +780,54 @@
     "updated": "2026-10-28T02:22:20.248Z",
     "source": "28f5ccf",
     "preview": "/images/previews/sweep-rush.jpg"
+  },
+  "stack-up": {
+    "id": "stack-up",
+    "title": "Stack Up",
+    "blurb": "Drop the sliding block onto the tower. Whatever hangs over gets sliced off. Land it perfectly to keep your width, and string perfects together to grow it back.",
+    "tag": "Arcade",
+    "minutes": [
+      1,
+      3
+    ],
+    "accent": "#4fb3ff",
+    "icon": "🏗️",
+    "score": {
+      "label": "floors",
+      "max": 5000
+    },
+    "achievements": [
+      {
+        "id": "ground-floor",
+        "name": "Ground Floor",
+        "description": "Stack 10 floors"
+      },
+      {
+        "id": "perfect-5",
+        "name": "Plumb Line",
+        "description": "Land 5 perfect drops in a row"
+      },
+      {
+        "id": "skyscraper",
+        "name": "Skyscraper",
+        "description": "Stack 50 floors in one run"
+      },
+      {
+        "id": "hairline",
+        "name": "Hairline",
+        "description": "Keep stacking on a block thinner than 6 pixels",
+        "secret": true
+      },
+      {
+        "id": "crew",
+        "name": "Construction Crew",
+        "description": "Stack 500 floors in total",
+        "goal": 500
+      }
+    ],
+    "added": "2026-10-28T11:55:56.087Z",
+    "updated": "2026-10-28T11:55:56.087Z",
+    "source": "33ac0b1",
+    "preview": "/images/previews/stack-up.jpg"
   }
 }
