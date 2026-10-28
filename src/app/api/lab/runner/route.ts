@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { BUSY, RUNNER_RESULTS, cleanText, isRunner } from '@/lib/lab';
+import { BUSY, RUNNER_RESULTS, cleanText, runnerProblem } from '@/lib/lab';
 
 // Used only by the claude-games feedback workflow (Authorization: Bearer <GitHub OIDC token>, see isRunner).
 //   GET  ?run=<id>       claim every queued note (they become "working", batch = run) and return them
@@ -9,14 +9,15 @@ import { BUSY, RUNNER_RESULTS, cleanText, isRunner } from '@/lib/lab';
 //   POST { run, commit?, results: [{ id, status, note?, heard?, transcript? }] }   write back what happened.
 //        Fields left out are not changed. Only notes still in progress are updated, so a run
 //        someone pressed Stop on can't overwrite what they did.
-const denied = () => NextResponse.json({ error: 'Runner only' }, { status: 401 });
+const denied = (why: string) => NextResponse.json({ error: `Runner only: ${why}` }, { status: 401 });
 const select = { id: true, game: true, text: true, context: true, audioType: true, status: true, createdAt: true } as const;
 type Row = { id: string; audioType: string | null } & Record<string, unknown>;
 const shape = (rows: Row[]) => rows.map(({ audioType, ...r }) => ({ ...r, hasAudio: !!audioType }));
 const SHA = /^[0-9a-f]{7,40}$/;
 
 export async function GET(request: Request) {
-  if (!(await isRunner(request))) return denied();
+  const problem = await runnerProblem(request);
+  if (problem) return denied(problem);
   const params = new URL(request.url).searchParams;
   const commit = params.get('commit');
   const batch = params.get('batch');
@@ -29,7 +30,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!(await isRunner(request))) return denied();
+  const problem = await runnerProblem(request);
+  if (problem) return denied(problem);
   const body = await request.json().catch(() => ({}));
   const results: Record<string, unknown>[] = Array.isArray(body?.results) ? body.results : [];
   const commit = typeof body?.commit === 'string' && SHA.test(body.commit) ? body.commit : null;

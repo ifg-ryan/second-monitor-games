@@ -65,22 +65,28 @@ export async function isTester(): Promise<boolean> {
 export const RUNNER_AUDIENCE = 'secondmonitorgames-lab';
 const githubKeys = createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'));
 
-export async function isGithubRunner(token: string): Promise<boolean> {
+/** Why a runner request was refused (shown in the run log), or null when it is the real runner. */
+export async function runnerProblem(request: Request): Promise<string | null> {
+  const got = (request.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '').trim();
+  if (!got) return 'no Authorization header reached the site';
+  if (got.split('.').length !== 3) {
+    const key = (process.env.LAB_RUNNER_KEY ?? '').trim().replace(/^["']|["']$/g, '');
+    if (!key) return 'a key was sent but LAB_RUNNER_KEY is not set on the site';
+    return same(got, key) ? null : 'the key does not match LAB_RUNNER_KEY';
+  }
   const repo = process.env.LAB_REPO ?? 'ifg-ryan/claude-games';
   try {
-    const { payload } = await jwtVerify(token, githubKeys, { issuer: 'https://token.actions.githubusercontent.com', audience: RUNNER_AUDIENCE });
-    return payload.repository === repo && typeof payload.workflow_ref === 'string' && payload.workflow_ref.startsWith(`${repo}/.github/workflows/feedback.yml@refs/heads/main`);
-  } catch {
-    return false;
+    const { payload } = await jwtVerify(got, githubKeys, { issuer: 'https://token.actions.githubusercontent.com', audience: RUNNER_AUDIENCE });
+    if (payload.repository !== repo) return `token is for ${payload.repository}, not ${repo}`;
+    if (typeof payload.workflow_ref !== 'string' || !payload.workflow_ref.startsWith(`${repo}/.github/workflows/feedback.yml@refs/heads/main`)) return `token is for workflow ${payload.workflow_ref}`;
+    return null;
+  } catch (e) {
+    return `GitHub token rejected: ${(e as Error).message}`;
   }
 }
 
 export async function isRunner(request: Request): Promise<boolean> {
-  const got = (request.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '').trim();
-  if (!got) return false;
-  if (got.split('.').length === 3) return isGithubRunner(got);
-  const key = (process.env.LAB_RUNNER_KEY ?? '').trim().replace(/^["']|["']$/g, '');
-  return !!key && same(got, key);
+  return (await runnerProblem(request)) === null;
 }
 
 export const labDenied = () => NextResponse.json({ error: 'Not a tester' }, { status: 401 });
