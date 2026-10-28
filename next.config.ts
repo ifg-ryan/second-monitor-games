@@ -26,8 +26,8 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options",            value: "SAMEORIGIN" },
           // Stop leaking full URL in Referer to third parties
           { key: "Referrer-Policy",            value: "strict-origin-when-cross-origin" },
-          // Restrict browser feature APIs not needed by this site
-          { key: "Permissions-Policy",         value: "camera=(), microphone=(), geolocation=(), payment=()" },
+          // Restrict browser feature APIs not needed by this site (the mic is for tester voice notes, see /lab)
+          { key: "Permissions-Policy",         value: "camera=(), microphone=(self), geolocation=(), payment=()" },
           // Legacy XSS auditor (belt-and-suspenders for older browsers)
           { key: "X-XSS-Protection",           value: "1; mode=block" },
           // Enforce HTTPS for 1 year (prod only; harmless on localhost)
@@ -41,6 +41,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https://img.clerk.com https://*.clerk.accounts.dev",
+              "media-src 'self' blob:",
               "connect-src 'self' https://www.google-analytics.com https://*.clerk.accounts.dev https://api.stripe.com",
               "frame-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://*.clerk.accounts.dev",
               "frame-ancestors 'self'",

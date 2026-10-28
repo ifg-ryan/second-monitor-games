@@ -1,5 +1,6 @@
 'use client';
-// The queue itself: Inbox (pick and Push), In progress, Live (with Undo per push), and Set aside.
+// The queue itself: Inbox (pick and Push), In progress, Review (try the preview, then Approve or Send back),
+// Live (with Undo per push), and Set aside.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import FeedbackComposer, { btn } from '@/components/lab/FeedbackComposer';
 
@@ -7,6 +8,10 @@ interface Item {
   id: string;
   game: string;
   text: string;
+  hasAudio: boolean;
+  transcript: string | null;
+  heard: string | null;
+  run: string | null;
   context: string | null;
   status: string;
   note: string | null;
@@ -21,8 +26,8 @@ interface Game {
   build?: string;
 }
 
-const BUSY = ['queued', 'working', 'undoing'];
-const LABEL: Record<string, string> = { queued: 'Waiting for Claude', working: 'Claude is on it', undoing: 'Undoing' };
+const BUSY = ['queued', 'working', 'approving', 'rejecting', 'undoing'];
+const LABEL: Record<string, string> = { queued: 'Waiting for Claude', working: 'Claude is on it', approving: 'Going live', rejecting: 'Sending back', undoing: 'Undoing' };
 
 function ago(iso: string): string {
   const s = (Date.now() - new Date(iso).getTime()) / 1000;
@@ -80,6 +85,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
 
   const inbox = items.filter((i) => i.status === 'new' || i.status === 'failed');
   const working = items.filter((i) => BUSY.includes(i.status));
+  const review = items.filter((i) => i.status === 'review');
   const live = items.filter((i) => i.status === 'live');
   const aside = items.filter((i) => ['skipped', 'dismissed', 'undone'].includes(i.status));
   const chosen = inbox.filter((i) => picked.has(i.id));
@@ -93,6 +99,11 @@ export default function LabQueue({ games }: { games: Game[] }) {
   }
 
   const push = () => call('/api/lab/push', 'POST', { ids: chosen.map((i) => i.id) });
+  const approve = (batch: string) => call('/api/lab/review', 'POST', { batch, action: 'approve' });
+  function sendBack(batch: string) {
+    const comment = prompt('What should change? (goes back to the inbox with the notes)');
+    if (comment !== null) call('/api/lab/review', 'POST', { batch, action: 'reject', comment });
+  }
   const undo = (commit: string) => confirm('Undo this push and re-ship those games?') && call('/api/lab/undo', 'POST', { commit });
   const setStatus = (id: string, status: 'new' | 'dismissed') => call('/api/lab/feedback', 'PATCH', { id, status });
   const remove = (id: string) => call(`/api/lab/feedback?id=${id}`, 'DELETE');
@@ -101,7 +112,10 @@ export default function LabQueue({ games }: { games: Game[] }) {
   }
   const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
 
-  const byCommit = live.reduce<Record<string, Item[]>>((acc, i) => ((acc[i.commit ?? '?'] ??= []).push(i), acc), {});
+  const group = (list: Item[], key: (i: Item) => string) => list.reduce<Record<string, Item[]>>((acc, i) => ((acc[key(i)] ??= []).push(i), acc), {});
+  const byCommit = group(live, (i) => i.commit ?? '?');
+  const byBatch = group(review, (i) => i.run ?? '?');
+  const gamesIn = (list: Item[]) => [...new Set(list.map((g) => g.game))];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -140,8 +154,9 @@ export default function LabQueue({ games }: { games: Game[] }) {
                   </div>
                 </div>
               ) : (
-                <p onClick={() => { setEditing(i.id); setDraft(i.text); }} style={{ ...text, cursor: 'text' }}>{i.text}</p>
+                <p onClick={() => { setEditing(i.id); setDraft(i.text); }} style={{ ...text, cursor: 'text', color: i.text ? 'var(--text)' : 'var(--text-muted)' }}>{i.text || (i.hasAudio ? '' : 'Empty')}</p>
               )}
+              <Said item={i} showText={false} />
               {i.status === 'failed' && i.note && <p style={{ ...note, color: 'var(--accent-red)' }}>{i.note}</p>}
             </div>
             <button type="button" onClick={() => setStatus(i.id, 'dismissed')} title="Set aside" style={x}>×</button>
@@ -157,8 +172,37 @@ export default function LabQueue({ games }: { games: Game[] }) {
               <span className="lab-pulse" style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--accent)', marginTop: '6px', flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
                 <Meta game={title[i.game] ?? i.game} when={LABEL[i.status]} />
-                <p style={text}>{i.text}</p>
+                <Said item={i} />
               </div>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {review.length > 0 && (
+        <section>
+          <div style={heading}><h2 style={h2}>Review <span style={count}>{review.length}</span></h2></div>
+          {Object.entries(byBatch).map(([batch, list]) => (
+            <div key={batch} style={{ ...card, borderColor: 'var(--accent)', padding: '4px 16px 12px', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', padding: '10px 0 4px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {gamesIn(list).map((g) => (
+                    <a key={g} href={`/proto/preview/${batch}/${g}.html`} target="_blank" rel="noopener" style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)', textDecoration: 'none' }}>Try {title[g] ?? g} ↗</a>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button type="button" onClick={() => sendBack(batch)} style={{ ...btn, background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)' }}>Send back</button>
+                  <button type="button" onClick={() => approve(batch)} style={{ ...btn, background: 'var(--accent)', color: '#1a1206' }}>Approve</button>
+                </div>
+              </div>
+              {list.map((i) => (
+                <div key={i.id} style={{ padding: '10px 0', borderTop: '1px solid var(--border)' }}>
+                  <Meta game={title[i.game] ?? i.game} when={ago(i.createdAt)} />
+                  <Said item={i} />
+                  {i.heard && <p style={{ ...note, color: 'var(--text)' }}><b>Claude heard:</b> {i.heard}</p>}
+                  {i.note && <p style={note}><b>Changed:</b> {i.note}</p>}
+                </div>
+              ))}
             </div>
           ))}
         </section>
@@ -181,7 +225,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
               {group.map((i) => (
                 <div key={i.id} style={{ padding: '8px 0', borderTop: '1px solid var(--border)' }}>
                   <Meta game={title[i.game] ?? i.game} />
-                  <p style={text}>{i.text}</p>
+                  {i.heard ? <p style={text}>{i.heard}</p> : <Said item={i} />}
                   {i.note && <p style={note}>✓ {i.note}</p>}
                 </div>
               ))}
@@ -197,7 +241,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
             <div key={i.id} style={{ ...row, opacity: 0.7 }}>
               <div style={{ flex: 1 }}>
                 <Meta game={title[i.game] ?? i.game} when={i.status === 'skipped' ? 'Claude skipped' : i.status === 'undone' ? 'Undone' : 'Set aside'} />
-                <p style={text}>{i.text}</p>
+                <Said item={i} />
                 {i.note && <p style={note}>{i.note}</p>}
               </div>
               <button type="button" onClick={() => setStatus(i.id, 'new')} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)' }}>Back to inbox</button>
@@ -206,8 +250,23 @@ export default function LabQueue({ games }: { games: Game[] }) {
           ))}
         </section>
       )}
-      <style>{`@keyframes labPulse{0%,100%{opacity:1}50%{opacity:.25}}.lab-pulse{animation:labPulse 1.2s ease-in-out infinite}`}</style>
     </div>
+  );
+}
+
+/** What the tester gave: their written text, the recording (playable), and Whisper's transcript once a run made one. */
+function Said({ item, showText = true }: { item: Item; showText?: boolean }) {
+  return (
+    <>
+      {showText && item.text && <p style={text}>{item.text}</p>}
+      {item.hasAudio && <audio src={`/api/lab/audio?id=${item.id}`} controls preload="none" style={{ height: '32px', width: '100%', maxWidth: '420px', marginTop: '6px' }} />}
+      {item.transcript && (
+        <details style={{ marginTop: '4px' }}>
+          <summary style={{ fontSize: '0.75rem', color: 'var(--text-muted)', cursor: 'pointer' }}>Transcript</summary>
+          <p style={{ ...note, whiteSpace: 'pre-wrap' }}>{item.transcript}</p>
+        </details>
+      )}
+    </>
   );
 }
 

@@ -111,21 +111,27 @@ model Achievement {
 }
 
 // ── Tester feedback (the /lab queue) ─────────────────────────────────────────
-// Notes testers dictate while playing a kit game. Pushing a batch from /lab starts
-// the claude-games "feedback" GitHub workflow, which has Claude apply the notes,
-// re-ships the games, and writes the result back here. See src/lib/lab.ts.
+// Notes testers record, type or upload about a kit game. Pushing a batch from /lab starts
+// the claude-games "feedback" GitHub workflow: recordings are transcribed (Whisper), Claude
+// applies the notes on a branch and ships preview builds; Approve takes them live.
+// See src/lib/lab.ts.
 model Feedback {
-  id        String   @id @default(cuid())
-  game      String
-  text      String
-  context   String?  // JSON: build, seconds into the session, screen size
-  status    String   @default("new") // new | queued | working | live | skipped | failed | dismissed | undoing | undone
-  note      String?  // Claude's one-line summary of what it did, or why it skipped
-  commit    String?  // claude-games commit that applied it (used by Undo)
-  run       String?  // GitHub Actions run that handled it
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  game       String
+  text       String   @default("") // typed or uploaded notes, or the browser's live draft of a recording
+  audio      Bytes?   // the recording itself (webm/ogg/mp4, a few MB at most)
+  audioType  String?
+  transcript String?  // Whisper's transcript of the recording
+  heard      String?  // Claude's short read of what the tester meant
+  context    String?  // JSON: build, seconds into the session, screen size
+  status     String   @default("new") // see STATUSES in src/lib/lab.ts
+  note       String?  // what Claude changed, why it skipped, or a reviewer's comment
+  commit     String?  // claude-games commit (review: on the batch branch; live: on main, used by Undo)
+  run        String?  // batch id (the GitHub Actions run that handled it)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([status])
   @@index([commit])
+  @@index([run])
 }

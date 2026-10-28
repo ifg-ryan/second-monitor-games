@@ -1,6 +1,6 @@
 'use client';
 // Feedback button in a game's info bar. Only testers see it (browsers that entered the /lab passcode).
-// Opening it starts the mic, so a tester can just talk, hit Send, and keep playing.
+// Opening it starts recording, so a tester can just talk, hit Send, and keep playing.
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import FeedbackComposer from './FeedbackComposer';
 
@@ -38,7 +38,7 @@ export default function FeedbackButton({ game, build }: { game: string; build?: 
             <a href="/lab" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', textDecoration: 'none' }}>Lab ↗</a>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close" style={{ background: 'none', border: 0, color: 'var(--text-muted)', fontSize: '1.1rem', cursor: 'pointer' }}>×</button>
           </div>
-          <FeedbackComposer game={game} context={context} autoListen />
+          <FeedbackComposer game={game} context={context} autoRecord />
         </div>
       )}
     </>
