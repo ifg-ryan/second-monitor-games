@@ -136,3 +136,31 @@ model Feedback {
   @@index([commit])
   @@index([run])
 }
+
+// ── New games from a GDD (the /lab/builds area) ───────────────────────────────
+// A tester uploads a design doc; Push to Claude starts the claude-games workflow in "build" mode,
+// which builds the game on branch build/<id> and ships a test build to /proto/preview/build-<id>/.
+// Testers ask for changes (each push = a new version), then Send to power user; a power user
+// publishes it (merged into the kit, shipped to the live site). See src/lib/builds.ts.
+model GameBuild {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   // the game's id in the kit (games/<slug>) and on the site (/play/<slug>)
+  fileName  String
+  fileType  String
+  file      Bytes    // the uploaded GDD, a few MB at most
+  notes     String   @default("") // anything the uploader adds for Claude
+  request   String?  // the latest change request (for the next version)
+  status    String   @default("draft") // see BUILD_STATUSES in src/lib/builds.ts
+  note      String?  // Claude's summary of the latest version, or why it failed
+  preview   String?  // the latest test build's path on the site
+  versions  Int      @default(0)
+  run       String?  // GitHub run working on it
+  commit    String?  // latest commit (branch while testing, main once live)
+  log       String   @default("[]") // JSON history: [{ at, event, text }]
+  reuse     String?  // JSON from the latest version: { plan, reused, added, candidates, gameLines, kitLines }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}

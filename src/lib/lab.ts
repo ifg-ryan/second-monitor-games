@@ -8,6 +8,7 @@
 //
 // Env (Vercel):
 //   LAB_PASSCODE           what testers type at /lab to get in (also unlocks the Feedback button)
+//   LAB_POWER_PASSCODE     optional: what power users type instead; also lets them publish new games built from a GDD
 //   LAB_RUNNER_KEY         optional: a shared secret the runner may send instead (normally it proves itself with GitHub's OIDC token)
 //   GITHUB_DISPATCH_TOKEN  fine-grained GitHub token with Actions: write on ifg-ryan/claude-games
 //   LAB_REPO               optional, defaults to ifg-ryan/claude-games
@@ -22,6 +23,8 @@ import { NextResponse } from 'next/server';
 export const LAB_COOKIE = 'smg_lab';
 /** Readable by the page so the Feedback button knows to show. Grants nothing by itself. */
 export const TESTER_COOKIE = 'smg_tester';
+/** Readable by the page to show power-user buttons. Grants nothing by itself. */
+export const POWER_COOKIE = 'smg_power';
 
 export const STATUSES = ['new', 'queued', 'working', 'review', 'approving', 'rejecting', 'live', 'skipped', 'failed', 'dismissed', 'undoing', 'undone'] as const;
 export type FeedbackStatus = (typeof STATUSES)[number];
@@ -47,17 +50,32 @@ function same(a: string, b: string): boolean {
   return x.length === y.length && timingSafeEqual(x, y);
 }
 
-/** The cookie value for a correct passcode, or null. */
-export function labToken(passcode: string | undefined | null): string | null {
+/** The cookie value for a correct passcode, and whether it is the power-user one; null when wrong. */
+export function labToken(passcode: string | undefined | null): { token: string; power: boolean } | null {
+  const code = passcode?.trim();
+  if (!code) return null;
+  const power = process.env.LAB_POWER_PASSCODE;
+  if (power && same(code, power)) return { token: sign(power), power: true };
   const real = process.env.LAB_PASSCODE;
-  if (!real || !passcode || !same(passcode.trim(), real)) return null;
-  return sign(real);
+  if (real && same(code, real)) return { token: sign(real), power: false };
+  return null;
+}
+
+async function labCookie(): Promise<string | undefined> {
+  return (await cookies()).get(LAB_COOKIE)?.value;
 }
 
 export async function isTester(): Promise<boolean> {
-  const real = process.env.LAB_PASSCODE;
-  const got = (await cookies()).get(LAB_COOKIE)?.value;
-  return !!real && !!got && same(got, sign(real));
+  const got = await labCookie();
+  if (!got) return false;
+  return [process.env.LAB_PASSCODE, process.env.LAB_POWER_PASSCODE].some((code) => !!code && same(got, sign(code)));
+}
+
+/** Power users can publish new games to the live site. */
+export async function isPower(): Promise<boolean> {
+  const got = await labCookie();
+  const power = process.env.LAB_POWER_PASSCODE;
+  return !!got && !!power && same(got, sign(power));
 }
 
 // The feedback workflow proves who it is with a GitHub OIDC token: signed by GitHub, for this repo's
@@ -111,7 +129,7 @@ export function cleanText(raw: unknown, max = 20000): string | null {
 }
 
 /** Start the claude-games feedback workflow. Throws with a readable message when it can't. */
-export async function dispatch(mode: 'apply' | 'approve' | 'reject' | 'undo', ref = ''): Promise<void> {
+export async function dispatch(mode: 'apply' | 'approve' | 'reject' | 'undo' | 'build' | 'publish', ref = ''): Promise<void> {
   const token = process.env.GITHUB_DISPATCH_TOKEN;
   if (!token) throw new Error('GITHUB_DISPATCH_TOKEN is not set on the site');
   const repo = process.env.LAB_REPO ?? 'ifg-ryan/claude-games';

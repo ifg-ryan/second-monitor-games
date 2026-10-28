@@ -8,11 +8,17 @@ describe('lab', () => {
     process.env.LAB_RUNNER_KEY = 'runner-secret';
   });
 
-  it('gives a token only for the right passcode', () => {
-    expect(labToken('fox-den')).toMatch(/^[0-9a-f]{64}$/);
-    expect(labToken(' fox-den ')).toBe(labToken('fox-den'));
+  it('gives a token only for the right passcode, and knows the power-user one', () => {
+    expect(labToken('fox-den')?.token).toMatch(/^[0-9a-f]{64}$/);
+    expect(labToken('fox-den')?.power).toBe(false);
+    expect(labToken(' fox-den ')?.token).toBe(labToken('fox-den')?.token);
     expect(labToken('nope')).toBeNull();
     expect(labToken('')).toBeNull();
+    process.env.LAB_POWER_PASSCODE = 'big-fox';
+    expect(labToken('big-fox')?.power).toBe(true);
+    expect(labToken('big-fox')?.token).not.toBe(labToken('fox-den')?.token);
+    delete process.env.LAB_POWER_PASSCODE;
+    expect(labToken('big-fox')).toBeNull();
     delete process.env.LAB_PASSCODE;
     expect(labToken('fox-den')).toBeNull();
   });
