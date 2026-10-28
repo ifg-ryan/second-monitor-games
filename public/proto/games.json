@@ -67,7 +67,7 @@
       3,
       8
     ],
-    "accent": "#4ade80",
+    "accent": "#c9a14a",
     "icon": "♠️",
     "score": {
       "label": "points",
@@ -102,8 +102,8 @@
       }
     ],
     "added": "2026-10-21T23:02:57Z",
-    "updated": "2026-10-28T22:11:33.896Z",
-    "source": "f03ea32",
+    "updated": "2026-10-28T23:01:43.145Z",
+    "source": "4314df8",
     "preview": "/images/previews/solitaire.jpg"
   },
   "golf-solitaire": {
