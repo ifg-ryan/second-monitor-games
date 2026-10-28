@@ -385,7 +385,7 @@
       2,
       4
     ],
-    "accent": "#ff5e7a",
+    "accent": "#e9d8a6",
     "icon": "🃏",
     "score": {
       "label": "rounds",
@@ -426,8 +426,8 @@
       }
     ],
     "added": "2026-10-23T15:35:13.416Z",
-    "updated": "2026-10-28T22:11:54.783Z",
-    "source": "f03ea32",
+    "updated": "2026-10-28T23:02:03.776Z",
+    "source": "4314df8",
     "preview": "/images/previews/hand-rogue.jpg"
   },
   "fiver": {
