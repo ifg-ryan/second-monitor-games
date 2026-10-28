@@ -731,5 +731,54 @@
     "updated": "2026-10-27T02:49:17.950Z",
     "source": "bd5cb76",
     "preview": "/images/previews/word-gardens.jpg"
+  },
+  "sweep-rush": {
+    "id": "sweep-rush",
+    "title": "Sweep Rush",
+    "blurb": "Minesweeper against the clock. Clear a board to bank time and move to a bigger one. Every mine you hit costs ten seconds.",
+    "tag": "Puzzle Sprint",
+    "minutes": [
+      1,
+      3
+    ],
+    "accent": "#5079b8",
+    "icon": "💣",
+    "score": {
+      "label": "points",
+      "max": 1000000
+    },
+    "achievements": [
+      {
+        "id": "first-clear",
+        "name": "Swept",
+        "description": "Clear a board"
+      },
+      {
+        "id": "clean",
+        "name": "Clean Sweep",
+        "description": "Clear a board without hitting a mine"
+      },
+      {
+        "id": "five-boards",
+        "name": "Minefield Marshal",
+        "description": "Clear 5 boards in one run"
+      },
+      {
+        "id": "photo-finish",
+        "name": "Photo Finish",
+        "description": "Clear a board with 3 seconds or less on the clock",
+        "secret": true
+      },
+      {
+        "id": "sweeper",
+        "name": "Career Sweeper",
+        "description": "Clear 50 boards in total",
+        "goal": 50
+      }
+    ],
+    "added": "2026-10-28T02:06:24.208Z",
+    "updated": "2026-10-28T02:06:24.208Z",
+    "source": "7c8050c",
+    "preview": "/images/previews/sweep-rush.jpg"
   }
 }
