@@ -26,8 +26,7 @@ export default function LabGuide() {
         <li><b>Kit</b>: every reusable piece games are built from, searchable (section 10).</li>
       </ul>
       <P>Talk or type notes while you play. Claude turns them into a playable test build in about 10 minutes. Nothing reaches the live site until a tester tries that build and pushes it live.</P>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/lab-guide/loop.svg" alt="Record a note, Inbox, Claude works, Test build, then Push to live site; Send back loops to the Inbox and Undo puts the old version back" style={{ width: '100%', margin: '16px 0' }} />
+      <Loop />
 
       <H2>1. One-time setup</H2>
       <ol style={ol}>
@@ -131,5 +130,44 @@ export default function LabGuide() {
       </ul>
       <P>Writing a GDD with the Kit in mind (naming a look, or a system the Kit already has) makes builds faster and cheaper. The Kit list updates every time a game ships.</P>
     </main>
+  );
+}
+
+/** The feedback loop, drawn in the site's theme colours so it reads in light and dark. */
+function Loop() {
+  const ink = 'var(--text)', quiet = 'var(--text-muted)', line = 'var(--text-dim)', accent = 'var(--accent)';
+  const box = (x: number, y: number, name: string, sub: string, hot = false) => (
+    <g>
+      <rect x={x} y={y} width="150" height="60" rx="8" fill={hot ? accent : 'none'} fillOpacity={hot ? 0.15 : 1} stroke={hot ? accent : line} strokeWidth={hot ? 2 : 1.25} />
+      <text x={x + 75} y={y + 26} textAnchor="middle" fontWeight="600" fill={ink}>{name}</text>
+      <text x={x + 75} y={y + 45} textAnchor="middle" fontSize="11.5" fill={hot ? ink : quiet}>{sub}</text>
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 760 330" role="img" aria-label="Record a note, Inbox, Claude works, Test build, then Push to live site; Send back loops to the Inbox and Undo puts the old version back" style={{ width: '100%', margin: '16px 0', fontFamily: 'inherit' }} fontSize="13">
+      <defs>
+        <marker id="loop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10z" fill={line} />
+        </marker>
+      </defs>
+      <text x="24" y="30" fontSize="15" fontWeight="600" fill={ink}>Nothing reaches the live site until a tester pushes the test build</text>
+      <g fill="none" stroke={line} strokeWidth="1.25">
+        <path d="M174 140H198" markerEnd="url(#loop-arrow)" />
+        <path d="M348 140H372" markerEnd="url(#loop-arrow)" />
+        <path d="M522 140H566" markerEnd="url(#loop-arrow)" />
+        <path d="M641 170V232" markerEnd="url(#loop-arrow)" />
+        <path d="M641 110V72H273V110" markerEnd="url(#loop-arrow)" />
+      </g>
+      {box(24, 110, 'Record a note', 'voice, typing or a file')}
+      {box(198, 110, 'Inbox', 'pick notes, press Push')}
+      {box(372, 110, 'Claude works', 'about 10 minutes')}
+      {box(566, 110, 'Test build', 'play it, check it')}
+      {box(566, 232, 'Live site', 'everyone plays it', true)}
+      <g fontSize="11.5" fill={quiet}>
+        <text x="457" y="64" textAnchor="middle">Send back, with a comment</text>
+        <text x="629" y="205" textAnchor="end">Are you sure? + Push to live site</text>
+        <text x="550" y="266" textAnchor="end">Undo puts the old version back</text>
+      </g>
+    </svg>
   );
 }
