@@ -193,7 +193,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', padding: '10px 0 4px' }}>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {gamesIn(list).map((g) => (
-                    <a key={g} href={`/proto/preview/${batch}/${g}.html`} target="_blank" rel="noopener" style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)', textDecoration: 'none' }}>Try {title[g] ?? g} ↗</a>
+                    <a key={g} href={`/lab/try/${batch}/${g}`} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)', textDecoration: 'none' }}>Try {title[g] ?? g} ↗</a>
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
