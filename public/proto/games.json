@@ -223,7 +223,7 @@
       1,
       3
     ],
-    "accent": "#ff9a3d",
+    "accent": "#e0a85a",
     "icon": "🤠",
     "score": {
       "label": "bounty",
@@ -264,8 +264,8 @@
       }
     ],
     "added": "2026-10-22T02:23:21.561Z",
-    "updated": "2026-10-28T22:12:57.882Z",
-    "source": "f03ea32",
+    "updated": "2026-10-28T23:03:05.565Z",
+    "source": "4314df8",
     "preview": "/images/previews/high-noon.jpg"
   },
   "range-rush": {
