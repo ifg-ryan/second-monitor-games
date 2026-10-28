@@ -63,7 +63,10 @@ export async function PATCH(request: Request) {
     data.status = body.status;
   }
   try {
-    const r = await prisma.feedback.updateMany({ where: { id: body.id, status: { in: EDITABLE } }, data });
+    // A note stuck in progress for 20+ minutes (a run that died) can be put back in the inbox.
+    const stale = { status: { in: BUSY }, updatedAt: { lt: new Date(Date.now() - 20 * 60_000) } };
+    const where = data.status === 'new' && data.text === undefined ? { id: body.id, OR: [{ status: { in: EDITABLE } }, stale] } : { id: body.id, status: { in: EDITABLE } };
+    const r = await prisma.feedback.updateMany({ where, data });
     if (!r.count) return NextResponse.json({ error: 'That note is being worked on' }, { status: 409 });
     return NextResponse.json({ ok: true });
   } catch {

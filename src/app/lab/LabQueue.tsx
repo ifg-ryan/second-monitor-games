@@ -174,6 +174,9 @@ export default function LabQueue({ games }: { games: Game[] }) {
                 <Meta game={title[i.game] ?? i.game} when={LABEL[i.status]} />
                 <Said item={i} />
               </div>
+              {Date.now() - new Date(i.updatedAt).getTime() > 20 * 60_000 && (
+                <button type="button" onClick={() => setStatus(i.id, 'new')} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)' }}>Back to inbox</button>
+              )}
             </div>
           ))}
         </section>
