@@ -790,7 +790,7 @@
       1,
       3
     ],
-    "accent": "#4fb3ff",
+    "accent": "#ff7a59",
     "icon": "🏗️",
     "score": {
       "label": "floors",
@@ -826,8 +826,8 @@
       }
     ],
     "added": "2026-10-28T11:55:56.087Z",
-    "updated": "2026-10-28T22:12:47.437Z",
-    "source": "f03ea32",
+    "updated": "2026-10-28T23:02:55.431Z",
+    "source": "4314df8",
     "preview": "/images/previews/stack-up.jpg"
   },
   "drone-combat": {
