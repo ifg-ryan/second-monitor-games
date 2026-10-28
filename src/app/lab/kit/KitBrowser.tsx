@@ -33,7 +33,7 @@ export default function KitBrowser({ catalog }: { catalog: KitCatalog }) {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
-  const cats = useMemo(() => [...catalog.categories, CANDIDATE].filter((c) => catalog.pieces.some((p) => p.category === c.id)), [catalog]);
+  const cats = useMemo(() => [...catalog.categories, ...(catalog.categories.some((c) => c.id === CANDIDATE.id) ? [] : [CANDIDATE])].filter((c) => catalog.pieces.some((p) => p.category === c.id)), [catalog]);
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
   const hay = (p: Piece) => `${p.name} ${p.what} ${p.when ?? ''} ${p.goodFor.join(' ')} ${p.module} ${p.usedBy.join(' ')}`.toLowerCase();
   const shown = catalog.pieces.filter((p) => (!cat || p.category === cat) && words.every((w) => hay(p).includes(w)));

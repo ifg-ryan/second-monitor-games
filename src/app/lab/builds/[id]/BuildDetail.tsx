@@ -95,7 +95,7 @@ export default function BuildDetail({ id, power }: { id: string; power: boolean 
         </div>
       )}
 
-      {b.note && <p style={{ ...card, margin: '0 0 16px', fontSize: '0.9rem', lineHeight: 1.5, ...(b.status === 'failed' ? { borderColor: 'var(--accent-red)' } : {}) }}><b>{b.status === 'failed' ? 'What went wrong: ' : `Version ${b.versions}: `}</b>{b.note}</p>}
+      {b.note && <p style={{ ...card, margin: '0 0 16px', fontSize: '0.9rem', lineHeight: 1.5, ...(b.status === 'failed' ? { borderColor: 'var(--accent-red)' } : {}) }}><b>{b.status === 'failed' ? 'What went wrong: ' : `What's in version ${b.versions}: `}</b>{b.note}</p>}
 
       {preview && b.status !== 'live' && (
         <div style={{ marginBottom: '16px' }}>
@@ -109,6 +109,23 @@ export default function BuildDetail({ id, power }: { id: string; power: boolean 
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', alignItems: 'start' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {b.status === 'requested' && (
+            <div style={{ ...card, borderColor: 'var(--accent)' }}>
+              <b>Waiting for a power user to publish version {b.versions}</b>
+              {power ? (
+                <>
+                  <button type="button" onClick={() => act('publish')} disabled={!sure || sending} style={{ ...btn, background: 'var(--accent)', color: '#1a1206', padding: '10px 18px', marginTop: '10px', opacity: sure ? 1 : 0.4, cursor: sure ? 'pointer' : 'not-allowed' }}>Publish to live site</button>
+                  <label style={{ display: 'flex', gap: '8px', marginTop: '8px', fontSize: '0.8rem', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={sure} onChange={(e) => setSure(e.target.checked)} style={{ accentColor: 'var(--accent)', width: '16px', height: '16px' }} />
+                    Are you sure? This adds {b.title} to the live site and its code to the kit.
+                  </label>
+                </>
+              ) : (
+                <p style={small}>A power user signs in to the lab with the power-user passcode to publish it.</p>
+              )}
+              <button type="button" onClick={() => act('unsend')} disabled={sending} className="nav-link-muted" style={{ background: 'none', border: 0, padding: 0, marginTop: '10px', cursor: 'pointer', fontSize: '0.8rem' }}>Withdraw the request</button>
+            </div>
+          )}
           {(b.status === 'draft' || (b.status === 'failed' && !b.versions)) && (
             <div style={card}>
               <b>Build it</b>
@@ -128,23 +145,6 @@ export default function BuildDetail({ id, power }: { id: string; power: boolean 
               <b>Happy with this version?</b>
               <p style={small}>Send it to a power user, who puts it on the live site.</p>
               <button type="button" onClick={() => act('send')} disabled={sending} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)', padding: '10px 18px' }}>Send to power user</button>
-            </div>
-          )}
-          {b.status === 'requested' && (
-            <div style={{ ...card, borderColor: 'var(--accent)' }}>
-              <b>Waiting for a power user to publish version {b.versions}</b>
-              {power ? (
-                <>
-                  <button type="button" onClick={() => act('publish')} disabled={!sure || sending} style={{ ...btn, background: 'var(--accent)', color: '#1a1206', padding: '10px 18px', marginTop: '10px', opacity: sure ? 1 : 0.4, cursor: sure ? 'pointer' : 'not-allowed' }}>Publish to live site</button>
-                  <label style={{ display: 'flex', gap: '8px', marginTop: '8px', fontSize: '0.8rem', cursor: 'pointer' }}>
-                    <input type="checkbox" checked={sure} onChange={(e) => setSure(e.target.checked)} style={{ accentColor: 'var(--accent)', width: '16px', height: '16px' }} />
-                    Are you sure? This adds {b.title} to the live site and its code to the kit.
-                  </label>
-                </>
-              ) : (
-                <p style={small}>A power user signs in to the lab with the power-user passcode to publish it.</p>
-              )}
-              <button type="button" onClick={() => act('unsend')} disabled={sending} className="nav-link-muted" style={{ background: 'none', border: 0, padding: 0, marginTop: '10px', cursor: 'pointer', fontSize: '0.8rem' }}>Withdraw the request</button>
             </div>
           )}
           {error && <p style={{ color: 'var(--accent-red)', fontSize: '0.85rem', margin: 0 }}>{error}</p>}

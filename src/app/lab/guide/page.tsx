@@ -19,6 +19,12 @@ export default function LabGuide() {
   return (
     <main style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 20px 100px', lineHeight: 1.6, fontSize: '1rem', color: 'var(--text)' }}>
       <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2.4rem', margin: '0 0 8px', fontWeight: 400 }}>Tester Lab guide</h1>
+      <P>The lab is where game designers work with Claude on Second Monitor Games. It has three parts, along the top of every lab page:</P>
+      <ul style={ul}>
+        <li><b>Feedback</b>: notes on any of our games. Claude makes the change, you test it, and push it live (sections 1 to 7).</li>
+        <li><b>New games</b>: upload a GDD and get a playable game back to test and refine (sections 8 and 9).</li>
+        <li><b>Kit</b>: every reusable piece games are built from, searchable (section 10).</li>
+      </ul>
       <P>Talk or type notes while you play. Claude turns them into a playable test build in about 10 minutes. Nothing reaches the live site until a tester tries that build and pushes it live.</P>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/lab-guide/loop.svg" alt="Record a note, Inbox, Claude works, Test build, then Push to live site; Send back loops to the Inbox and Undo puts the old version back" style={{ width: '100%', margin: '16px 0' }} />
@@ -93,6 +99,37 @@ export default function LabGuide() {
         </tbody>
       </table>
       <P>Each Push runs Claude on Ryan&apos;s account, capped at $5 a push and $200 a month. Send back and Stop cost almost nothing.</P>
+
+      <H2>8. New games from a GDD</H2>
+      <P>Under <b>New games</b>, drop in a game design document (PDF, Word, Markdown or text, up to 3 MB), give the game a title, and add any notes for Claude: a look to use, what to build first, what to leave out. Press <b>Upload</b>.</P>
+      <Shot src="13-new-games.png" alt="New games: upload a GDD, and the list of games with their status" />
+      <P>On the game&apos;s page, press <b>Push to Claude</b>. Claude reads the GDD, maps every system it needs to pieces already in the Kit, builds the game from those pieces, and moves anything new and reusable back into the Kit. A first build usually takes 20 to 45 minutes; the page updates by itself, and <b>Stop</b> cancels it.</P>
+      <P>When it&apos;s done, the page shows:</P>
+      <ul style={ul}>
+        <li><b>The test build</b>, playable right on the page (or <b>Open full window</b>). Test builds never post to the real leaderboards.</li>
+        <li><b>What&apos;s in this version</b>, and what isn&apos;t built yet.</li>
+        <li><b>Kit reuse</b>: how many Kit pieces it reused, how many new pieces it added to the Kit, and how many lines of game code it took. <b>Claude&apos;s kit plan</b> lists each system in the GDD and the Kit piece that covers it.</li>
+        <li><b>History</b> of every upload, push and version.</li>
+      </ul>
+      <Shot src="14-build-page.png" alt="A new game's page: the test build, Ask for changes, Kit reuse and History" />
+      <P><b>Not there yet?</b> Write what should change under <b>Ask for changes</b> and press <b>Push changes to Claude</b>. Each push makes a new version on top of the last, with the GDD still the reference. Repeat as often as you like.</P>
+      <P><b>Happy with it?</b> Press <b>Send to power user</b>. The game waits for a power user to publish it.</P>
+
+      <H2>9. Power users: publishing a new game</H2>
+      <P>Power users sign in to the lab with the power-user passcode (Ryan sets it as <code>LAB_POWER_PASSCODE</code>). They see a <b>POWER USER</b> badge, and on a game waiting for them, a <b>Publish to live site</b> button behind an <b>Are you sure?</b> checkbox.</P>
+      <Shot src="15-publish.png" alt="A game waiting for a power user, with Publish to live site" />
+      <P>Publishing merges the game&apos;s code (and anything it added to the Kit) into the Kit, then ships the game to the site with a front-page card, a leaderboard and achievements. It takes a few minutes; the page then shows <b>Play it live</b>. Anyone can still <b>Withdraw the request</b> or ask for more changes before it&apos;s published.</P>
+
+      <H2>10. The Kit</H2>
+      <P>Every game is built from the Kit: shared pieces for the game loop, screens, input, cameras, waves, cards, words, scoring, effects, sound and art looks. The more games we build, the more pieces the Kit has, and the less new code each game needs.</P>
+      <Shot src="12-kit.png" alt="The Kit browser, searching for waves" />
+      <ul style={ul}>
+        <li><b>Search</b> by what you need (&quot;waves&quot;, &quot;deck&quot;, &quot;tower defense&quot;) or filter by category.</li>
+        <li><b>Click a piece</b> for when to use it, what it&apos;s good for, which games use it, and a short code example.</li>
+        <li>Below the pieces: the <b>starter templates</b>, the <b>art looks</b>, the <b>modules</b>, and which pieces each game uses.</li>
+        <li><b>Still inside a game</b> lists systems built for one game that the next game could pull into the Kit.</li>
+      </ul>
+      <P>Writing a GDD with the Kit in mind (naming a look, or a system the Kit already has) makes builds faster and cheaper. The Kit list updates every time a game ships.</P>
     </main>
   );
 }
