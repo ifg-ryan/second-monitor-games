@@ -21,6 +21,8 @@ export interface KitGame {
   icon?: string;
   preview?: string;
   updated?: string;
+  /** claude-games commit the shipped build came from. */
+  source?: string;
   /** First shipped. Sorts the front page, so re-shipping a fix doesn't reorder it. */
   added?: string;
   score: { label: string; max: number; lowerIsBetter?: boolean };

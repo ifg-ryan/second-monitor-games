@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { KIT_GAMES, kitGame, kitFile } from '@/lib/kitGames';
 import KitGameFrame from '@/components/game/KitGameFrame';
+import FeedbackButton from '@/components/lab/FeedbackButton';
 
 export function generateStaticParams() {
   return KIT_GAMES.map((g) => ({ id: g.id }));
@@ -59,6 +60,7 @@ export default async function PlayPage({ params }: { params: Promise<{ id: strin
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', whiteSpace: 'nowrap' }}>
+          <FeedbackButton game={g.id} build={g.source} />
           {minutes && <span className="hidden md:inline" style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{minutes}</span>}
           <a href={`/leaderboard#${g.id}`} style={{ ...link, color: 'var(--accent)' }}>🏆 Leaderboard</a>
           <a href="/account" className="nav-link-muted hidden sm:inline" style={link}>Achievements</a>

@@ -109,3 +109,23 @@ model Achievement {
   @@unique([userId, game, key])
   @@index([userId])
 }
+
+// ── Tester feedback (the /lab queue) ─────────────────────────────────────────
+// Notes testers dictate while playing a kit game. Pushing a batch from /lab starts
+// the claude-games "feedback" GitHub workflow, which has Claude apply the notes,
+// re-ships the games, and writes the result back here. See src/lib/lab.ts.
+model Feedback {
+  id        String   @id @default(cuid())
+  game      String
+  text      String
+  context   String?  // JSON: build, seconds into the session, screen size
+  status    String   @default("new") // new | queued | working | live | skipped | failed | dismissed | undoing | undone
+  note      String?  // Claude's one-line summary of what it did, or why it skipped
+  commit    String?  // claude-games commit that applied it (used by Undo)
+  run       String?  // GitHub Actions run that handled it
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([commit])
+}
