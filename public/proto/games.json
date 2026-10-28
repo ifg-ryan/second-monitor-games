@@ -829,5 +829,58 @@
     "updated": "2026-10-28T11:55:56.087Z",
     "source": "33ac0b1",
     "preview": "/images/previews/stack-up.jpg"
+  },
+  "drone-combat": {
+    "id": "drone-combat",
+    "title": "Drone Combat",
+    "blurb": "Atari Combat rebuilt as a drone duel roguelike. Win best of three, beat the bosses, spend points on a sharper drone.",
+    "tag": "Arcade Duel",
+    "minutes": [
+      1,
+      4
+    ],
+    "accent": "#e2412f",
+    "icon": "🛸",
+    "score": {
+      "label": "points",
+      "max": 200000
+    },
+    "achievements": [
+      {
+        "id": "airborne",
+        "name": "Airborne",
+        "description": "Win your first level"
+      },
+      {
+        "id": "flawless",
+        "name": "Flawless",
+        "description": "Win a level 2-0"
+      },
+      {
+        "id": "homer",
+        "name": "Homer Down",
+        "description": "Beat the level 5 boss"
+      },
+      {
+        "id": "mothership",
+        "name": "Mothership Down",
+        "description": "Beat level 10"
+      },
+      {
+        "id": "lock-on",
+        "name": "Lock-On",
+        "description": "Reach Targeting level 5 on any drone"
+      },
+      {
+        "id": "hangar",
+        "name": "Hangar Regular",
+        "description": "Buy 10 Hangar upgrades",
+        "goal": 10
+      }
+    ],
+    "added": "2026-10-28T15:25:08.703Z",
+    "updated": "2026-10-28T15:25:08.703Z",
+    "source": "35588aa",
+    "preview": "/images/previews/drone-combat.jpg"
   }
 }
