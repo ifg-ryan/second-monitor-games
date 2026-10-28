@@ -155,10 +155,10 @@
         "goal": 20
       }
     ],
-    "updated": "2026-10-22T02:17:12.590Z",
-    "source": "485fba5",
-    "preview": "/images/previews/golf-solitaire.jpg",
-    "added": "2026-10-22T01:40:35Z"
+    "added": "2026-10-22T01:40:35Z",
+    "updated": "2026-10-28T22:11:44.599Z",
+    "source": "f03ea32",
+    "preview": "/images/previews/golf-solitaire.jpg"
   },
   "snake-rogue": {
     "id": "snake-rogue",
