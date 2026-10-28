@@ -882,5 +882,57 @@
     "updated": "2026-10-28T15:35:42.710Z",
     "source": "74dc1db",
     "preview": "/images/previews/drone-combat.jpg"
+  },
+  "treasure-tunnels": {
+    "id": "treasure-tunnels",
+    "title": "Treasure Tunnels of Terra",
+    "blurb": "Scramble through the tunnels of Terra, drop into the cavern and land it Lunar Lander style. One energy bar is fuel, ammo and health.",
+    "tag": "Retro Sci-Fi",
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#d9381e",
+    "icon": "🚀",
+    "score": {
+      "label": "points",
+      "max": 500000
+    },
+    "achievements": [
+      {
+        "id": "first-descent",
+        "name": "First Descent",
+        "description": "Complete Level 1"
+      },
+      {
+        "id": "giant-slayer",
+        "name": "Giant Slayer",
+        "description": "Defeat your first boss"
+      },
+      {
+        "id": "featherfall",
+        "name": "Featherfall",
+        "description": "Make a perfect landing"
+      },
+      {
+        "id": "fumes",
+        "name": "Running on Fumes",
+        "description": "Land with under 5% energy"
+      },
+      {
+        "id": "ceiling-walker",
+        "name": "Ceiling Walker",
+        "description": "Complete a roof-hole landing"
+      },
+      {
+        "id": "tunnel-rat",
+        "name": "Tunnel Rat",
+        "description": "Reach Level 10"
+      }
+    ],
+    "added": "2026-10-28T16:08:59.704Z",
+    "updated": "2026-10-28T16:08:59.704Z",
+    "source": "edb8286",
+    "preview": "/images/previews/treasure-tunnels.jpg"
   }
 }
