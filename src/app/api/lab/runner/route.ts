@@ -6,7 +6,7 @@ import { BUSY, RUNNER_RESULTS, cleanText, runnerProblem } from '@/lib/lab';
 //   GET  ?run=<id>       claim every queued note (they become "working", batch = run) and return them
 //   GET  ?batch=<id>     the notes in a batch (for Approve / Send back)
 //   GET  ?commit=<sha>   the notes a live commit applied (for Undo)
-//   POST { run, commit?, results: [{ id, status, note?, heard?, transcript? }] }   write back what happened.
+//   POST { run, commit?, results: [{ id, status, note?, heard?, transcript?, link? }] }   write back what happened.
 //        Fields left out are not changed. Only notes still in progress are updated, so a run
 //        someone pressed Stop on can't overwrite what they did.
 const denied = (why: string) => NextResponse.json({ error: `Runner only: ${why}` }, { status: 401 });
@@ -43,6 +43,7 @@ export async function POST(request: Request) {
     if ('note' in r) data.note = cleanText(r.note, 500);
     if ('heard' in r) data.heard = cleanText(r.heard, 1000);
     if ('transcript' in r) data.transcript = cleanText(r.transcript);
+    if ('link' in r) data.link = typeof r.link === 'string' && /^https:\/\/[\w.-]+\/[\w./?=&%-]*$/.test(r.link) ? r.link : null;
     if ((status === 'review' || status === 'live') && commit) data.commit = commit;
     const res = await prisma.feedback.updateMany({ where: { id: r.id, status: { in: BUSY } }, data }).catch(() => ({ count: 0 }));
     updated += res.count;

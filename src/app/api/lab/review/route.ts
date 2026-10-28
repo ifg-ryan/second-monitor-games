@@ -21,10 +21,10 @@ export async function POST(request: Request) {
     const comment = cleanText(body?.comment, 2000);
     for (const i of items) {
       const tried = i.note ? `\n\nFirst try: ${i.note}` : '';
-      await prisma.feedback.update({ where: { id: i.id }, data: { status: next, text: comment ? `${i.text}${tried}\nSent back: ${comment}` : i.text, note: comment ? `Sent back: ${comment}` : 'Sent back' } });
+      await prisma.feedback.update({ where: { id: i.id }, data: { status: next, link: null, text: comment ? `${i.text}${tried}\nSent back: ${comment}` : i.text, note: comment ? `Sent back: ${comment}` : 'Sent back' } });
     }
   } else {
-    await prisma.feedback.updateMany({ where: { id: { in: ids } }, data: { status: next } });
+    await prisma.feedback.updateMany({ where: { id: { in: ids } }, data: { status: next, link: null } });
   }
   try {
     await dispatch(action, batch);

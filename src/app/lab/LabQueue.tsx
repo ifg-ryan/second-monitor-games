@@ -11,6 +11,7 @@ interface Item {
   hasAudio: boolean;
   transcript: string | null;
   heard: string | null;
+  link: string | null;
   run: string | null;
   context: string | null;
   status: string;
@@ -206,6 +207,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
                   <Said item={i} />
                   {i.heard && <p style={{ ...note, color: 'var(--text)' }}><b>Claude heard:</b> {i.heard}</p>}
                   {i.note && <p style={note}><b>Changed:</b> {i.note}</p>}
+                  <TestLink item={i} />
                 </div>
               ))}
             </div>
@@ -232,6 +234,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
                   <Meta game={title[i.game] ?? i.game} />
                   {i.heard ? <p style={text}>{i.heard}</p> : <Said item={i} />}
                   {i.note && <p style={note}>✓ {i.note}</p>}
+                  <TestLink item={i} />
                 </div>
               ))}
             </div>
@@ -248,6 +251,7 @@ export default function LabQueue({ games }: { games: Game[] }) {
                 <Meta game={title[i.game] ?? i.game} when={i.status === 'skipped' ? 'Claude skipped' : i.status === 'undone' ? 'Undone' : 'Set aside'} />
                 <Said item={i} />
                 {i.note && <p style={note}>{i.note}</p>}
+                {i.status === 'undone' && <TestLink item={i} />}
               </div>
               <button type="button" onClick={() => setStatus(i.id, 'new')} style={{ ...btn, background: 'var(--surface-2)', color: 'var(--text)' }}>Back to inbox</button>
               <button type="button" onClick={() => remove(i.id)} title="Delete" style={x}>×</button>
@@ -256,6 +260,17 @@ export default function LabQueue({ games }: { games: Game[] }) {
         </section>
       )}
     </div>
+  );
+}
+
+/** Where to test this note's change: the preview build while in Review, the live game once approved. */
+function TestLink({ item }: { item: Item }) {
+  if (!item.link) return null;
+  const label = item.status === 'review' ? 'Test the preview' : 'Play it live';
+  return (
+    <a href={item.link} target="_blank" rel="noopener" style={{ display: 'inline-block', marginTop: '6px', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}>
+      {label} ↗ <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>{item.link.replace(/^https:\/\//, '')}</span>
+    </a>
   );
 }
 

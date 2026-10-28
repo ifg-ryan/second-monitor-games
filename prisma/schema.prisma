@@ -123,6 +123,7 @@ model Feedback {
   audioType  String?
   transcript String?  // Whisper's transcript of the recording
   heard      String?  // Claude's short read of what the tester meant
+  link       String?  // where to test the change: the preview build (review) or the live game (live)
   context    String?  // JSON: build, seconds into the session, screen size
   status     String   @default("new") // see STATUSES in src/lib/lab.ts
   note       String?  // what Claude changed, why it skipped, or a reviewer's comment

@@ -17,7 +17,7 @@ export async function GET() {
     const rows = await prisma.feedback.findMany({
       orderBy: { createdAt: 'desc' },
       take: 300,
-      select: { id: true, game: true, text: true, audioType: true, transcript: true, heard: true, context: true, status: true, note: true, commit: true, run: true, createdAt: true, updatedAt: true },
+      select: { id: true, game: true, text: true, audioType: true, transcript: true, heard: true, link: true, context: true, status: true, note: true, commit: true, run: true, createdAt: true, updatedAt: true },
     });
     const items = rows.map(({ audioType, ...r }: { audioType: string | null } & Record<string, unknown>) => ({ ...r, hasAudio: !!audioType }));
     return NextResponse.json({ items });
