@@ -331,7 +331,7 @@
       2,
       4
     ],
-    "accent": "#5ef2ff",
+    "accent": "#f2c84b",
     "icon": "🧱",
     "score": {
       "label": "points",
@@ -372,8 +372,8 @@
       }
     ],
     "added": "2026-10-22T16:26:18.046Z",
-    "updated": "2026-10-28T22:12:26.955Z",
-    "source": "f03ea32",
+    "updated": "2026-10-28T23:02:34.993Z",
+    "source": "4314df8",
     "preview": "/images/previews/brick-rogue.jpg"
   },
   "hand-rogue": {
