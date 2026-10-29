@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 export default async function KitPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = (await searchParams).q ?? '';
   return (
-    <main style={{ maxWidth: '980px', margin: '0 auto', padding: '32px 20px 80px' }}>
+    <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 20px 80px' }}>
       {(await isTester()) ? <KitBrowser catalog={catalog as unknown as KitCatalog} initialQuery={q} /> : <LabLogin />}
     </main>
   );

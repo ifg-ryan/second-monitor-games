@@ -13,7 +13,7 @@ export default async function LabPage({ searchParams }: { searchParams: Promise<
   const pick = (await searchParams).game;
   const games = KIT_GAMES.map((g) => ({ id: g.id, title: g.title, icon: g.icon ?? '🎮', build: g.source }));
   return (
-    <main style={{ maxWidth: '860px', margin: '0 auto', padding: '32px 20px 80px' }}>
+    <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 20px 80px' }}>
       {(await isTester()) ? <LabQueue games={games} initialGame={games.some((g) => g.id === pick) ? pick : undefined} /> : <LabLogin />}
     </main>
   );

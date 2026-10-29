@@ -8,5 +8,5 @@ export const metadata: Metadata = { title: 'Create Game', robots: { index: false
 export const dynamic = 'force-dynamic';
 
 export default async function BuildsPage() {
-  return <main style={{ maxWidth: '860px', margin: '0 auto', padding: '32px 20px 80px' }}>{(await isTester()) ? <BuildsList /> : <LabLogin />}</main>;
+  return <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 20px 80px' }}>{(await isTester()) ? <BuildsList /> : <LabLogin />}</main>;
 }

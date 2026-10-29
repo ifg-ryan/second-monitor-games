@@ -2,6 +2,7 @@
 // Open to anyone with the link (not linked from the public site) so a new tester can read it first.
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import LabNav from '@/components/lab/LabNav';
 
 export const metadata: Metadata = { title: 'Tester Lab guide', robots: { index: false, follow: false } };
 
@@ -17,7 +18,9 @@ const cell = { border: '1px solid var(--border)', padding: '8px 10px', verticalA
 
 export default function LabGuide() {
   return (
-    <main style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 20px 100px', lineHeight: 1.6, fontSize: '1rem', color: 'var(--text)' }}>
+    <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 20px 100px', color: 'var(--text)' }}>
+      <LabNav />
+      <div style={{ maxWidth: '760px', lineHeight: 1.6, fontSize: '1rem' }}>
       <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2.4rem', margin: '0 0 8px', fontWeight: 400 }}>Tester Lab guide</h1>
       <P>The lab is where game designers work with Claude on Second Monitor Games. It has three parts, along the top of every lab page:</P>
       <ul style={ul}>
@@ -129,6 +132,7 @@ export default function LabGuide() {
         <li><b>Still inside a game</b> lists systems built for one game that the next game could pull into the Kit.</li>
       </ul>
       <P>Writing a GDD with the Kit in mind (naming a look, or a system the Kit already has) makes builds faster and cheaper. The Kit list updates every time a game ships.</P>
+      </div>
     </main>
   );
 }
