@@ -4,7 +4,14 @@ export default function GamePicker({ options, value }: { options: { id: string; 
   return (
     <select
       value={value ?? ''}
-      onChange={(e) => location.assign(e.target.value ? `/lab/games?game=${e.target.value}` : '/lab/games')}
+      onChange={(e) => {
+        // Keep the stats period and tester toggle when switching games.
+        const q = new URLSearchParams(location.search);
+        if (e.target.value) q.set('game', e.target.value);
+        else q.delete('game');
+        const s = q.toString();
+        location.assign(`/lab/games${s ? `?${s}` : ''}`);
+      }}
       style={{ width: '100%', maxWidth: '480px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', font: 'inherit', fontSize: '1rem' }}
     >
       <option value="">All games ({options.length})</option>

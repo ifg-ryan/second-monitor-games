@@ -11,6 +11,8 @@ import catalog from '../../../../lab-data/kit-catalog.json';
 import LabLogin from '../LabLogin';
 import LabNav from '@/components/lab/LabNav';
 import GamePicker from './GamePicker';
+import { StatsOverview, GameStats, readQuery, type StatsQuery } from './PlayStats';
+import { SITE_GAMES } from '@/lib/playStats';
 
 export const metadata: Metadata = { title: 'Games', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
@@ -27,41 +29,36 @@ const time = (iso: string) => new Date(iso).toLocaleString(undefined, { month: '
 const live = (id: string) => KIT_GAMES.find((g) => g.id === id);
 const titleOf = (id: string) => live(id)?.title ?? CAT.games.find((g) => g.id === id)?.name ?? id;
 
-export default async function GamesPage({ searchParams }: { searchParams: Promise<{ game?: string }> }) {
+export default async function GamesPage({ searchParams }: { searchParams: Promise<{ game?: string; period?: string; lab?: string }> }) {
   if (!(await isTester())) return <main style={wrap}><LabLogin /></main>;
   const ids = Object.keys(HISTORY).sort((a, b) => titleOf(a).localeCompare(titleOf(b)));
   const options = ids.map((id) => ({ id, title: titleOf(id), versions: HISTORY[id].versions.length }));
-  const pick = (await searchParams).game;
+  const sp = await searchParams;
+  const pick = sp.game;
+  const q = readQuery(sp);
   const id = pick && HISTORY[pick] ? pick : null;
 
   return (
     <main style={wrap}>
       <LabNav />
       <GamePicker options={options} value={id} />
-      {id ? <Game id={id} /> : <Overview ids={ids} />}
+      {id ? <Game id={id} q={q} /> : <Overview ids={ids} q={q} />}
     </main>
   );
 }
 
-function Overview({ ids }: { ids: string[] }) {
-  return (
-    <div style={{ marginTop: '20px' }}>
-      {ids.map((id) => {
-        const h = HISTORY[id];
-        const v = h.versions[0];
-        return (
-          <a key={id} href={`/lab/games?game=${id}`} style={{ display: 'flex', gap: '14px', alignItems: 'baseline', padding: '12px 4px', borderTop: '1px solid var(--border)', textDecoration: 'none', color: 'var(--text)' }}>
-            <b style={{ flex: 1 }}>{titleOf(id)}</b>
-            {h.unreleased.length > 0 && <span style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>{h.unreleased.length} unreleased</span>}
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{v ? `version ${v.version} · ${day(v.date)}` : 'not shipped yet'}</span>
-          </a>
-        );
-      })}
-    </div>
-  );
+function Overview({ ids, q }: { ids: string[]; q: StatsQuery }) {
+  const games = [
+    ...ids.map((id) => {
+      const v = HISTORY[id].versions[0];
+      return { id, title: titleOf(id), linked: true, version: v ? `v${v.version}` : HISTORY[id].unreleased.length ? 'not shipped' : '' };
+    }),
+    ...Object.entries(SITE_GAMES).map(([id, title]) => ({ id, title, linked: false, version: 'older site game' })),
+  ];
+  return <StatsOverview q={q} games={games} />;
 }
 
-async function Game({ id }: { id: string }) {
+async function Game({ id, q }: { id: string; q: StatsQuery }) {
   const h = HISTORY[id];
   const site = live(id);
   const modules = CAT.games.find((g) => g.id === id)?.uses ?? [];
@@ -81,13 +78,15 @@ async function Game({ id }: { id: string }) {
         {site && <a href={`/play/${id}`} style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>Play live ↗</a>}
         <a href={`/lab?game=${id}`} className="nav-link-muted" style={{ fontSize: '0.85rem' }}>Give feedback</a>
       </div>
-      <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap', margin: '14px 0 26px' }}>
+      <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap', margin: '14px 0 22px' }}>
         <Stat n={latest ? `v${latest.version}` : 'none'} label={latest ? `live since ${day(latest.date)}` : 'not shipped yet'} />
         <Stat n={pieces.length} label="kit pieces used" />
         <Stat n={modules.length} label="kit modules" />
         <Stat n={h.versions.reduce((n, v) => n + v.notes.length, 0) + h.unreleased.length} label="changes recorded" />
         {h.created && <Stat n={day(h.created)} label="first built" />}
       </div>
+
+      <GameStats q={q} game={id} />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', alignItems: 'start' }}>
         <section>

@@ -164,3 +164,23 @@ model GameBuild {
 
   @@index([status])
 }
+
+// ── Play stats (the lab's Games page) ─────────────────────────────────────────
+// One row per play of a game, updated in place while it runs. A play starts at the player's
+// first input; seconds is active time only (tab visible, input in the last minute); runs counts
+// game overs. Sent by @kit/site Telemetry in claude-games, and public/smg-play.js for the
+// older site games. lab marks plays by passcode holders so testing stays out of the numbers.
+model Play {
+  id        String   @id // made by the browser: p + random
+  game      String
+  playerId  String   // Clerk user id, or "guest:<browser id>"
+  day       String   // the day it started, YYYY-MM-DD in Atlantic time
+  seconds   Int      @default(0)
+  runs      Int      @default(0)
+  lab       Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([day])
+  @@index([game, day])
+}
