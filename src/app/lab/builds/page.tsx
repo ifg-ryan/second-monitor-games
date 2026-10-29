@@ -4,7 +4,7 @@ import { isTester } from '@/lib/lab';
 import LabLogin from '../LabLogin';
 import BuildsList from './BuildsList';
 
-export const metadata: Metadata = { title: 'New games', robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: 'Create Game', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
 export default async function BuildsPage() {

@@ -22,7 +22,7 @@ export default function LabGuide() {
       <P>The lab is where game designers work with Claude on Second Monitor Games. It has three parts, along the top of every lab page:</P>
       <ul style={ul}>
         <li><b>Feedback</b>: notes on any of our games. Claude makes the change, you test it, and push it live (sections 1 to 7).</li>
-        <li><b>New games</b>: upload a GDD and get a playable game back to test and refine (sections 8 and 9).</li>
+        <li><b>Create Game</b>: upload a GDD and get a playable game back to test and refine (sections 8 and 9).</li>
         <li><b>Kit</b>: every reusable piece games are built from, searchable (section 10).</li>
       </ul>
       <P>Talk or type notes while you play. Claude turns them into a playable test build in about 10 minutes. Nothing reaches the live site until a tester tries that build and pushes it live.</P>
@@ -99,9 +99,9 @@ export default function LabGuide() {
       </table>
       <P>Each Push runs Claude on Ryan&apos;s account, capped at $5 a push and $200 a month. Send back and Stop cost almost nothing.</P>
 
-      <H2>8. New games from a GDD</H2>
-      <P>Under <b>New games</b>, drop in a game design document (PDF, Word, Markdown or text, up to 3 MB), give the game a title, and add any notes for Claude: a look to use, what to build first, what to leave out. Press <b>Upload</b>.</P>
-      <Shot src="13-new-games.png" alt="New games: upload a GDD, and the list of games with their status" />
+      <H2>8. Create Game: a new game from a GDD</H2>
+      <P>Under <b>Create Game</b>, drop in a game design document (PDF, Word, Markdown or text, up to 3 MB), give the game a title, and add any notes for Claude: a look to use, what to build first, what to leave out. Press <b>Upload</b>.</P>
+      <Shot src="13-new-games.png" alt="Create Game: upload a GDD, and the list of games with their status" />
       <P>On the game&apos;s page, press <b>Push to Claude</b>. Claude reads the GDD, maps every system it needs to pieces already in the Kit, builds the game from those pieces, and moves anything new and reusable back into the Kit. A first build usually takes 20 to 45 minutes; the page updates by itself, and <b>Stop</b> cancels it.</P>
       <P>When it&apos;s done, the page shows:</P>
       <ul style={ul}>

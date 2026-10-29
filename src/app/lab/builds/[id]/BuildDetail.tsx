@@ -59,7 +59,7 @@ export default function BuildDetail({ id, power }: { id: string; power: boolean 
   }
 
   if (b === undefined) return <LabNav />;
-  if (b === null) return (<><LabNav /><p>That game isn&apos;t here any more. <Link href="/lab/builds" style={{ color: 'var(--accent)' }}>All new games</Link></p></>);
+  if (b === null) return (<><LabNav /><p>That game isn&apos;t here any more. <Link href="/lab/builds" style={{ color: 'var(--accent)' }}>All games in Create Game</Link></p></>);
 
   const reuse = parse<Reuse>(b.reuse, {});
   const log = parse<LogEntry[]>(b.log, []).slice().reverse();
