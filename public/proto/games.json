@@ -1145,7 +1145,7 @@
   "putt-party": {
     "id": "putt-party",
     "title": "Putt Party",
-    "blurb": "Nine holes of seaside mini golf: bank shots, a pond, a volcano and the windmill. Fewest strokes wins.",
+    "blurb": "Seaside mini golf on four courses: the Boardwalk classic, Pirate Cove, Cosmic Crater and Candy Carnival. Moving cups, spinners, every course par 27.",
     "tag": "Sports",
     "type": "sports",
     "tags": [
@@ -1197,8 +1197,8 @@
       }
     ],
     "added": "2026-10-29T14:43:08.338Z",
-    "updated": "2026-10-29T15:00:55.210Z",
-    "source": "044b631",
+    "updated": "2026-10-29T15:12:49.349Z",
+    "source": "a655aa3",
     "preview": "/images/previews/putt-party.e275c958.jpg"
   }
 }
