@@ -4,6 +4,7 @@ import { kitGame } from '@/lib/kitGames';
 import { kitPlayer, sanitizeName } from '@/lib/kitPlayer';
 import { containsBadWord } from '@/lib/wordFilter';
 import { grantSiteAchievements } from '@/lib/siteAchievements';
+import { accountLevel } from '@/lib/xp';
 
 // Scores for Claude Games kit games. One row per player per game holding their best.
 // Signed-in players post under their account; guests post under a nickname with a browser id.
@@ -93,8 +94,10 @@ export async function POST(request: Request) {
     });
     const rank = await rankOf(game.id, best, lower);
     const total = await prisma.kitScore.count({ where: { game: game.id } });
+    const before = player ? await accountLevel(player.userId).catch(() => null) : null;
     const site = player ? await grantSiteAchievements(player.userId, rank).catch(() => []) : [];
-    return NextResponse.json({ ok: true, best, newBest: better, rank, total, siteAchievements: site });
+    const after = player && site.length ? await accountLevel(player.userId).catch(() => null) : before;
+    return NextResponse.json({ ok: true, best, newBest: better, rank, total, siteAchievements: site, ...(after ? { xp: after.xp, level: after.level, gained: after.xp - (before?.xp ?? after.xp), leveledUp: !!before && after.level > before.level } : {}) });
   } catch {
     return unavailable();
   }

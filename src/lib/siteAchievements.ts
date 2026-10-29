@@ -3,11 +3,11 @@ import { prisma } from '@/lib/prisma';
 import { KIT_GAMES } from '@/lib/kitGames';
 
 export const SITE_ACHIEVEMENTS = [
-  { id: 'first-score', name: 'On the Board', description: 'Post your first score to a leaderboard' },
-  { id: 'explorer', name: 'Explorer', description: 'Play 3 different games' },
-  { id: 'completionist', name: 'Tour Guide', description: 'Play every game on the site' },
-  { id: 'regular', name: 'Regular', description: 'Finish 25 games' },
-  { id: 'podium', name: 'Podium', description: 'Reach the top 3 on any leaderboard' },
+  { id: 'first-score', name: 'On the Board', description: 'Post your first score to a leaderboard', xp: 50 },
+  { id: 'explorer', name: 'Explorer', description: 'Play 3 different games', xp: 100 },
+  { id: 'completionist', name: 'Tour Guide', description: 'Play every game on the site', xp: 500 },
+  { id: 'regular', name: 'Regular', description: 'Finish 25 games', xp: 150 },
+  { id: 'podium', name: 'Podium', description: 'Reach the top 3 on any leaderboard', xp: 250 },
 ] as const;
 
 /** Grant site achievements after a signed-in player posts a score. Returns newly unlocked ids. */

@@ -2,6 +2,7 @@
 // Each board has an anchor (#<game id>) so games can link straight to it.
 import { prisma } from '@/lib/prisma';
 import { KIT_GAMES, kitUrl } from '@/lib/kitGames';
+import { levelsFor } from '@/lib/xp';
 
 const MEDAL: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
@@ -21,6 +22,8 @@ export default async function KitLeaderboards({ userId }: { userId: string | nul
       }
     }),
   );
+
+  const levels = await levelsFor(boards.flatMap((b) => b.rows.map((r) => r.playerId))).catch(() => new Map<string, number>());
 
   return (
     <div style={{ display: 'grid', gap: '20px', marginBottom: '48px' }}>
@@ -50,6 +53,7 @@ export default async function KitLeaderboards({ userId }: { userId: string | nul
                   <span style={{ color: 'var(--text-muted)' }}>{MEDAL[i + 1] ?? i + 1}</span>
                   <span style={{ fontWeight: me ? 700 : 500 }}>
                     {r.name}
+                    {levels.has(r.playerId) && <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 500 }}> · Lv {levels.get(r.playerId)}</span>}
                     {r.isGuest && <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}> · guest</span>}
                     {me && <span style={{ color: 'var(--accent)', fontSize: '0.75rem' }}> · you</span>}
                   </span>

@@ -20,6 +20,13 @@ A signed-in player's saved progress in each kit game follows them to any device.
 - `/play/<id>` (KitGameFrame) fetches the save and puts it aside in the browser before the game loads, so the game starts with it.
 - Kept on the device: tuning-panel overrides and any `localOnly` keys in a game's game.json.
 
+## Account XP
+- Every achievement is worth XP: `xp` in the game's game.json (default 50); site-wide ones in `src/lib/siteAchievements.ts`.
+- A player's XP is the total of the achievements on their account (`src/lib/xp.ts`); nothing separate to keep in step.
+- Levels: reaching level n takes 20 x (n - 1)^2 XP. Level 20 is 7,220 XP.
+- Shown in the header (Lv badge), on /account (level, XP bar, XP and progress per achievement) and next to names on leaderboards.
+  Games get the level from /api/kit/me and a level-up flag from /api/kit/achievements and /api/kit/score.
+
 ## Setup (done once)
 1. Clerk: create the production instance for secondmonitorgames.com and add its DNS records.
 2. Clerk, User and authentication: turn on Google; turn off email, phone, username and every other provider.

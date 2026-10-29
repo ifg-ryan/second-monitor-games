@@ -2,6 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { SignOutButton } from "@clerk/nextjs";
 import { prisma } from "@/lib/prisma";
+import { accountLevel } from "@/lib/xp";
 
 const item = { display: "block", width: "100%", textAlign: "left" as const, padding: "8px 14px", fontSize: "0.85rem", color: "var(--text)", background: "none", border: "none", cursor: "pointer", textDecoration: "none" };
 
@@ -13,6 +14,7 @@ export default async function AccountButton() {
     .findUnique({ where: { clerkId: userId }, select: { username: true } })
     .catch(() => null);
   const name = user?.username ?? null;
+  const lv = await accountLevel(userId).catch(() => null);
 
   return (
     <details style={{ position: "relative" }}>
@@ -29,6 +31,11 @@ export default async function AccountButton() {
           {name ? name[0].toUpperCase() : "?"}
         </span>
         {name && <span className="hidden md:inline" style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text)" }}>{name}</span>}
+        {lv && (
+          <span title={`${lv.xp.toLocaleString("en-US")} XP`} style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--accent)", border: "1px solid var(--accent)", borderRadius: "999px", padding: "1px 7px" }}>
+            Lv {lv.level}
+          </span>
+        )}
       </summary>
       <div
         style={{

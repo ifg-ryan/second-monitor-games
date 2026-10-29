@@ -9,6 +9,8 @@ export interface KitAchievement {
   description: string;
   goal?: number;
   secret?: boolean;
+  /** Account XP for unlocking it (default 50, see src/lib/xp.ts). */
+  xp?: number;
 }
 
 export interface KitGame {
