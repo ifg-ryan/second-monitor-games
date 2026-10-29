@@ -25,7 +25,7 @@ export default function LabGuide() {
       <P>The lab is where game designers work with Claude on Second Monitor Games. Its sections are the tabs along the top of every lab page:</P>
       <ul style={ul}>
         <li><b>Feedback</b>: notes on any of our games. Claude makes the change, you test it, and push it live (sections 1 to 7).</li>
-        <li><b>Games</b>: pick a game to see the Kit pieces it&apos;s built from and every version with its build notes (section 8).</li>
+        <li><b>Games</b>: play stats for every game, and for each game the Kit pieces it&apos;s built from and every version with its build notes (section 8).</li>
         <li><b>Create Game</b>: upload a GDD and get a playable game back to test and refine (sections 9 and 10).</li>
         <li><b>Kit</b>: every reusable piece games are built from, searchable (section 11).</li>
         <li><b>Guide</b>: this page.</li>
@@ -107,7 +107,8 @@ export default function LabGuide() {
       <P>Each Push runs Claude on Ryan&apos;s account, capped at $5 a feedback push, $20 a Create Game push, and $200 a month. Send back and Stop cost almost nothing.</P>
 
       <H2>8. Games</H2>
-      <P>The <b>Games</b> tab lists every game with its current version. Pick one from the dropdown to see:</P>
+      <P>The <b>Games</b> tab opens on <b>Play stats</b> for the whole site: players today, average daily players, plays and play time, a chart of daily players over the last 30 days, and a table of every game you can sort by any column (plays, play time, finished runs, quick quits, plays per player, returning players). Hover a column name for what it counts. Choose today, 7 days, 30 days or all time at the top. Plays by people signed in to the lab are left out unless you press <b>Include tester plays</b>, so testing doesn&apos;t skew the numbers.</P>
+      <P>Pick a game from the dropdown to see its own play stats, plus:</P>
       <ul style={ul}>
         <li><b>Version history</b>: every version that went live, newest first, with the date. Under each are the changes made since the version before, and <b>Build notes</b> opens the full note on a change. Changes made but not shipped yet sit at the top under <b>Not shipped yet</b>.</li>
         <li><b>Built from the Kit</b>: the Kit modules and every Kit piece the game uses, by category. Click a piece to open it in the Kit tab. Systems built only for this game that could join the Kit are listed too.</li>
