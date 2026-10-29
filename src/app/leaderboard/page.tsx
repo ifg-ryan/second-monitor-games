@@ -12,7 +12,7 @@ export default async function LeaderboardPage() {
   const { userId } = await auth();
 
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px 80px' }}>
+    <div style={{ maxWidth: '1040px', margin: '0 auto', padding: '48px 24px 80px' }}>
 
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>

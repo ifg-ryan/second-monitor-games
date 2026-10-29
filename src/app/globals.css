@@ -93,3 +93,9 @@ body {
 
 .smg-detail::backdrop { background: rgba(5, 10, 7, 0.82); }
 .smg-detail { margin: auto; }
+
+/* Leaderboard page: game art on the left, the board on the right; stacked on narrow screens. */
+.smg-board { display: grid; grid-template-columns: 280px 1fr; }
+.smg-board-art img { transition: opacity 0.15s ease; }
+.smg-board-art:hover img { opacity: 1 !important; }
+@media (max-width: 720px) { .smg-board { grid-template-columns: 1fr; } }

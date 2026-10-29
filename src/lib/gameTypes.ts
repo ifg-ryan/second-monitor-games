@@ -19,3 +19,11 @@ export const GAME_TAGS = [
 
 export type GameType = (typeof GAME_TYPES)[number]['id'];
 export type GameTag = (typeof GAME_TAGS)[number]['id'];
+
+/** Card edge colour by game type, from the Iron Fox tri-colour (front page and leaderboard cards). */
+export const TYPE_STRIPE: Record<string, string> = {
+  arcade: 'var(--accent)', strategy: 'var(--accent)',
+  card: 'var(--accent-red)', puzzle: 'var(--accent-red)',
+  sports: 'var(--accent-blue)', word: 'var(--accent-blue)',
+};
+export const typeStripe = (type?: string): string => TYPE_STRIPE[type ?? ''] ?? 'var(--accent)';

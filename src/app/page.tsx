@@ -4,6 +4,7 @@ import Image from "next/image";
 import { KIT_GAMES, kitUrl, kitBoards, type KitGame } from "@/lib/kitGames";
 import TopFive, { type ScoreRow } from "@/components/game/TopFive";
 import { prisma } from "@/lib/prisma";
+import { typeStripe } from "@/lib/gameTypes";
 
 export const metadata: Metadata = {
   title:       "Free Card Games, Puzzles, Golf & Arcade for Your Second Monitor",
@@ -20,12 +21,6 @@ export const metadata: Metadata = {
 // The featured game's top 5 is read live; the rest of the page is static.
 export const revalidate = 60;
 
-// Card edge colour by game type, from the Iron Fox tri-colour.
-const STRIPE: Record<string, string> = {
-  arcade: "var(--accent)", strategy: "var(--accent)",
-  card: "var(--accent-red)", puzzle: "var(--accent-red)",
-  sports: "var(--accent-blue)", word: "var(--accent-blue)",
-};
 
 // Kit games come from public/proto/games.json (written by `npm run ship` in claude-games),
 // newest first; shipping a game with a game.json adds its card here automatically.
@@ -41,7 +36,7 @@ const GAMES: GridGame[] = KIT_GAMES.map((g, i) => ({
   type: g.type,
   tags: g.tags,
   href: kitUrl(g.id),
-  stripe: STRIPE[g.type ?? ""] ?? "var(--accent)",
+  stripe: typeStripe(g.type),
   previewImage: g.preview,
   number: i + 1,
   minutes: g.minutes,
