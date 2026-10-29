@@ -2,12 +2,6 @@
 // The page loads per-day totals and player-days with a few groupBy queries; everything here is
 // plain math on those rows, so it is unit tested without a database.
 
-/** Site games outside the kit that send plays (public/smg-play.js), with their names. */
-export const SITE_GAMES: Record<string, string> = {
-  cryptogram: 'Cryptogram',
-  'block-fall': 'Block Fall',
-};
-
 /** A play this short (active seconds) counts as a quick quit. */
 export const QUICK_QUIT_SECONDS = 20;
 

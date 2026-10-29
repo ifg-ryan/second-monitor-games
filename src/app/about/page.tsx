@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: "What games are available right now?",
-    a: "Currently: The Escape (daily card strategy), Fiver (daily word puzzle), and Block Fall (daily arcade). New games are added regularly — the site is actively growing.",
+    a: "Card games, word puzzles, golf, arcade and more, all built for short breaks. New games are added regularly — the site is actively growing.",
   },
   {
     q: "Can I play on my phone?",
@@ -217,14 +217,6 @@ export default function AboutPage() {
               color:       "#538d4e",
               href:        "/play/fiver",
               description: "A quick daily word puzzle. Six tries to find the hidden five-letter word, new puzzle every day and the same word for every player. Missed a day? Past puzzles are in the archive.",
-            },
-            {
-              icon:        "🟦",
-              name:        "Block Fall",
-              type:        "Quick Arcade Game",
-              color:       "#00c8ff",
-              href:        "/games/block-fall",
-              description: "The classic block-stacking game, free in your browser. Clear lines, beat your daily high score, see how long you can survive. No download needed — just open and play. Daily leaderboard resets at midnight.",
             },
           ].map((game) => (
             <div

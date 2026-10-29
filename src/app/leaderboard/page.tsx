@@ -1,55 +1,15 @@
 import { auth } from '@clerk/nextjs/server';
-import { prisma } from '@/lib/prisma';
 import KitLeaderboards from '@/components/game/KitLeaderboards';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Leaderboards — Top Scores | Second Monitor Games',
-  description: 'See the top scores across all Second Monitor Games daily puzzles. Daily leaderboards reset at midnight — compete for the top spot in Fiver, Block Fall, and The Escape.',
+  description: 'See the top scores across all Second Monitor Games. Only your personal best counts.',
 };
-
-const MEDAL: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
-
-function formatScore(n: number) {
-  return n.toLocaleString('en-US');
-}
 
 export default async function LeaderboardPage() {
   const { userId } = await auth();
-
-  const scores = await prisma.leaderboardScore.findMany({
-    where: { game: 'block-fall' },
-    orderBy: { score: 'desc' },
-    take: 20,
-    select: {
-      id: true,
-      userId: true,
-      userName: true,
-      score: true,
-      lines: true,
-      level: true,
-    },
-  });
-
-  // If current user is logged in but not in top 20, fetch their best
-  let myEntry: typeof scores[0] | null = null;
-  let myRank: number | null = null;
-  if (userId) {
-    const inTop = scores.findIndex((s) => s.userId === userId);
-    if (inTop === -1) {
-      const personal = await prisma.leaderboardScore.findUnique({
-        where: { game_userId: { game: 'block-fall', userId } },
-        select: { id: true, userId: true, userName: true, score: true, lines: true, level: true },
-      });
-      if (personal) {
-        myEntry = personal;
-        myRank = await prisma.leaderboardScore.count({
-          where: { game: 'block-fall', score: { gt: personal.score } },
-        }) + 1;
-      }
-    }
-  }
 
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px 80px' }}>
@@ -72,197 +32,6 @@ export default async function LeaderboardPage() {
       {/* Kit games: one board each, linkable as /leaderboard#<game id> */}
       <KitLeaderboards userId={userId ?? null} />
 
-      <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '1.4rem', color: 'var(--text)', marginBottom: '12px' }}>Block Fall</h2>
-
-      {/* Game Tabs */}
-      <div style={{
-        display: 'flex',
-        gap: '8px',
-        marginBottom: '24px',
-        borderBottom: '1px solid var(--border)',
-        paddingBottom: '0',
-      }}>
-        {/* Active tab */}
-        <div style={{
-          padding: '8px 18px',
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          color: 'var(--accent)',
-          borderBottom: '2px solid var(--accent)',
-          marginBottom: '-1px',
-          cursor: 'default',
-        }}>
-          Block Fall
-        </div>
-      </div>
-
-      {/* Table */}
-      <div style={{
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: '12px',
-        overflow: 'hidden',
-      }}>
-        {/* Table Header */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '48px 1fr 110px 70px 70px',
-          padding: '10px 20px',
-          fontSize: '0.7rem',
-          fontWeight: 700,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: 'var(--text-muted)',
-          borderBottom: '1px solid var(--border)',
-        }}>
-          <span>#</span>
-          <span>Player</span>
-          <span style={{ textAlign: 'right' }}>Score</span>
-          <span style={{ textAlign: 'right' }}>Level</span>
-          <span style={{ textAlign: 'right' }}>Lines</span>
-        </div>
-
-        {scores.length === 0 ? (
-          <div style={{
-            padding: '60px 20px',
-            textAlign: 'center',
-            color: 'var(--text-muted)',
-            fontSize: '0.9rem',
-          }}>
-            No scores yet — play Block Fall to be the first on the board!
-          </div>
-        ) : (
-          scores.map((entry, i) => {
-            const rank = i + 1;
-            const isMe = entry.userId === userId;
-            return (
-              <div
-                key={entry.id}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '48px 1fr 110px 70px 70px',
-                  padding: '13px 20px',
-                  fontSize: '0.875rem',
-                  borderBottom: i < scores.length - 1 ? '1px solid var(--border)' : 'none',
-                  background: isMe ? 'rgba(232, 168, 56, 0.07)' : 'transparent',
-                  borderLeft: isMe ? '3px solid var(--accent)' : '3px solid transparent',
-                  alignItems: 'center',
-                  transition: 'background 0.15s',
-                }}
-              >
-                {/* Rank */}
-                <span style={{
-                  fontWeight: 700,
-                  fontSize: rank <= 3 ? '1rem' : '0.8rem',
-                  color: rank <= 3 ? 'var(--accent)' : 'var(--text-muted)',
-                }}>
-                  {MEDAL[rank] ?? `#${rank}`}
-                </span>
-
-                {/* Name */}
-                <span style={{
-                  fontWeight: isMe ? 700 : 500,
-                  color: isMe ? 'var(--accent)' : 'var(--text)',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {entry.userName}
-                  {isMe && (
-                    <span style={{
-                      marginLeft: '8px',
-                      fontSize: '0.65rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                      background: 'var(--accent)',
-                      color: '#0d0d18',
-                      borderRadius: '4px',
-                      padding: '1px 5px',
-                    }}>
-                      You
-                    </span>
-                  )}
-                </span>
-
-                {/* Score */}
-                <span style={{
-                  textAlign: 'right',
-                  fontWeight: 700,
-                  color: 'var(--accent)',
-                  fontVariantNumeric: 'tabular-nums',
-                }}>
-                  {formatScore(entry.score)}
-                </span>
-
-                {/* Level */}
-                <span style={{
-                  textAlign: 'right',
-                  color: 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                }}>
-                  {entry.level}
-                </span>
-
-                {/* Lines */}
-                <span style={{
-                  textAlign: 'right',
-                  color: 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                }}>
-                  {entry.lines}
-                </span>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* Current user's score if outside top 20 */}
-      {myEntry && myRank && (
-        <div style={{
-          marginTop: '16px',
-          padding: '14px 20px',
-          background: 'rgba(232, 168, 56, 0.07)',
-          border: '1px solid var(--accent)',
-          borderRadius: '10px',
-          display: 'grid',
-          gridTemplateColumns: '48px 1fr 110px 70px 70px',
-          fontSize: '0.875rem',
-          alignItems: 'center',
-          borderLeft: '3px solid var(--accent)',
-        }}>
-          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            #{myRank}
-          </span>
-          <span style={{ fontWeight: 700, color: 'var(--accent)' }}>
-            {myEntry.userName}
-            <span style={{
-              marginLeft: '8px',
-              fontSize: '0.65rem',
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              background: 'var(--accent)',
-              color: '#0d0d18',
-              borderRadius: '4px',
-              padding: '1px 5px',
-            }}>
-              You
-            </span>
-          </span>
-          <span style={{ textAlign: 'right', fontWeight: 700, color: 'var(--accent)' }}>
-            {formatScore(myEntry.score)}
-          </span>
-          <span style={{ textAlign: 'right', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-            {myEntry.level}
-          </span>
-          <span style={{ textAlign: 'right', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-            {myEntry.lines}
-          </span>
-        </div>
-      )}
-
       {/* CTA for signed-out users */}
       {!userId && (
         <p style={{
@@ -277,26 +46,6 @@ export default async function LeaderboardPage() {
           to save your scores and appear on the leaderboard.
         </p>
       )}
-
-      {/* Play Block Fall CTA */}
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <a
-          href="/games/block-fall"
-          style={{
-            display: 'inline-block',
-            background: 'var(--accent)',
-            color: '#0d0d18',
-            borderRadius: '8px',
-            fontWeight: 700,
-            fontSize: '0.9rem',
-            padding: '10px 24px',
-            textDecoration: 'none',
-            transition: 'opacity 0.2s',
-          }}
-        >
-          Play Block Fall →
-        </a>
-      </div>
 
     </div>
   );

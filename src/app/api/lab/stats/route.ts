@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { KIT_GAMES } from '@/lib/kitGames';
 import { isTester, runnerProblem } from '@/lib/lab';
 import { loadPlayRows } from '@/lib/playData';
-import { SITE_GAMES, addDays, dauSeries, summarize } from '@/lib/playStats';
+import { addDays, dauSeries, summarize } from '@/lib/playStats';
 import history from '../../../../../lab-data/game-history.json';
 
 // GET /api/lab/stats: the week in numbers, for the weekly newsletter.
@@ -27,8 +27,8 @@ export async function GET(request: Request) {
   const prev = { from: addDays(week.from, -days), to: addDays(week.from, -1), days };
   const since = new Date(`${week.from}T04:00:00Z`); // start of the window in Atlantic time (close enough for counts)
 
-  const title = (id: string) => KIT_GAMES.find((g) => g.id === id)?.title ?? SITE_GAMES[id] ?? id;
-  const ids = [...new Set([...KIT_GAMES.map((g) => g.id), ...Object.keys(SITE_GAMES), ...rows.map((r) => r.game)])];
+  const title = (id: string) => KIT_GAMES.find((g) => g.id === id)?.title ?? id;
+  const ids = [...new Set([...KIT_GAMES.map((g) => g.id), ...rows.map((r) => r.game)])];
   const games = ids
     .map((id) => ({ id, title: title(id), week: summarize(rows, playerDays, week, id), prev: summarize(rows, playerDays, prev, id), allTimePlays: rows.filter((r) => r.game === id).reduce((n, r) => n + r.plays, 0) }))
     .sort((a, b) => b.week.plays - a.week.plays || b.allTimePlays - a.allTimePlays);

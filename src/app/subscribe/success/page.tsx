@@ -84,7 +84,7 @@ export default function SubscribeSuccessPage() {
             Play today&apos;s games →
           </Link>
           <Link
-            href="/archive"
+            href="/leaderboard"
             style={{
               background:     "var(--surface)",
               color:          "var(--text)",
@@ -96,7 +96,7 @@ export default function SubscribeSuccessPage() {
               textDecoration: "none",
             }}
           >
-            Browse the archive
+            See the leaderboards
           </Link>
         </div>
       </div>

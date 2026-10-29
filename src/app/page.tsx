@@ -42,37 +42,7 @@ const KIT_CARDS = KIT_GAMES.map((g, i) => ({
   cta: "Play",
 }));
 
-const GAMES: GridGame[] = [
-  ...KIT_CARDS,
-  {
-    title: "Cryptogram",
-    description:
-      "Crack the daily code. Each number hides a letter — deduce the secret phrase using logic and letter banks.",
-    tag: "Code Breaker",
-    type: "word",
-    tags: ["daily"],
-    href: "/games/cryptogram",
-    accentColor: "#6c8eff",
-    bgGradient: "linear-gradient(135deg, #0a0e1a 0%, #141a30 50%, #0d1225 100%)",
-    icon: "🔢",
-    previewImage: "/images/previews/cryptogram.png",
-    featured: false,
-  },
-  {
-    title: "Block Fall",
-    description:
-      "Classic block-stacking arcade. Choose your visual style, clear lines, and beat your high score.",
-    tag: "Arcade",
-    type: "puzzle",
-    tags: ["classic"],
-    href: "/games/block-fall",
-    accentColor: "#00c8ff",
-    bgGradient: "linear-gradient(135deg, #0d1a2e 0%, #0a1420 50%, #060e1a 100%)",
-    icon: "🟦",
-    previewImage: "/images/previews/block-fall.png",
-    featured: false,
-  },
-];
+const GAMES: GridGame[] = KIT_CARDS;
 
 export default function Home() {
   const today = getTodayLabel();

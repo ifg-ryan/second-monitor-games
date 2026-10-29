@@ -12,7 +12,6 @@ import LabLogin from '../LabLogin';
 import LabNav from '@/components/lab/LabNav';
 import GamePicker from './GamePicker';
 import { StatsOverview, GameStats, readQuery, type StatsQuery } from './PlayStats';
-import { SITE_GAMES } from '@/lib/playStats';
 
 export const metadata: Metadata = { title: 'Games', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
@@ -48,13 +47,10 @@ export default async function GamesPage({ searchParams }: { searchParams: Promis
 }
 
 function Overview({ ids, q }: { ids: string[]; q: StatsQuery }) {
-  const games = [
-    ...ids.map((id) => {
-      const v = HISTORY[id].versions[0];
-      return { id, title: titleOf(id), linked: true, version: v ? `v${v.version}` : HISTORY[id].unreleased.length ? 'not shipped' : '' };
-    }),
-    ...Object.entries(SITE_GAMES).map(([id, title]) => ({ id, title, linked: false, version: 'older site game' })),
-  ];
+  const games = ids.map((id) => {
+    const v = HISTORY[id].versions[0];
+    return { id, title: titleOf(id), linked: true, version: v ? `v${v.version}` : HISTORY[id].unreleased.length ? 'not shipped' : '' };
+  });
   return <StatsOverview q={q} games={games} />;
 }
 

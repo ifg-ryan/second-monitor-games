@@ -2,7 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { kitGame } from '@/lib/kitGames';
 import { isTester } from '@/lib/lab';
-import { SITE_GAMES, atlanticDay } from '@/lib/playStats';
+import { atlanticDay } from '@/lib/playStats';
 
 // POST /api/kit/play  { id, game, guestId, seconds, runs }
 // Play stats: one row per play, created by the first beat and updated by later ones (about one a
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   } catch {
     return new Response('Invalid JSON', { status: 400 });
   }
-  const game = typeof b.game === 'string' && (kitGame(b.game) || b.game in SITE_GAMES) ? b.game : null;
+  const game = typeof b.game === 'string' && kitGame(b.game) ? b.game : null;
   const seconds = Math.min(MAX_SECONDS, Math.max(0, Math.floor(Number(b.seconds) || 0)));
   const runs = Math.min(1000, Math.max(0, Math.floor(Number(b.runs) || 0)));
   if (!game || !b.id || !PLAY_ID.test(b.id) || !b.guestId || !GUEST_ID.test(b.guestId)) return new Response('Bad play', { status: 400 });

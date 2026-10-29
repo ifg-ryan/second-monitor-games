@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
       // The original The Escape was replaced by the kit version. Keep old links working.
       { source: "/games/the-escape", destination: "/play/the-escape", permanent: true },
       { source: "/games/the-escape.html", destination: "/play/the-escape", permanent: true },
+      // Block Fall and Cryptogram (the site's last pre-kit games) and the archive that only held
+      // Block Fall were cut. Keep old links working.
+      { source: "/games/block-fall", destination: "/", permanent: true },
+      { source: "/games/block-fall.html", destination: "/", permanent: true },
+      { source: "/games/cryptogram", destination: "/", permanent: true },
+      { source: "/games/cryptogram.html", destination: "/", permanent: true },
+      { source: "/archive", destination: "/", permanent: true },
       { source: "/proto", destination: "/proto/index.html", permanent: false },
     ];
   },

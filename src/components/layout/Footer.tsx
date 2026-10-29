@@ -47,7 +47,6 @@ export default function Footer() {
                 {[
                   { label: "The Escape", href: "/play/the-escape"  },
                   { label: "Fiver",      href: "/play/fiver"       },
-                  { label: "Block Fall", href: "/games/block-fall" },
                 ].map((link) => (
                   <a
                     key={link.href}
@@ -77,7 +76,6 @@ export default function Footer() {
               <nav className="flex flex-col gap-2">
                 {[
                   { label: "About",   href: "/about"   },
-                  { label: "Archive", href: "/archive" },
                   { label: "Account", href: "/account" },
                   { label: "Terms",   href: "/terms"   },
                   { label: "Privacy", href: "/privacy" },

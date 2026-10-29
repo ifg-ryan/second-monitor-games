@@ -12,12 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority:        1.0,
     },
-    {
-      url:             `${base}/games/block-fall`,
-      lastModified:    now,
-      changeFrequency: "daily",
-      priority:        0.7,
-    },
     ...KIT_GAMES.map((g) => ({
       url:             `${base}/play/${g.id}`,
       lastModified:    now,

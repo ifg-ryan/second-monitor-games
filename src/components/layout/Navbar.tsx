@@ -63,19 +63,6 @@ export default function Navbar() {
               Today&apos;s Games
             </a>
             <a
-              href="/archive"
-              className="nav-link-muted"
-              style={{
-                borderRadius: "6px",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                padding: "8px 16px",
-                textDecoration: "none",
-              }}
-            >
-              Archive
-            </a>
-            <a
               href="/leaderboard"
               className="nav-link-muted"
               style={{
