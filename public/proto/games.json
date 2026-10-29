@@ -1141,5 +1141,64 @@
     "updated": "2026-10-29T03:32:25.522Z",
     "source": "5ff9cf3",
     "preview": "/images/previews/ready-set-grow.1b71b773.jpg"
+  },
+  "putt-party": {
+    "id": "putt-party",
+    "title": "Putt Party",
+    "blurb": "Nine holes of seaside mini golf: bank shots, a pond, a volcano and the windmill. Fewest strokes wins.",
+    "tag": "Sports",
+    "type": "sports",
+    "tags": [
+      "classic"
+    ],
+    "minutes": [
+      2,
+      4
+    ],
+    "accent": "#ff5d73",
+    "icon": "⛳",
+    "score": {
+      "label": "strokes",
+      "max": 70,
+      "lowerIsBetter": true
+    },
+    "achievements": [
+      {
+        "id": "full-round",
+        "name": "Front Nine",
+        "description": "Finish all nine holes"
+      },
+      {
+        "id": "ace",
+        "name": "Hole in One",
+        "description": "Sink a putt in one stroke"
+      },
+      {
+        "id": "bank-shot",
+        "name": "Bank Shot",
+        "description": "Sink a putt after 3 or more bounces"
+      },
+      {
+        "id": "under-par",
+        "name": "Under Par",
+        "description": "Finish a round under par"
+      },
+      {
+        "id": "clean-card",
+        "name": "Clean Card",
+        "description": "Make par or better on every hole",
+        "secret": true
+      },
+      {
+        "id": "ace-collector",
+        "name": "Ace Collector",
+        "description": "Make 10 holes in one in total",
+        "goal": 10
+      }
+    ],
+    "added": "2026-10-29T14:43:08.338Z",
+    "updated": "2026-10-29T14:43:08.338Z",
+    "source": "54d2926",
+    "preview": "/images/previews/putt-party.e275c958.jpg"
   }
 }
