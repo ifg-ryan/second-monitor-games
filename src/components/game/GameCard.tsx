@@ -13,14 +13,18 @@ interface GameCardProps {
   minutes?: [number, number];
   isNew?: boolean;
   featured?: boolean;
+  /** Opens the expanded card. */
+  onOpen?: () => void;
 }
 
-export default function GameCard({ title, tag, href, stripe, previewImage, number, minutes, isNew = false }: GameCardProps) {
+export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen }: GameCardProps) {
   return (
-    <a
-      href={href}
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-haspopup="dialog"
       className="smg-card"
-      style={{ display: "flex", flexDirection: "column", textDecoration: "none", color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
+      style={{ display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", cursor: "pointer", border: 0, padding: 0, color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
     >
       <div style={{ position: "relative", aspectRatio: "16 / 10", background: "var(--ink-deep)", overflow: "hidden" }}>
         {previewImage && (
@@ -53,6 +57,6 @@ export default function GameCard({ title, tag, href, stripe, previewImage, numbe
           {tag}{minutes ? ` · ${minutes[0]}–${minutes[1]} min` : ""}
         </span>
       </div>
-    </a>
+    </button>
   );
 }

@@ -1,48 +1,6 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import AccountButton from "@/components/layout/AccountButton";
-import { KIT_GAMES, kitUrl } from "@/lib/kitGames";
-
-const NEW_DAYS = 30;
-
-// Ticker: the newest games, then the daily ones, then the game count.
-function tickerItems() {
-  const now = Date.now();
-  const fresh = KIT_GAMES.filter((g) => g.added && now - Date.parse(g.added) < NEW_DAYS * 86400000).slice(0, 5);
-  const daily = KIT_GAMES.filter((g) => g.tags?.includes("daily"));
-  return [
-    ...fresh.map((g) => ({ label: "New", title: g.title, href: kitUrl(g.id) })),
-    ...daily.map((g) => ({ label: "Daily", title: g.title, href: kitUrl(g.id) })),
-    { label: `${KIT_GAMES.length} games`, title: "on the board", href: "/" },
-  ];
-}
-
-function Ticker() {
-  const items = tickerItems();
-  const run = (hidden: boolean) => (
-    <span aria-hidden={hidden || undefined} style={{ display: "inline-flex", alignItems: "center" }}>
-      {items.map((it, i) => (
-        <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
-          <a href={it.href} tabIndex={hidden ? -1 : undefined} style={{ color: "var(--text)", textDecoration: "none", padding: "0 18px" }}>
-            <span style={{ color: "var(--accent)" }}>{it.label}:</span> {it.title}
-          </a>
-          <span aria-hidden="true" style={{ color: "var(--accent-red)" }}>◆</span>
-        </span>
-      ))}
-    </span>
-  );
-  return (
-    <div
-      className="smg-ticker font-label"
-      style={{ background: "var(--ink-deep)", borderBottom: "1px solid var(--border)", fontSize: "15px", padding: "7px 0", overflow: "hidden", whiteSpace: "nowrap" }}
-    >
-      <div className="smg-ticker-track">
-        {run(false)}
-        {run(true)}
-      </div>
-    </div>
-  );
-}
 
 const navLink: React.CSSProperties = { color: "var(--text)", textDecoration: "none", padding: "10px 14px" };
 
@@ -55,8 +13,6 @@ export default function Navbar() {
         <div style={{ flex: 1, background: "var(--accent)" }} />
         <div style={{ flex: 1, background: "var(--accent-blue)" }} />
       </div>
-
-      <Ticker />
 
       <header style={{ borderBottom: "1px solid var(--border)", background: "var(--bg)" }}>
         <div className="max-w-7xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">

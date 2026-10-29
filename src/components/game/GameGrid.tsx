@@ -6,9 +6,10 @@
 
 import { useEffect, useState } from "react";
 import GameCard from "@/components/game/GameCard";
+import GameDetail, { type DetailGame } from "@/components/game/GameDetail";
 import { GAME_TYPES, GAME_TAGS } from "@/lib/gameTypes";
 
-export type GridGame = React.ComponentProps<typeof GameCard> & { type?: string; tags?: string[] };
+export type GridGame = Omit<React.ComponentProps<typeof GameCard>, "onOpen"> & DetailGame & { type?: string; tags?: string[] };
 
 type Filter = { kind: "all" } | { kind: "type" | "tag"; id: string };
 
@@ -16,6 +17,7 @@ const same = (a: Filter, b: Filter) => a.kind === b.kind && (a.kind === "all" ||
 
 export default function GameGrid({ games }: { games: GridGame[] }) {
   const [filter, setFilter] = useState<Filter>({ kind: "all" });
+  const [open, setOpen] = useState<GridGame | null>(null);
 
   const types = GAME_TYPES.map((t) => ({ ...t, count: games.filter((g) => g.type === t.id).length })).filter((t) => t.count);
   const tags = GAME_TAGS.map((t) => ({ ...t, count: games.filter((g) => g.tags?.includes(t.id)).length })).filter((t) => t.count);
@@ -77,9 +79,11 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "20px" }}>
         {shown.map((game) => (
-          <GameCard key={game.href} {...game} />
+          <GameCard key={game.href} {...game} onOpen={() => setOpen(game)} />
         ))}
       </div>
+
+      {open && <GameDetail key={open.id} game={open} onClose={() => setOpen(null)} />}
     </div>
   );
 }

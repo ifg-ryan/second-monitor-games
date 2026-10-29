@@ -1,38 +1,39 @@
 // Leaderboards for every Claude Games kit game (server component).
 // Each board has an anchor (#<game id>) so games can link straight to it.
 import { prisma } from '@/lib/prisma';
-import { KIT_GAMES, kitUrl } from '@/lib/kitGames';
+import { KIT_GAMES, kitUrl, kitBoards } from '@/lib/kitGames';
 
 
 export default async function KitLeaderboards({ userId }: { userId: string | null }) {
   const boards = await Promise.all(
-    KIT_GAMES.map(async (game) => {
+    // Games with several leaderboards (Putt Party's courses) get one board each.
+    KIT_GAMES.flatMap((game) => kitBoards(game).map((b, i) => ({ game, board: b, anchor: i === 0 ? game.id : b.key.replace(':', '-') }))).map(async ({ game, board, anchor }) => {
       try {
         const rows = await prisma.kitScore.findMany({
-          where: { game: game.id },
+          where: { game: board.key },
           orderBy: [{ score: game.score.lowerIsBetter ? 'asc' : 'desc' }, { updatedAt: 'asc' }],
           take: 10,
           select: { playerId: true, name: true, score: true, isGuest: true },
         });
-        return { game, rows, ok: true };
+        return { game, board, anchor, rows, ok: true };
       } catch {
-        return { game, rows: [], ok: false };
+        return { game, board, anchor, rows: [], ok: false };
       }
     }),
   );
 
   return (
     <div style={{ display: 'grid', gap: '20px', marginBottom: '48px' }}>
-      {boards.map(({ game, rows, ok }) => (
-        <section key={game.id} id={game.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', overflow: 'hidden', scrollMarginTop: '80px' }}>
+      {boards.map(({ game, board, anchor, rows, ok }) => (
+        <section key={board.key} id={anchor} style={{ background: 'var(--surface)', border: '1px solid var(--border)', overflow: 'hidden', scrollMarginTop: '80px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--text)' }}>{game.title}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--text)' }}>{game.title}{board.name && <span style={{ color: 'var(--accent)' }}> · {board.name}</span>}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Best {game.score.label} · {game.tag}</div>
               </div>
             </div>
-            <a href={kitUrl(game.id)} style={{ background: 'var(--accent)', color: 'var(--bg)', fontWeight: 700, fontSize: '0.8rem', padding: '7px 14px', textDecoration: 'none' }}>
+            <a href={board.id ? `${kitUrl(game.id)}?board=${board.id}` : kitUrl(game.id)} style={{ background: 'var(--accent)', color: 'var(--bg)', fontWeight: 700, fontSize: '0.8rem', padding: '7px 14px', textDecoration: 'none' }}>
               Play →
             </a>
           </div>

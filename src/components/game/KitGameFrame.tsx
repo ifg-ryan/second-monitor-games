@@ -8,11 +8,14 @@ export default function KitGameFrame({ src, title }: { src: string; title: strin
   useEffect(() => {
     const frame = ref.current;
     if (!frame) return;
+    // Pass the page's query on to the game (e.g. ?board=pirate opens that Putt Party course).
+    const q = window.location.search;
+    if (q && !frame.src.includes('?')) frame.src = src + q;
     const focus = () => frame.contentWindow?.focus();
     frame.addEventListener('load', focus);
     focus();
     return () => frame.removeEventListener('load', focus);
-  }, []);
+  }, [src]);
   return (
     <iframe
       ref={ref}

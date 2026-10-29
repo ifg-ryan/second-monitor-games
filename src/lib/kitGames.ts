@@ -11,6 +11,11 @@ export interface KitAchievement {
   secret?: boolean;
 }
 
+export interface KitBoard {
+  id: string;
+  name: string;
+}
+
 export interface KitGame {
   id: string;
   title: string;
@@ -28,7 +33,8 @@ export interface KitGame {
   source?: string;
   /** First shipped. Sorts the front page, so re-shipping a fix doesn't reorder it. */
   added?: string;
-  score: { label: string; max: number; lowerIsBetter?: boolean };
+  /** `boards`: separate leaderboards inside one game (Putt Party's courses). Scores are stored under "<game id>:<board id>". */
+  score: { label: string; max: number; lowerIsBetter?: boolean; boards?: KitBoard[] };
   achievements: KitAchievement[];
 }
 
@@ -53,3 +59,26 @@ export function kitUrl(id: string): string {
 export function kitFile(id: string): string {
   return `/proto/${id}.html`;
 }
+
+/** One leaderboard: its storage key and, for games with several, its name. */
+export interface BoardRef {
+  key: string;
+  name: string | null;
+  id: string | null;
+}
+
+/** Every leaderboard a game has: one per board, or the single game board. */
+export function kitBoards(g: KitGame): BoardRef[] {
+  const boards = g.score.boards;
+  return boards?.length ? boards.map((b) => ({ key: `${g.id}:${b.id}`, name: b.name, id: b.id })) : [{ key: g.id, name: null, id: null }];
+}
+
+/** Storage key for a score, or null when the board doesn't fit the game (missing, unknown, or given to a one-board game). */
+export function boardKey(g: KitGame, board: string | null | undefined): string | null {
+  const boards = g.score.boards;
+  if (!boards?.length) return board ? null : g.id;
+  return board && boards.some((b) => b.id === board) ? `${g.id}:${board}` : null;
+}
+
+/** The game id a stored score key belongs to. */
+export const gameOfKey = (key: string) => key.split(':')[0];

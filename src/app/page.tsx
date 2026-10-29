@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import GameGrid, { type GridGame } from "@/components/game/GameGrid";
 import Image from "next/image";
-import { KIT_GAMES, kitUrl, type KitGame } from "@/lib/kitGames";
+import { KIT_GAMES, kitUrl, kitBoards, type KitGame } from "@/lib/kitGames";
+import TopFive, { type ScoreRow } from "@/components/game/TopFive";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -33,6 +34,7 @@ const NEW_DAYS = 30;
 const NEW_MAX = 4;
 const isNew = (g: KitGame, i: number) => i > 0 && i <= NEW_MAX && !!g.added && Date.now() - Date.parse(g.added) < NEW_DAYS * 86400000;
 const GAMES: GridGame[] = KIT_GAMES.map((g, i) => ({
+  id: g.id,
   title: g.title,
   description: g.blurb,
   tag: g.tag,
@@ -45,21 +47,27 @@ const GAMES: GridGame[] = KIT_GAMES.map((g, i) => ({
   minutes: g.minutes,
   featured: i === 0,
   isNew: isNew(g, i),
+  boards: kitBoards(g).map((b) => ({ id: b.id, name: b.name })),
 }));
 
 const FEATURED = KIT_GAMES[0];
 
-async function topFive(game: KitGame) {
-  try {
-    return await prisma.kitScore.findMany({
-      where: { game: game.id },
-      orderBy: [{ score: game.score.lowerIsBetter ? "asc" : "desc" }, { updatedAt: "asc" }],
-      take: 5,
-      select: { playerId: true, name: true, score: true },
-    });
-  } catch {
-    return [];
-  }
+/** The top 5 of each of a game's leaderboards, keyed by board id ("" for a one-board game). */
+async function topFives(game: KitGame): Promise<Record<string, ScoreRow[]>> {
+  const out: Record<string, ScoreRow[]> = {};
+  await Promise.all(kitBoards(game).map(async (b) => {
+    try {
+      out[b.id ?? ""] = await prisma.kitScore.findMany({
+        where: { game: b.key },
+        orderBy: [{ score: game.score.lowerIsBetter ? "asc" : "desc" }, { updatedAt: "asc" }],
+        take: 5,
+        select: { name: true, score: true },
+      });
+    } catch {
+      out[b.id ?? ""] = [];
+    }
+  }));
+  return out;
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -72,7 +80,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 export default async function Home() {
-  const rows = FEATURED ? await topFive(FEATURED) : [];
+  const tops = FEATURED ? await topFives(FEATURED) : {};
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -116,24 +124,7 @@ export default async function Home() {
 
           {/* Featured game's leaderboard */}
           <aside style={{ flex: "1 1 320px", background: "var(--surface)", padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
-            <h2 className="font-display" style={{ margin: 0, fontSize: "30px" }}>
-              Top 5 <span style={{ color: "var(--accent)" }}>All time</span>
-            </h2>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {rows.length === 0 ? (
-                <p className="font-label" style={{ margin: 0, padding: "16px 0", borderTop: "1px solid var(--border)", fontSize: "18px", color: "var(--text-muted)" }}>
-                  Board is open. Post the first score.
-                </p>
-              ) : (
-                rows.map((r, i) => (
-                  <div key={r.playerId} style={{ display: "grid", gridTemplateColumns: "40px minmax(0, 1fr) auto", gap: "12px", alignItems: "center", padding: "12px 0", borderTop: "1px solid var(--border)" }}>
-                    <span className="font-display" style={{ fontSize: "24px", color: i === 0 ? "var(--accent)" : "var(--text-muted)" }}>{i + 1}</span>
-                    <span className="font-label" style={{ fontSize: "19px", fontWeight: 600, letterSpacing: "0.04em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.name}</span>
-                    <span className="font-display" style={{ fontSize: "22px", color: "var(--accent)", fontVariantNumeric: "tabular-nums" }}>{r.score.toLocaleString("en-US")}</span>
-                  </div>
-                ))
-              )}
-            </div>
+            <TopFive game={FEATURED.id} boards={GAMES[0].boards} initial={tops} />
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px", marginTop: "auto" }}>
               {FEATURED.minutes && <Stat label="Length" value={`${FEATURED.minutes[0]}–${FEATURED.minutes[1]} min`} />}
               <Stat label="Type" value={FEATURED.tag} />

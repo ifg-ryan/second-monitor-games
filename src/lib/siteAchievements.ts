@@ -1,6 +1,6 @@
 // Site-wide achievements, earned across all kit games. Stored with game "site".
 import { prisma } from '@/lib/prisma';
-import { KIT_GAMES } from '@/lib/kitGames';
+import { KIT_GAMES, gameOfKey } from '@/lib/kitGames';
 
 export const SITE_ACHIEVEMENTS = [
   { id: 'first-score', name: 'On the Board', description: 'Post your first score to a leaderboard' },
@@ -13,7 +13,7 @@ export const SITE_ACHIEVEMENTS = [
 /** Grant site achievements after a signed-in player posts a score. Returns newly unlocked ids. */
 export async function grantSiteAchievements(userId: string, rank: number): Promise<string[]> {
   const rows = await prisma.kitScore.findMany({ where: { playerId: userId }, select: { game: true, plays: true } });
-  const games = new Set(rows.map((r) => r.game)).size;
+  const games = new Set(rows.map((r) => gameOfKey(r.game))).size;
   const plays = rows.reduce((n, r) => n + r.plays, 0);
   const earned: string[] = ['first-score'];
   if (games >= 3) earned.push('explorer');

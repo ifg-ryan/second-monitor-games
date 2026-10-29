@@ -15,7 +15,7 @@
   --text:         #f0eee8;
   --text-muted:   #8aaa90;
   --text-dim:     #8aaa90;
-  --nav-h:        114px; /* stripe + ticker + header, see Navbar */
+  --nav-h:        77px; /* stripe + header, see Navbar */
   color-scheme: dark;
 }
 
@@ -79,11 +79,6 @@ body {
 .font-display { font-family: var(--font-display), Impact, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; }
 .font-label   { font-family: var(--font-label), sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 
-@keyframes smg-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.smg-ticker-track { display: inline-flex; animation: smg-ticker 60s linear infinite; }
-.smg-ticker:hover .smg-ticker-track { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .smg-ticker-track { animation: none; } }
-
 .smg-card { transition: transform 0.15s ease, background 0.15s ease; }
 .smg-card:hover { transform: translateY(-3px); background: var(--surface-2); }
 .smg-card img { transition: opacity 0.15s ease; }
@@ -95,3 +90,6 @@ body {
 .smg-tab { transition: color 0.15s ease, border-color 0.15s ease; }
 .smg-tab:hover { color: var(--accent); }
 .smg-tab:focus-visible, .smg-play:focus-visible, .smg-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.smg-detail::backdrop { background: rgba(5, 10, 7, 0.82); }
+.smg-detail { margin: auto; }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { kitGame } from '@/lib/kitGames';
+import { kitGame, boardKey } from '@/lib/kitGames';
 import { kitPlayer, sanitizeName } from '@/lib/kitPlayer';
 import { containsBadWord } from '@/lib/wordFilter';
 import { grantSiteAchievements } from '@/lib/siteAchievements';
@@ -24,11 +24,13 @@ async function rankOf(game: string, score: number, lowerIsBetter: boolean): Prom
   return (await prisma.kitScore.count({ where: { game, score: lowerIsBetter ? { lt: score } : { gt: score } } })) + 1;
 }
 
-// GET /api/kit/score?game=range-rush&limit=10[&guestId=...]
+// GET /api/kit/score?game=range-rush&limit=10[&board=pirate][&guestId=...]  (board: games with several leaderboards)
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const game = kitGame(params.get('game'));
   if (!game) return NextResponse.json({ error: 'Unknown game' }, { status: 400 });
+  const key = boardKey(game, params.get('board'));
+  if (!key) return NextResponse.json({ error: 'Unknown board' }, { status: 400 });
   const limit = Math.min(50, Math.max(1, Number(params.get('limit')) || 10));
   const lower = !!game.score.lowerIsBetter;
   try {
@@ -36,7 +38,7 @@ export async function GET(request: Request) {
     const guestId = params.get('guestId');
     const myId = player?.userId ?? (guestId && GUEST_ID.test(guestId) ? `guest:${guestId}` : null);
     const rows = await prisma.kitScore.findMany({
-      where: { game: game.id },
+      where: { game: key },
       orderBy: [{ score: lower ? 'asc' : 'desc' }, { updatedAt: 'asc' }],
       take: limit,
       select: { playerId: true, name: true, score: true },
@@ -44,18 +46,18 @@ export async function GET(request: Request) {
     const top = rows.map((r) => ({ name: r.name, score: r.score, ...(r.playerId === myId ? { me: true } : {}) }));
     let me: { rank: number; score: number } | undefined;
     if (myId) {
-      const mine = await prisma.kitScore.findUnique({ where: { game_playerId: { game: game.id, playerId: myId } }, select: { score: true } });
-      if (mine) me = { rank: await rankOf(game.id, mine.score, lower), score: mine.score };
+      const mine = await prisma.kitScore.findUnique({ where: { game_playerId: { game: key, playerId: myId } }, select: { score: true } });
+      if (mine) me = { rank: await rankOf(key, mine.score, lower), score: mine.score };
     }
-    return NextResponse.json({ top, me, total: await prisma.kitScore.count({ where: { game: game.id } }) });
+    return NextResponse.json({ top, me, total: await prisma.kitScore.count({ where: { game: key } }) });
   } catch {
     return unavailable();
   }
 }
 
-// POST /api/kit/score  { game, score, name?, guestId? }
+// POST /api/kit/score  { game, board?, score, name?, guestId? }
 export async function POST(request: Request) {
-  let body: { game?: string; score?: number; name?: string; guestId?: string };
+  let body: { game?: string; board?: string; score?: number; name?: string; guestId?: string };
   try {
     body = await request.json();
   } catch {
@@ -63,6 +65,8 @@ export async function POST(request: Request) {
   }
   const game = kitGame(body.game);
   if (!game) return NextResponse.json({ error: 'Unknown game' }, { status: 400 });
+  const key = boardKey(game, body.board);
+  if (!key) return NextResponse.json({ error: 'Unknown board' }, { status: 400 });
   const score = Number(body.score);
   if (!Number.isInteger(score) || score < 0 || score > game.score.max) return NextResponse.json({ error: 'Invalid score' }, { status: 400 });
 
@@ -83,16 +87,16 @@ export async function POST(request: Request) {
 
   const lower = !!game.score.lowerIsBetter;
   try {
-    const existing = await prisma.kitScore.findUnique({ where: { game_playerId: { game: game.id, playerId } }, select: { score: true } });
+    const existing = await prisma.kitScore.findUnique({ where: { game_playerId: { game: key, playerId } }, select: { score: true } });
     const better = !existing || (lower ? score < existing.score : score > existing.score);
     const best = better ? score : existing!.score;
     await prisma.kitScore.upsert({
-      where: { game_playerId: { game: game.id, playerId } },
-      create: { game: game.id, playerId, name, score, isGuest: !player },
+      where: { game_playerId: { game: key, playerId } },
+      create: { game: key, playerId, name, score, isGuest: !player },
       update: { name, plays: { increment: 1 }, ...(better ? { score } : {}) },
     });
-    const rank = await rankOf(game.id, best, lower);
-    const total = await prisma.kitScore.count({ where: { game: game.id } });
+    const rank = await rankOf(key, best, lower);
+    const total = await prisma.kitScore.count({ where: { game: key } });
     const site = player ? await grantSiteAchievements(player.userId, rank).catch(() => []) : [];
     return NextResponse.json({ ok: true, best, newBest: better, rank, total, siteAchievements: site });
   } catch {
