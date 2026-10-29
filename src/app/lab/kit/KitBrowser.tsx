@@ -1,7 +1,9 @@
 'use client';
-// Search and browse the kit: pieces by category, starter templates, art looks, and which games use what.
+// Search and browse the kit: pieces by category, starter templates, modules and which games use what,
+// and the Art section (looks and the art library, as pictures). ?tab=art opens on Art.
 import { useMemo, useState } from 'react';
 import LabNav from '@/components/lab/LabNav';
+import ArtBrowser, { type ArtLibrary, type ArtLook } from './ArtBrowser';
 
 interface Piece {
   id: string;
@@ -24,13 +26,24 @@ export interface KitCatalog {
   pieces: Piece[];
   games: { id: string; name: string; uses: string[] }[];
   templates: { id: string; what: string }[];
-  looks: string[];
+  looks: ArtLook[];
+  art: ArtLibrary;
 }
 
 const CANDIDATE = { id: 'candidate', name: 'In a game, could join the kit', blurb: 'Systems built inside one game that a second game could reuse.' };
 
-export default function KitBrowser({ catalog, initialQuery = '' }: { catalog: KitCatalog; initialQuery?: string }) {
+type Tab = 'pieces' | 'art';
+
+export default function KitBrowser({ catalog, initialQuery = '', initialTab = 'pieces', gameTitles }: { catalog: KitCatalog; initialQuery?: string; initialTab?: Tab; gameTitles: Record<string, string> }) {
   const [q, setQ] = useState(initialQuery);
+  const [tab, setTabState] = useState<Tab>(initialTab);
+  const setTab = (t: Tab) => {
+    setTabState(t);
+    const url = new URL(location.href);
+    if (t === 'art') url.searchParams.set('tab', 'art');
+    else url.searchParams.delete('tab');
+    history.replaceState(null, '', url);
+  };
   const [cat, setCat] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
   const cats = useMemo(() => [...catalog.categories, ...(catalog.categories.some((c) => c.id === CANDIDATE.id) ? [] : [CANDIDATE])].filter((c) => catalog.pieces.some((p) => p.category === c.id)), [catalog]);
@@ -43,15 +56,24 @@ export default function KitBrowser({ catalog, initialQuery = '' }: { catalog: Ki
     <div>
       <LabNav />
       <p style={{ margin: '0 0 18px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-        {catalog.totals.pieces} pieces in {catalog.totals.modules} modules, {catalog.templates.length} starter templates, {catalog.looks.length} art looks. Updated {catalog.generated}.
+        {catalog.totals.pieces} pieces in {catalog.totals.modules} modules, {catalog.templates.length} starter templates, {catalog.looks.length} art looks, {catalog.art.packs.length} art packs. Updated {catalog.generated}.
       </p>
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '14px' }}>
+        {(['pieces', 'art'] as const).map((t) => (
+          <button key={t} type="button" onClick={() => setTab(t)} style={{ border: `1px solid ${tab === t ? 'var(--accent)' : 'var(--border)'}`, background: tab === t ? 'var(--accent)' : 'transparent', color: tab === t ? 'var(--bg)' : 'var(--text-dim)', borderRadius: '8px', padding: '7px 18px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}>
+            {t === 'pieces' ? 'Pieces' : 'Art'}
+          </button>
+        ))}
+      </div>
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search: waves, deck, camera, tower defense, poker…"
+        placeholder={tab === 'art' ? 'Search: pixel, cards, noir, Kenney, golf…' : 'Search: waves, deck, camera, tower defense, poker…'}
         autoFocus
         style={{ width: '100%', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', font: 'inherit', fontSize: '1rem', marginBottom: '12px' }}
       />
+      {tab === 'art' && <ArtBrowser looks={catalog.looks} art={catalog.art} query={q} gameTitles={gameTitles} />}
+      {tab === 'pieces' && (<>
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
         <Chip on={!cat} onClick={() => setCat(null)}>All</Chip>
         {cats.map((c) => (
@@ -99,12 +121,6 @@ export default function KitBrowser({ catalog, initialQuery = '' }: { catalog: Ki
         ))}
       </div>
 
-      <h2 style={h2}>Art looks</h2>
-      <p style={{ margin: '0 0 10px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Art directions drawn in code. Name one in a GDD to use it; every game should pick a look no other game uses.</p>
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        {catalog.looks.map((l) => <span key={l} style={{ ...card, padding: '6px 10px', fontSize: '0.85rem' }}>{l}</span>)}
-      </div>
-
       <h2 style={h2}>Modules</h2>
       <div style={grid}>
         {catalog.modules.map((m) => (
@@ -115,9 +131,10 @@ export default function KitBrowser({ catalog, initialQuery = '' }: { catalog: Ki
       <h2 style={h2}>Games and what they use</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {catalog.games.map((g) => (
-          <div key={g.id} style={{ fontSize: '0.85rem' }}><b>{g.name}</b> <span style={{ color: 'var(--text-muted)' }}>{g.uses.join(' · ')}</span></div>
+          <div key={g.id} style={{ fontSize: '0.85rem' }}><b>{gameTitles[g.id] ?? g.name}</b> <span style={{ color: 'var(--text-muted)' }}>{g.uses.join(' · ')}</span></div>
         ))}
       </div>
+      </>)}
     </div>
   );
 }

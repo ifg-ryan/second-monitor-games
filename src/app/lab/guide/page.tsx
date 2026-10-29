@@ -143,7 +143,8 @@ export default function LabGuide() {
       <ul style={ul}>
         <li><b>Search</b> by what you need (&quot;waves&quot;, &quot;deck&quot;, &quot;tower defense&quot;) or filter by category.</li>
         <li><b>Click a piece</b> for when to use it, what it&apos;s good for, which games use it, and a short code example.</li>
-        <li>Below the pieces: the <b>starter templates</b>, the <b>art looks</b>, the <b>modules</b>, and which modules each game uses (the Games tab has the full breakdown per game).</li>
+        <li>Below the pieces: the <b>starter templates</b>, the <b>modules</b>, and which modules each game uses (the Games tab has the full breakdown per game).</li>
+        <li><b>Art</b> shows every art look and art pack as pictures. Pick Looks or a library style (pixel, retro, illustrated...), click a card for a large view with its colours, type and the games using it, and use the arrow keys to flip through.</li>
         <li><b>Still inside a game</b> lists systems built for one game that the next game could pull into the Kit.</li>
       </ul>
       <P>Writing a GDD with the Kit in mind (naming a look, or a system the Kit already has) makes builds faster and cheaper. The Kit list updates every time a game ships.</P>
