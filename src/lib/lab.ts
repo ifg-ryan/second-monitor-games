@@ -84,7 +84,7 @@ export const RUNNER_AUDIENCE = 'secondmonitorgames-lab';
 const githubKeys = createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'));
 
 /** Why a runner request was refused (shown in the run log), or null when it is the real runner. */
-export async function runnerProblem(request: Request): Promise<string | null> {
+export async function runnerProblem(request: Request, workflows: string[] = ['feedback.yml']): Promise<string | null> {
   const got = (request.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '').trim();
   if (!got) return 'no Authorization header reached the site';
   if (got.split('.').length !== 3) {
@@ -96,7 +96,8 @@ export async function runnerProblem(request: Request): Promise<string | null> {
   try {
     const { payload } = await jwtVerify(got, githubKeys, { issuer: 'https://token.actions.githubusercontent.com', audience: RUNNER_AUDIENCE });
     if (payload.repository !== repo) return `token is for ${payload.repository}, not ${repo}`;
-    if (typeof payload.workflow_ref !== 'string' || !payload.workflow_ref.startsWith(`${repo}/.github/workflows/feedback.yml@refs/heads/main`)) return `token is for workflow ${payload.workflow_ref}`;
+    const ref = payload.workflow_ref;
+    if (typeof ref !== 'string' || !workflows.some((w) => ref.startsWith(`${repo}/.github/workflows/${w}@refs/heads/main`))) return `token is for workflow ${ref}`;
     return null;
   } catch (e) {
     return `GitHub token rejected: ${(e as Error).message}`;

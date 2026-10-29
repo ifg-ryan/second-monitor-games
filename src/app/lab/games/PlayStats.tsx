@@ -1,9 +1,9 @@
 // Play stats on the lab's Games page: plays, play time, daily players and four health numbers,
 // per game and site-wide. Data: the Play table (written by /api/kit/play), read with four groupBy
 // queries and summed in src/lib/playStats.ts. Lab testers' plays are left out unless ?lab=1.
-import { prisma } from '@/lib/prisma';
+import { loadPlayRows } from '@/lib/playData';
 import StatsTable from './StatsTable';
-import { PERIODS, QUICK_QUIT_SECONDS, atlanticDay, dauSeries, duration, pct, periodRange, summarize, type DayRow, type PeriodId, type PlayerDay, type Stats } from '@/lib/playStats';
+import { PERIODS, QUICK_QUIT_SECONDS, dauSeries, duration, pct, periodRange, summarize, type DayRow, type PeriodId, type PlayerDay, type Stats } from '@/lib/playStats';
 
 export interface StatsQuery {
   period: PeriodId;
@@ -18,25 +18,10 @@ export function readQuery(p: { period?: string; lab?: string }): StatsQuery {
 type Data = { rows: DayRow[]; playerDays: PlayerDay[]; today: string; range: ReturnType<typeof periodRange> };
 
 export async function loadStats(q: StatsQuery): Promise<Data | null> {
-  const where = q.lab ? {} : { lab: false };
-  try {
-    const [all, quick, done, playerDays] = await Promise.all([
-      prisma.play.groupBy({ by: ['game', 'day'], where, _count: { _all: true }, _sum: { seconds: true } }),
-      prisma.play.groupBy({ by: ['game', 'day'], where: { ...where, seconds: { lt: QUICK_QUIT_SECONDS } }, _count: { _all: true } }),
-      prisma.play.groupBy({ by: ['game', 'day'], where: { ...where, runs: { gt: 0 } }, _count: { _all: true } }),
-      prisma.play.groupBy({ by: ['game', 'playerId', 'day'], where }),
-    ]);
-    type Count = { game: string; day: string; _count: { _all: number } };
-    const key = (r: { game: string; day: string }) => `${r.game}|${r.day}`;
-    const quickBy = new Map((quick as Count[]).map((r) => [key(r), r._count._all]));
-    const doneBy = new Map((done as Count[]).map((r) => [key(r), r._count._all]));
-    const rows: DayRow[] = (all as (Count & { _sum: { seconds: number | null } })[]).map((r) => ({ game: r.game, day: r.day, plays: r._count._all, seconds: r._sum.seconds ?? 0, quick: quickBy.get(key(r)) ?? 0, done: doneBy.get(key(r)) ?? 0 }));
-    const today = atlanticDay();
-    const first = rows.reduce<string | null>((m, r) => (m === null || r.day < m ? r.day : m), null);
-    return { rows, playerDays: playerDays as PlayerDay[], today, range: periodRange(q.period, today, first) };
-  } catch {
-    return null; // table not created yet (it appears on the next production deploy)
-  }
+  const data = await loadPlayRows(q.lab);
+  if (!data) return null; // table not created yet (it appears on the next production deploy)
+  const first = data.rows.reduce<string | null>((m, r) => (m === null || r.day < m ? r.day : m), null);
+  return { ...data, range: periodRange(q.period, data.today, first) };
 }
 
 /** Period and lab toggles, as links that keep the picked game. */
