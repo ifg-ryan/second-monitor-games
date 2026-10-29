@@ -1160,7 +1160,25 @@
     "score": {
       "label": "strokes",
       "max": 70,
-      "lowerIsBetter": true
+      "lowerIsBetter": true,
+      "boards": [
+        {
+          "id": "seaside",
+          "name": "Seaside Classic"
+        },
+        {
+          "id": "pirate",
+          "name": "Pirate Cove"
+        },
+        {
+          "id": "cosmic",
+          "name": "Cosmic Crater"
+        },
+        {
+          "id": "candy",
+          "name": "Candy Carnival"
+        }
+      ]
     },
     "achievements": [
       {
@@ -1197,8 +1215,8 @@
       }
     ],
     "added": "2026-10-29T14:43:08.338Z",
-    "updated": "2026-10-29T16:58:36.533Z",
-    "source": "8d82fed",
+    "updated": "2026-10-29T19:37:02.096Z",
+    "source": "322bec8",
     "preview": "/images/previews/putt-party.e275c958.jpg"
   }
 }
