@@ -4,12 +4,12 @@ import { checkUsername, isBannedName } from '../usernames';
 const BANNED = [
   'fuck', 'FuckYou', 'f_u_c_k', 'fuuuuck', 'fvck_off', 'b1tch', 'BigDick', 'big_dick', 'b1gd1ck', 'xXslutXx', 'shit_head', 'shithead', 'xXshitXx',
   'nigger', 'n1gg3r', 'faggot', 'retard', 'kike', 'cunt99', 'pornstar', 'whore', 'Hitler88', 'kkk_member', 'pussy', 'penis',
-  'cock', 'dickhead', 'asshole', 'a55hole', 'wanker',
+  'cock', 'dickhead', 'asshole', 'a55hole', 'wanker', 'kunt', 'k_u_n_t', 'NaziFan',
 ];
 const FINE = [
   'Ryan', 'Ryan_F', 'PEI_Golfer', 'classic', 'Classic_Gamer', 'titan', 'TitanFall', 'therapist', 'Peacock', 'Cocktail_Hour', 'Dickens',
   'Scunthorpe', 'assassin', 'Sussex', 'analyst', 'bass_player', 'grass', 'cucumber', 'shitake', 'Hancock', 'pass', 'Matsushita', 'Yamashita', 'Kinoshita', 'Kirk', 'Hacker',
-  'grape', 'Pawn_Star', 'GodOfWar', 'hellokitty', 'butterfly', 'Spaceman', 'spicy', 'document', 'circumstance', 'Penistone',
+  'grape', 'Pawn_Star', 'GodOfWar', 'hellokitty', 'butterfly', 'Spaceman', 'spicy', 'document', 'circumstance', 'Penistone', 'Nazir', 'AhmedNazir', 'Nazareth', 'Staffy', 'Supporter', 'Official_Bob', 'raccoon', 'Tycoon99',
 ];
 
 describe('ban list', () => {
@@ -32,6 +32,6 @@ describe('checkUsername', () => {
     expect(checkUsername(42).ok).toBe(false);
   });
   it('reserves staff-looking names', () => {
-    for (const n of ['admin', 'Admin_1', 'moderator', 'IronFoxGames', 'secondmonitor', 'guest', 'support_team']) expect(checkUsername(n).ok).toBe(false);
+    for (const n of ['admin', 'Admin_1', 'moderator', 'IronFoxGames', 'secondmonitor', 'guest', 'Support', 'Staff_1', 'Official']) expect(checkUsername(n).ok).toBe(false);
   });
 });

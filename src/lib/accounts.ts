@@ -19,10 +19,13 @@ export async function ensureUser(clerkId: string) {
   const found = await prisma.user.findUnique({ where: { clerkId } });
   if (found && !found.email.endsWith('@placeholder')) return found;
   const cu = await currentUser().catch(() => null);
+  // No Clerk user (deleted a moment ago, session not expired yet): don't bring the row back.
+  if (!cu && !found) throw new Error('No Clerk user');
   const email = cu?.primaryEmailAddress?.emailAddress ?? cu?.emailAddresses[0]?.emailAddress ?? `${clerkId}@placeholder`;
   return upsertUser(clerkId, email);
 }
 
+const uniqueTarget = (e: unknown) => String((e as { meta?: { target?: unknown } }).meta?.target ?? '');
 const isUniqueError = (e: unknown) => typeof e === 'object' && !!e && 'code' in e && (e as { code: string }).code === 'P2002';
 
 /**
@@ -35,7 +38,8 @@ export async function upsertUser(clerkId: string, email: string) {
     return await write();
   } catch (e) {
     if (!isUniqueError(e)) throw e;
-    await prisma.user.deleteMany({ where: { email, NOT: { clerkId } } });
+    const stale = await prisma.user.findFirst({ where: { email, NOT: { clerkId } }, select: { clerkId: true } });
+    if (stale) await deleteAccountData(stale.clerkId);
     return write();
   }
 }
@@ -56,13 +60,18 @@ export async function setUsername(clerkId: string, raw: unknown): Promise<SetNam
   const check = checkUsername(raw);
   if (!check.ok) return { ok: false, error: check.error, status: 422 };
   await ensureUser(clerkId);
-  try {
-    await prisma.$transaction([
-      prisma.username.deleteMany({ where: { userId: clerkId, NOT: { key: check.key } } }),
+  const save = () =>
+    prisma.$transaction([
       prisma.username.upsert({ where: { userId: clerkId }, create: { key: check.key, userId: clerkId }, update: { key: check.key } }),
       prisma.user.update({ where: { clerkId }, data: { username: check.name } }),
       prisma.kitScore.updateMany({ where: { playerId: clerkId }, data: { name: check.name } }),
     ]);
+  try {
+    await save().catch((err) => {
+      // Two saves at once from a brand-new player both try to create their row: retry once.
+      if (isUniqueError(err) && uniqueTarget(err).includes('userId')) return save();
+      throw err;
+    });
   } catch (err) {
     if (isUniqueError(err)) return { ok: false, error: 'That name is taken.', status: 409 };
     throw err;
@@ -84,23 +93,27 @@ export function mergeScores(account: { score: number; plays: number } | null, gu
  */
 export async function claimGuest(clerkId: string, guestId: string | null, unlocks: Record<string, unknown>) {
   const user = await ensureUser(clerkId);
+  // Once per account, so made-up guest ids can't be stacked onto one account.
+  const first = await prisma.user.updateMany({ where: { clerkId, guestClaimedAt: null }, data: { guestClaimedAt: new Date() } });
+  if (first.count === 0) return { scores: 0, achievements: 0, site: [] as string[], already: true };
+
   const guestPlayer = guestId ? `guest:${guestId}` : null;
   const guestRows = guestPlayer ? await prisma.kitScore.findMany({ where: { playerId: guestPlayer } }) : [];
   let moved = 0;
   let bestRank = Infinity;
   for (const g of guestRows) {
-    const game = kitGame(g.game);
-    const lower = !!game?.score.lowerIsBetter;
-    const mine = await prisma.kitScore.findUnique({ where: { game_playerId: { game: g.game, playerId: clerkId } } });
-    const merged = mergeScores(mine, g, lower);
-    await prisma.$transaction([
-      prisma.kitScore.delete({ where: { id: g.id } }),
-      prisma.kitScore.upsert({
+    const lower = !!kitGame(g.game)?.score.lowerIsBetter;
+    const merged = await prisma.$transaction(async (tx) => {
+      const mine = await tx.kitScore.findUnique({ where: { game_playerId: { game: g.game, playerId: clerkId } } });
+      const m = mergeScores(mine, g, lower);
+      await tx.kitScore.deleteMany({ where: { id: g.id } });
+      await tx.kitScore.upsert({
         where: { game_playerId: { game: g.game, playerId: clerkId } },
-        create: { game: g.game, playerId: clerkId, name: user.username ?? g.name, score: merged.score, plays: merged.plays, isGuest: false },
-        update: { score: merged.score, plays: merged.plays },
-      }),
-    ]);
+        create: { game: g.game, playerId: clerkId, name: user.username ?? g.name, score: m.score, plays: m.plays, isGuest: false },
+        update: { score: m.score, plays: m.plays },
+      });
+      return m;
+    });
     const rank = (await prisma.kitScore.count({ where: { game: g.game, score: lower ? { lt: merged.score } : { gt: merged.score } } })) + 1;
     bestRank = Math.min(bestRank, rank);
     moved++;
@@ -115,7 +128,7 @@ export async function claimGuest(clerkId: string, guestId: string | null, unlock
   }
   if (rows.length) await prisma.achievement.createMany({ data: rows.slice(0, 2000), skipDuplicates: true });
   const site = moved ? await grantSiteAchievements(clerkId, bestRank) : [];
-  return { scores: moved, achievements: rows.length, site };
+  return { scores: moved, achievements: rows.length, site, already: false };
 }
 
 /** Remove everything the site keeps about a player. Clerk's own record is deleted by the caller. */

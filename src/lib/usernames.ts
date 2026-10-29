@@ -27,6 +27,7 @@ export const normalize = (s: string) =>
 const collapse = (s: string) => s.replace(/(.)\1+/g, '$1');
 
 const allowed = new Set(EXTRA_ALLOWED);
+const allowedLongestFirst = [...allowed].sort((a, b) => b.length - a.length);
 const inside = [...list.inside, ...EXTRA_ANYWHERE].filter((w) => !allowed.has(w));
 // Collapsed forms only where they stay 4+ letters (so "kkk" doesn't become "k").
 const insideCollapsed = inside.map((w) => (collapse(w).length >= 4 ? collapse(w) : null));
@@ -55,9 +56,13 @@ function badRun(t: string): boolean {
 export function isBannedName(raw: string): boolean {
   const n = normalize(raw);
   if (!n) return false;
-  if (!allowed.has(n)) {
-    const c = collapse(n);
-    for (let i = 0; i < inside.length; i++) if (n.includes(inside[i]) || (insideCollapsed[i] && c.includes(insideCollapsed[i]!))) return true;
+  {
+    // Allowed words are blanked out first, so "AhmedNazir" isn't caught by "nazi".
+    let m = n;
+    for (const a of allowedLongestFirst) m = m.split(a).join('|');
+    const c = collapse(m);
+    const n2 = m;
+    for (let i = 0; i < inside.length; i++) if (n2.includes(inside[i]) || (insideCollapsed[i] && c.includes(insideCollapsed[i]!))) return true;
   }
   // Each part between spaces or underscores with look-alikes resolved ("b1gd1ck" -> "bigdick"),
   // and each run of letters as typed ("BigDick" -> "big", "dick").
@@ -69,7 +74,8 @@ export function isBannedName(raw: string): boolean {
 
 export function isReservedName(raw: string): boolean {
   const n = normalize(raw);
-  return reserved.has(n) || reserved.has(raw.toLowerCase()) || RESERVED_PREFIXES.some((p) => n.startsWith(p));
+  const letters = raw.toLowerCase().replace(/[^a-z]/g, ''); // "Staff_1" -> "staff"
+  return reserved.has(n) || reserved.has(letters) || RESERVED_PREFIXES.some((p) => n.startsWith(p) || letters.startsWith(p));
 }
 
 export type UsernameCheck = { ok: true; name: string; key: string } | { ok: false; error: string };

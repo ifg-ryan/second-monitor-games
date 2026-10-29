@@ -3,6 +3,7 @@
 // checks the name as you type, then moves this browser's guest progress to the account.
 import { useEffect, useRef, useState } from 'react';
 import { guestProgress } from './guestProgress';
+import { safeNext } from '@/lib/safeNext';
 
 const RULE = /^[A-Za-z0-9_]{3,20}$/;
 type Status = { state: 'idle' | 'checking' | 'ok' | 'bad'; error?: string };
@@ -51,7 +52,7 @@ export default function WelcomeForm({ next, suggestion }: { next: string; sugges
       if (g.guestId || Object.keys(g.unlocks).length) {
         await fetch('/api/user/claim-guest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ guestId: g.guestId, unlocks: g.unlocks }) }).catch(() => null);
       }
-      window.location.assign(next);
+      window.location.assign(safeNext(next));
     } finally {
       setSaving(false);
     }

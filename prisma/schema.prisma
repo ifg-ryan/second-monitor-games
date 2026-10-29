@@ -15,6 +15,7 @@ model User {
   email            String        @unique
   username         String?       @unique
   stripeCustomerId String?       @unique
+  guestClaimedAt   DateTime?     // when this browser's guest progress was moved here (once per account)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   subscription     Subscription?
