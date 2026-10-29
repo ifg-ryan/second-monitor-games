@@ -4,10 +4,10 @@ import { usePathname } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
 
 const LINKS = [
-  { href: '/lab', label: 'Feedback' },
   { href: '/lab/games', label: 'Games' },
-  { href: '/lab/builds', label: 'Create Game' },
   { href: '/lab/kit', label: 'Kit' },
+  { href: '/lab', label: 'Feedback' },
+  { href: '/lab/builds', label: 'Create Game' },
   { href: '/lab/guide', label: 'Guide' },
 ];
 const noSubscribe = () => () => {};
@@ -20,7 +20,7 @@ export default function LabNav() {
   return (
     <nav style={{ marginBottom: '28px' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '14px' }}>
-        <a href="/lab" style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', color: 'var(--text)', textDecoration: 'none' }}>Lab</a>
+        <a href="/lab/games" style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', color: 'var(--text)', textDecoration: 'none' }}>Lab</a>
         <span style={{ marginLeft: 'auto', display: 'flex', gap: '14px', alignItems: 'baseline' }}>
           {power && <span title="Can publish new games to the live site" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '4px', padding: '2px 6px' }}>POWER USER</span>}
           <button type="button" onClick={() => fetch('/api/lab/login', { method: 'DELETE' }).then(() => location.assign('/lab'))} className="nav-link-muted" style={{ background: 'none', border: 0, cursor: 'pointer', fontSize: '0.8rem' }}>Sign out</button>
