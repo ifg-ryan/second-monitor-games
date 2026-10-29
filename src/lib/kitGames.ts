@@ -16,6 +16,9 @@ export interface KitGame {
   title: string;
   blurb: string;
   tag: string;
+  /** Main category, see src/lib/gameTypes.ts. */
+  type?: string;
+  tags?: string[];
   minutes?: [number, number];
   accent?: string;
   icon?: string;

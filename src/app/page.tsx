@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import GameCard from "@/components/game/GameCard";
+import GameGrid, { type GridGame } from "@/components/game/GameGrid";
 import { KIT_GAMES, kitUrl } from "@/lib/kitGames";
 
 export const metadata: Metadata = {
@@ -30,6 +30,8 @@ const KIT_CARDS = KIT_GAMES.map((g, i) => ({
   title: g.title,
   description: g.blurb,
   tag: g.tag,
+  type: g.type,
+  tags: g.tags,
   href: kitUrl(g.id),
   accentColor: g.accent ?? "#ffd84a",
   bgGradient: `linear-gradient(135deg, #14141c 0%, ${g.accent ?? "#444444"}55 100%)`,
@@ -40,13 +42,14 @@ const KIT_CARDS = KIT_GAMES.map((g, i) => ({
   cta: "Play",
 }));
 
-const GAMES = [
+const GAMES: GridGame[] = [
   ...KIT_CARDS,
   {
     title: "The Escape",
     description:
       "A dark card strategy game. Manage your hand, reveal anchors, and escape before the deck runs out.",
     tag: "Card Strategy",
+    type: "card",
     href: "/games/the-escape",
     accentColor: "#c9a84c",
     bgGradient: "linear-gradient(135deg, #0a0a0f 0%, #1a1a28 50%, #12100a 100%)",
@@ -59,6 +62,8 @@ const GAMES = [
     description:
       "Crack the daily code. Each number hides a letter — deduce the secret phrase using logic and letter banks.",
     tag: "Code Breaker",
+    type: "word",
+    tags: ["daily"],
     href: "/games/cryptogram",
     accentColor: "#6c8eff",
     bgGradient: "linear-gradient(135deg, #0a0e1a 0%, #141a30 50%, #0d1225 100%)",
@@ -71,6 +76,8 @@ const GAMES = [
     description:
       "Classic block-stacking arcade. Choose your visual style, clear lines, and beat your high score.",
     tag: "Arcade",
+    type: "puzzle",
+    tags: ["classic"],
     href: "/games/block-fall",
     accentColor: "#00c8ff",
     bgGradient: "linear-gradient(135deg, #0d1a2e 0%, #0a1420 50%, #060e1a 100%)",
@@ -132,35 +139,7 @@ export default function Home() {
 
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-10">
-        <div className="flex flex-col gap-3 mb-12">
-          <h1
-            style={{
-              fontFamily: "var(--font-dm-serif)",
-              color: "var(--text)",
-              fontSize: "clamp(2.5rem, 6vw, 4rem)",
-              lineHeight: 1.1,
-            }}
-          >
-            Play Free Games
-          </h1>
-          <p
-            style={{
-              color: "var(--text-muted)",
-              fontSize: "1.1rem",
-              maxWidth: "480px",
-              lineHeight: 1.6,
-            }}
-          >
-            Card games, puzzles, golf and arcade, all free to play in your browser. New games added regularly.
-          </p>
-        </div>
-
-        {/* Game cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {GAMES.map((game) => (
-            <GameCard key={game.title} {...game} />
-          ))}
-        </div>
+        <GameGrid games={GAMES} />
       </section>
 
       {/* ── How it works ─────────────────────────────────────── */}

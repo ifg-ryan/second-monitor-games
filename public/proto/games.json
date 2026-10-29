@@ -4,6 +4,10 @@
     "title": "AstroRogue",
     "blurb": "Retro arcade shooter with a roguelite twist. Clear each round, pick 1 of 3 power-ups, survive as long as you can.",
     "tag": "Retro Arcade",
+    "type": "arcade",
+    "tags": [
+      "roguelite"
+    ],
     "minutes": [
       2,
       4
@@ -63,6 +67,10 @@
     "title": "Solitaire",
     "blurb": "Classic Klondike. Drag, double-click to send home, undo anytime, and win the famous bouncing-card finish.",
     "tag": "Card Classic",
+    "type": "card",
+    "tags": [
+      "classic"
+    ],
     "minutes": [
       3,
       8
@@ -111,6 +119,7 @@
     "title": "Golf Solitaire",
     "blurb": "Clear seven columns by playing cards one higher or one lower. Chain long runs, save your deck, and go for the hole in one. Two-minute rounds.",
     "tag": "Card Puzzle",
+    "type": "card",
     "minutes": [
       1,
       3
@@ -165,6 +174,11 @@
     "title": "Snake Rogue",
     "blurb": "Classic snake with a roguelite twist: every 10 apples, pick a mutation. Rocks pile up, the snake speeds up.",
     "tag": "Arcade",
+    "type": "arcade",
+    "tags": [
+      "roguelite",
+      "classic"
+    ],
     "minutes": [
       1,
       3
@@ -219,6 +233,7 @@
     "title": "High Noon",
     "blurb": "Quick-draw duels. Wait for DRAW!, then stop your aim on target before the outlaw fires. Each outlaw is faster.",
     "tag": "Reflex",
+    "type": "arcade",
     "minutes": [
       1,
       3
@@ -273,6 +288,7 @@
     "title": "Range Rush",
     "blurb": "60 seconds on the range. Hit the called target to build a combo, catch the golden flags, and fight the wind as it builds.",
     "tag": "Golf",
+    "type": "sports",
     "minutes": [
       1,
       2
@@ -327,6 +343,10 @@
     "title": "Brick Rogue",
     "blurb": "Breakout with a roguelite twist. Aim your serve, chain combos, pick an upgrade after every level, and keep the wall from reaching you.",
     "tag": "Arcade",
+    "type": "arcade",
+    "tags": [
+      "roguelite"
+    ],
     "minutes": [
       2,
       4
@@ -381,6 +401,10 @@
     "title": "Hand Rogue",
     "blurb": "Play poker hands to beat a climbing target. Four hands, three discards, then pick a joker that bends the scoring. How many rounds can you clear?",
     "tag": "Card Roguelite",
+    "type": "card",
+    "tags": [
+      "roguelite"
+    ],
     "minutes": [
       2,
       4
@@ -435,6 +459,10 @@
     "title": "Fiver",
     "blurb": "Guess the five-letter word in six tries. Green is the right spot, yellow is in the word. A new word every day, and every past puzzle in the archive.",
     "tag": "Daily Word",
+    "type": "word",
+    "tags": [
+      "daily"
+    ],
     "minutes": [
       1,
       4
@@ -490,6 +518,10 @@
     "title": "Hive",
     "blurb": "Make words from seven letters. Every word needs the centre letter; find the pangram that uses them all. A new hive every day, every past one in the archive.",
     "tag": "Daily Word",
+    "type": "word",
+    "tags": [
+      "daily"
+    ],
     "minutes": [
       2,
       4
@@ -544,6 +576,10 @@
     "title": "Quartets",
     "blurb": "Sixteen words, four hidden groups. Find them before four mistakes. A new board every day, every past one in the archive.",
     "tag": "Daily Word",
+    "type": "word",
+    "tags": [
+      "daily"
+    ],
     "minutes": [
       2,
       4
@@ -598,6 +634,7 @@
     "title": "The Escape",
     "blurb": "One deck, eleven turns. Play four cards with the Anchor as a poker hand, then promote one to be the next Anchor. Land a Royal Flush to escape.",
     "tag": "Card Puzzle",
+    "type": "card",
     "minutes": [
       2,
       4
@@ -684,6 +721,7 @@
     "title": "Word Gardens",
     "blurb": "Swipe across the petals to make words and fill the board. Find bonus words for the jar, climb from easy boards to epic ones, and stamp your card with a themed daily crossword.",
     "tag": "Word",
+    "type": "word",
     "minutes": [
       1,
       4
@@ -737,6 +775,7 @@
     "title": "Sweep Rush",
     "blurb": "Minesweeper against the clock. Clear a board to bank time and move to a bigger one. Every mine you hit costs ten seconds.",
     "tag": "Puzzle Sprint",
+    "type": "puzzle",
     "minutes": [
       1,
       3
@@ -786,6 +825,7 @@
     "title": "Stack Up",
     "blurb": "Drop the sliding block onto the tower. Whatever hangs over gets sliced off. Land it perfectly to keep your width, and string perfects together to grow it back.",
     "tag": "Arcade",
+    "type": "arcade",
     "minutes": [
       1,
       3
@@ -835,6 +875,10 @@
     "title": "Drone Combat",
     "blurb": "Atari Combat rebuilt as a drone duel roguelike. Win best of three, beat the bosses, spend points on a sharper drone.",
     "tag": "Arcade Duel",
+    "type": "arcade",
+    "tags": [
+      "roguelite"
+    ],
     "minutes": [
       1,
       4
@@ -888,6 +932,7 @@
     "title": "Treasure Tunnels of Terra",
     "blurb": "Scramble through the tunnels of Terra, drop into the cavern and land it Lunar Lander style. One energy bar is fuel, ammo and health.",
     "tag": "Retro Sci-Fi",
+    "type": "arcade",
     "minutes": [
       2,
       4
@@ -940,6 +985,7 @@
     "title": "Hold'em Career Manager",
     "blurb": "Live one year as a touring tournament pro. Pick your events, plan the trips, survive the road and play the hands that matter.",
     "tag": "Poker Manager",
+    "type": "card",
     "minutes": [
       5,
       15
@@ -992,6 +1038,7 @@
     "title": "Home Run Derby",
     "blurb": "10 balls. Every home run earns one back. Time the pitch, square it up and see how far a hot streak can carry you.",
     "tag": "Sports",
+    "type": "sports",
     "minutes": [
       1,
       4
@@ -1046,6 +1093,7 @@
     "title": "Ready Set Grow",
     "blurb": "Plant cards, wait for them to ripen, and shovel your rivals' best crops into your own garden.",
     "tag": "Card Game",
+    "type": "card",
     "minutes": [
       3,
       6
