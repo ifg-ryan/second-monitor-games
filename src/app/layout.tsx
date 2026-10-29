@@ -133,7 +133,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased flex flex-col min-h-screen">
         <GoogleAnalytics />
-        <ClerkProvider afterSignUpUrl="/onboard">
+        <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-in" afterSignOutUrl="/">
           <ThemeProvider>
             <Navbar />
             <main className="flex-1">{children}</main>

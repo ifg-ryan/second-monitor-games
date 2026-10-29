@@ -13,6 +13,7 @@ export default function SignInPage() {
       }}
     >
       <SignIn
+        withSignUp
         appearance={{
           variables: {
             colorPrimary:    "#e8a838",

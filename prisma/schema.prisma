@@ -20,6 +20,16 @@ model User {
   subscription     Subscription?
 }
 
+// ── Username ─────────────────────────────────────────────────────────────────
+// Claims a username regardless of case: key is the lowercase name, so "Ryan" and "ryan"
+// can't both exist. User.username keeps the name as typed. A table of its own (instead of a
+// unique column on User) so it deploys with the automatic, add-only schema push.
+model Username {
+  key       String   @id
+  userId    String   @unique // Clerk user id
+  createdAt DateTime @default(now())
+}
+
 // ── Subscription ──────────────────────────────────────────────────────────────
 // Mirrored from Stripe via webhooks. Source of truth for feature gating.
 model Subscription {

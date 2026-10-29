@@ -5,6 +5,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { getSubscriptionStatus } from "@/lib/subscription";
 import ManageButton from "./ManageButton";
 import UsernameSection from "./UsernameSection";
+import DeleteAccount from "./DeleteAccount";
 import AchievementsCard from "@/components/game/AchievementsCard";
 import { PRICING_ENABLED } from "@/lib/features";
 
@@ -202,6 +203,12 @@ export default async function AccountPage() {
           )}
         </div>
         )}
+
+        {/* ── Delete account ───────────────────────────────────────── */}
+        <div style={cardStyle}>
+          <div style={{ ...sectionLabelStyle, background: "#e0525218", color: "#e05252" }}>Delete account</div>
+          <DeleteAccount />
+        </div>
 
         {/* ── Footer: billing note + sign out ─────────────────────── */}
         <div

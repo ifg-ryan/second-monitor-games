@@ -54,7 +54,7 @@ export default function UsernameSection({ initial }: { initial: string | null })
           {/* Prompt for users with no username */}
           {!current && (
             <p style={{ color: "#c9a84c", fontSize: "0.8rem", marginBottom: "12px" }}>
-              Set a username — your real name won&apos;t appear anywhere on the site.
+              Pick a username. Your real name never appears on the site.
             </p>
           )}
 
@@ -138,7 +138,7 @@ export default function UsernameSection({ initial }: { initial: string | null })
             <p style={{ color: "#e05252", fontSize: "0.8rem", marginTop: "8px" }}>{error}</p>
           )}
           <p style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginTop: "8px" }}>
-            3–20 characters. Letters, numbers, underscores only.
+            3 to 20 letters, numbers or underscores.
           </p>
         </div>
       ) : (

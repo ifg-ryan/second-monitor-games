@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
-import { prisma } from "@/lib/prisma";
+import { deleteAccountData, upsertUser } from "@/lib/accounts";
 
 // Clerk sends webhooks signed via svix — verify before trusting
 interface ClerkUserCreatedEvent {
@@ -44,7 +44,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  // Only handle user.created
+  // Account deleted in Clerk (by the player or from the Clerk dashboard): remove the site's data too.
+  if (event.type === "user.deleted") {
+    const id = (event.data as { id?: string }).id;
+    if (id) {
+      try {
+        await deleteAccountData(id);
+      } catch (err) {
+        console.error("[clerk-webhook] delete failed", err);
+        return NextResponse.json({ error: "DB error" }, { status: 500 });
+      }
+    }
+    return NextResponse.json({ received: true });
+  }
+
+  // Otherwise only user.created
   if (event.type !== "user.created") {
     return NextResponse.json({ received: true });
   }
@@ -64,11 +78,7 @@ export async function POST(request: Request) {
 
   // Create user in DB (idempotent — ignore if already exists)
   try {
-    await prisma.user.upsert({
-      where:  { clerkId },
-      create: { clerkId, email: primaryEmail },
-      update: {},          // no-op if already exists
-    });
+    await upsertUser(clerkId, primaryEmail);
     console.log(`[clerk-webhook] User created: ${clerkId} <${primaryEmail}>`);
   } catch (err) {
     console.error("[clerk-webhook] DB upsert failed", err);
