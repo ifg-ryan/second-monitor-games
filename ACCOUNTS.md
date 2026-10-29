@@ -12,6 +12,14 @@ Players sign in with Google (through Clerk), then pick a username. Guests can st
   Guest leaderboard rows move to the account (better score kept, plays added), play stats move, site achievements are re-checked. Once per account (User.guestClaimedAt).
 - Delete account: `/account` (checkbox, then the button). Removes scores, achievements, play stats, username and the Clerk user. The Clerk webhook (`user.deleted`) does the same when an account is deleted from the Clerk dashboard.
 
+## Cloud save
+A signed-in player's saved progress in each kit game follows them to any device.
+- Stored in `GameSave` (one row per player per game, JSON of the game's saved keys, 256 KB cap) through `/api/kit/save`.
+- Each write names the revision it started from; if another device saved first the write is refused (409) and the kit merges on the next start.
+  All merge rules live in the kit (claude-games `kit/core/CloudSave.ts`, `kit/site/CloudSync.ts`); the site only stores.
+- `/play/<id>` (KitGameFrame) fetches the save and puts it aside in the browser before the game loads, so the game starts with it.
+- Kept on the device: tuning-panel overrides and any `localOnly` keys in a game's game.json.
+
 ## Setup (done once)
 1. Clerk: create the production instance for secondmonitorgames.com and add its DNS records.
 2. Clerk, User and authentication: turn on Google; turn off email, phone, username and every other provider.
@@ -28,6 +36,8 @@ so to test a preview against the same database first run this once in the Neon S
 CREATE TABLE IF NOT EXISTS "Username" ("key" TEXT NOT NULL, "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "Username_pkey" PRIMARY KEY ("key"));
 CREATE UNIQUE INDEX IF NOT EXISTS "Username_userId_key" ON "Username"("userId");
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "guestClaimedAt" TIMESTAMP(3);
+CREATE TABLE IF NOT EXISTS "GameSave" ("id" TEXT NOT NULL, "userId" TEXT NOT NULL, "game" TEXT NOT NULL, "rev" INTEGER NOT NULL DEFAULT 0, "data" TEXT NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL, CONSTRAINT "GameSave_pkey" PRIMARY KEY ("id"));
+CREATE UNIQUE INDEX IF NOT EXISTS "GameSave_userId_game_key" ON "GameSave"("userId", "game");
 ```
 
 ## Wipe of development-era accounts (Oct 2026)
@@ -40,4 +50,5 @@ DELETE FROM "Play" WHERE "playerId" NOT LIKE 'guest:%';
 DELETE FROM "Subscription";
 DELETE FROM "User";
 DELETE FROM "Username";
+DELETE FROM "GameSave";
 ```

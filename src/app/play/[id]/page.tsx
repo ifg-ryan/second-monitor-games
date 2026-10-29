@@ -67,7 +67,7 @@ export default async function PlayPage({ params }: { params: Promise<{ id: strin
           <a href={kitFile(g.id)} target="_blank" rel="noopener" className="nav-link-muted hidden md:inline" style={link} title="Open the game on its own, full window">Pop out ↗</a>
         </div>
       </div>
-      <KitGameFrame src={kitFile(g.id)} title={g.title} />
+      <KitGameFrame src={kitFile(g.id)} title={g.title} game={g.id} />
     </div>
   );
 }

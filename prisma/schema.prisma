@@ -31,6 +31,23 @@ model Username {
   createdAt DateTime @default(now())
 }
 
+// ── Cloud save (kit games) ───────────────────────────────────────────────────
+// A signed-in player's saved progress for one kit game, so it follows them to any device.
+// data is JSON: { key: value } exactly as the game's Storage keeps it. rev goes up by one on
+// every write; a write must name the rev it started from, so two devices can't overwrite each
+// other (the loser merges in the kit and tries again on its next start). See src/app/api/kit/save.
+model GameSave {
+  id        String   @id @default(cuid())
+  userId    String   // Clerk user id
+  game      String
+  rev       Int      @default(0)
+  data      String   @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, game])
+}
+
 // ── Subscription ──────────────────────────────────────────────────────────────
 // Mirrored from Stripe via webhooks. Source of truth for feature gating.
 model Subscription {

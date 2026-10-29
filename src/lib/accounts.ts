@@ -131,12 +131,13 @@ export async function claimGuest(clerkId: string, guestId: string | null, unlock
   return { scores: moved, achievements: rows.length, site, already: false };
 }
 
-/** Remove everything the site keeps about a player. Clerk's own record is deleted by the caller. */
+/** Remove everything the site keeps about a player (including cloud saves). Clerk's own record is deleted by the caller. */
 export async function deleteAccountData(clerkId: string) {
   await prisma.$transaction([
     prisma.achievement.deleteMany({ where: { userId: clerkId } }),
     prisma.kitScore.deleteMany({ where: { playerId: clerkId } }),
     prisma.play.deleteMany({ where: { playerId: clerkId } }),
+    prisma.gameSave.deleteMany({ where: { userId: clerkId } }),
     prisma.username.deleteMany({ where: { userId: clerkId } }),
     prisma.user.deleteMany({ where: { clerkId } }),
   ]);
