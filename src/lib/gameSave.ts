@@ -7,6 +7,8 @@ export const MAX_KEYS = 500;
 const KEY = /^[A-Za-z0-9_.:\-]{1,100}$/;
 
 export interface SaveWrite {
+  /** The account the sending device thinks it is saving to (a mismatch is refused). */
+  user: string | null;
   base: number;
   set: Record<string, unknown>;
   del: string[];
@@ -21,7 +23,7 @@ export function parseWrite(body: unknown): SaveWrite | string {
   const del = Array.isArray(b.del) ? b.del : [];
   for (const k of Object.keys(set)) if (!KEY.test(k) || k.startsWith('__') || k.startsWith('tuning:')) return `Invalid key ${k.slice(0, 40)}`;
   for (const k of del) if (typeof k !== 'string' || !KEY.test(k)) return 'Invalid key';
-  return { base: b.base as number, set, del: del as string[] };
+  return { user: typeof b.user === 'string' ? b.user : null, base: b.base as number, set, del: del as string[] };
 }
 
 /** The stored keys after a write, or an error if it is too big. */
@@ -29,7 +31,7 @@ export function applyWrite(current: Record<string, unknown>, w: SaveWrite): Reco
   const next = { ...current, ...w.set };
   for (const k of w.del) delete next[k];
   if (Object.keys(next).length > MAX_KEYS) return 'Too many saved keys';
-  if (JSON.stringify(next).length > MAX_BYTES) return 'Save is too big';
+  if (new TextEncoder().encode(JSON.stringify(next)).length > MAX_BYTES) return 'Save is too big';
   return next;
 }
 

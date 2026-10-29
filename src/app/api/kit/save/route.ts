@@ -40,6 +40,8 @@ export async function POST(request: Request) {
 
   const conflict = async () => NextResponse.json({ ok: false, conflict: true, remote: await current(userId, game.id) }, { status: 409 });
   try {
+    // Written for another account (signed out and in as someone else with the game open): refuse.
+    if (write.user !== null && write.user !== userId) return conflict();
     const row = await prisma.gameSave.findUnique({ where: { userId_game: { userId, game: game.id } } });
     if ((row?.rev ?? 0) !== write.base) return conflict();
     const next = applyWrite(parseData(row?.data), write);
