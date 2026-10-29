@@ -122,7 +122,7 @@ export default function OnboardPage() {
           </div>
           <h1
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "1.75rem",
               lineHeight:   1.2,

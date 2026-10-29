@@ -1,35 +1,22 @@
 @import "tailwindcss";
 
-/* ── Dark theme (default) — Iron Fox aligned ────────────── */
+/* ── Iron Fox palette, dark only ───────────────────────── */
 :root {
   --bg:           #0d1812;
   --surface:      #131f18;
   --surface-2:    #1b2c22;
   --border:       #1e3228;
+  --ink-deep:     #0a130e;
   --accent:       #e8a838;
   --accent-hover: #f0bc55;
   --accent-dim:   rgba(232, 168, 56, 0.12);
   --accent-red:   #d4572a;
   --accent-blue:  #4a8fc4;
   --text:         #f0eee8;
-  --text-muted:   #6b8a72;
+  --text-muted:   #8aaa90;
   --text-dim:     #8aaa90;
-}
-
-/* ── Light theme — Iron Fox cream ───────────────────────── */
-html[data-theme="light"] {
-  --bg:           #e8e3d5;
-  --surface:      #f2ede4;
-  --surface-2:    #ddd8cc;
-  --border:       #c8bfaf;
-  --accent:       #c89018;
-  --accent-hover: #daa020;
-  --accent-dim:   rgba(200, 144, 24, 0.12);
-  --accent-red:   #d4572a;
-  --accent-blue:  #4a8fc4;
-  --text:         #1c2a1e;
-  --text-muted:   #6b5e4e;
-  --text-dim:     #8a7a68;
+  --nav-h:        114px; /* stripe + ticker + header, see Navbar */
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -49,11 +36,10 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ── Nav link hover — works in both themes ──────────────── */
@@ -88,3 +74,24 @@ body {
   background-position: right 12px center !important;
 }
 .game-filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Scoreboard look ────────────────────────────────────── */
+.font-display { font-family: var(--font-display), Impact, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; }
+.font-label   { font-family: var(--font-label), sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+
+@keyframes smg-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.smg-ticker-track { display: inline-flex; animation: smg-ticker 60s linear infinite; }
+.smg-ticker:hover .smg-ticker-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .smg-ticker-track { animation: none; } }
+
+.smg-card { transition: transform 0.15s ease, background 0.15s ease; }
+.smg-card:hover { transform: translateY(-3px); background: var(--surface-2); }
+.smg-card img { transition: opacity 0.15s ease; }
+.smg-card:hover img { opacity: 1 !important; }
+
+.smg-play { transition: background 0.15s ease; }
+.smg-play:hover { background: var(--accent-hover) !important; }
+
+.smg-tab { transition: color 0.15s ease, border-color 0.15s ease; }
+.smg-tab:hover { color: var(--accent); }
+.smg-tab:focus-visible, .smg-play:focus-visible, .smg-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

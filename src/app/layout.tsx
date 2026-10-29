@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
+import { Anton, Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import ThemeProvider from "@/components/ui/ThemeProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const inter = Inter({
+const display = Anton({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: "400",
+  variable: "--font-display",
   display: "swap",
 });
 
-const dmSerif = DM_Serif_Display({
+const label = Barlow_Condensed({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-dm-serif",
+  weight: ["500", "600", "700"],
+  variable: "--font-label",
+  display: "swap",
+});
+
+const body = Barlow({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -84,24 +91,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${dmSerif.variable}`}
-      suppressHydrationWarning
+      className={`${display.variable} ${label.variable} ${body.variable}`}
     >
       <head>
-        {/* Theme init — runs before first paint to prevent flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                var t = localStorage.getItem('smg-theme-v2');
-                document.documentElement.setAttribute(
-                  'data-theme',
-                  t === 'dark' ? 'dark' : 'light'
-                );
-              } catch (e) {}
-            `,
-          }}
-        />
         {/* JSON-LD — WebSite + Organization */}
         <script
           type="application/ld+json"
@@ -134,11 +126,9 @@ export default function RootLayout({
       <body className="antialiased flex flex-col min-h-screen">
         <GoogleAnalytics />
         <ClerkProvider afterSignUpUrl="/onboard">
-          <ThemeProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </ThemeProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
         </ClerkProvider>
       </body>
     </html>

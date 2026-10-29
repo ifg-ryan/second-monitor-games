@@ -71,7 +71,7 @@ export default function SubscribePage() {
           </div>
           <h1
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "clamp(1.75rem, 4vw, 2.5rem)",
               lineHeight:   1.15,
@@ -241,7 +241,7 @@ function PlanCard({ name, price, period, badge, perMonth, highlighted, loading, 
           {name}
         </p>
         <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-          <span style={{ color: "var(--text)", fontSize: "2rem", fontWeight: 700, fontFamily: "var(--font-dm-serif)" }}>
+          <span style={{ color: "var(--text)", fontSize: "2rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>
             {price}
           </span>
           <span style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>

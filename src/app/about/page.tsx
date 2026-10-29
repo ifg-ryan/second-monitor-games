@@ -104,7 +104,7 @@ export default function AboutPage() {
         </div>
         <h1
           style={{
-            fontFamily: "var(--font-dm-serif)",
+            fontFamily: "var(--font-display)",
             color:      "var(--text)",
             fontSize:   "clamp(2rem, 5vw, 3.25rem)",
             lineHeight: 1.1,
@@ -136,7 +136,7 @@ export default function AboutPage() {
           <div>
             <h2
               style={{
-                fontFamily:   "var(--font-dm-serif)",
+                fontFamily:   "var(--font-display)",
                 color:        "var(--text)",
                 fontSize:     "1.75rem",
                 marginBottom: "16px",
@@ -192,7 +192,7 @@ export default function AboutPage() {
       <section className="max-w-4xl mx-auto px-6 py-12">
         <h2
           style={{
-            fontFamily:   "var(--font-dm-serif)",
+            fontFamily:   "var(--font-display)",
             color:        "var(--text)",
             fontSize:     "1.75rem",
             marginBottom: "32px",
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 <div className="flex items-center gap-3 flex-wrap" style={{ marginBottom: "8px" }}>
                   <h3
                     style={{
-                      fontFamily: "var(--font-dm-serif)",
+                      fontFamily: "var(--font-display)",
                       color:      "var(--text)",
                       fontSize:   "1.25rem",
                       margin:     0,
@@ -292,7 +292,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-6 py-14">
           <h2
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "1.75rem",
               marginBottom: "36px",
@@ -335,7 +335,7 @@ export default function AboutPage() {
         >
           <h2
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "1.75rem",
               marginBottom: "12px",

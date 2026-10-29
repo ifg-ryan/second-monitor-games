@@ -13,7 +13,7 @@ export default function LabLogin() {
   }
   return (
     <form onSubmit={go} style={{ maxWidth: '320px', margin: '80px auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', margin: 0 }}>Lab</h1>
+      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', margin: 0 }}>Lab</h1>
       <input
         type="password"
         autoFocus

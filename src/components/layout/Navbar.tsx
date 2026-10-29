@@ -1,106 +1,87 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import ThemeToggle from "@/components/ui/ThemeToggle";
+import Link from "next/link";
 import AccountButton from "@/components/layout/AccountButton";
+import { KIT_GAMES, kitUrl } from "@/lib/kitGames";
+
+const NEW_DAYS = 30;
+
+// Ticker: the newest games, then the daily ones, then the game count.
+function tickerItems() {
+  const now = Date.now();
+  const fresh = KIT_GAMES.filter((g) => g.added && now - Date.parse(g.added) < NEW_DAYS * 86400000).slice(0, 5);
+  const daily = KIT_GAMES.filter((g) => g.tags?.includes("daily"));
+  return [
+    ...fresh.map((g) => ({ label: "New", title: g.title, href: kitUrl(g.id) })),
+    ...daily.map((g) => ({ label: "Daily", title: g.title, href: kitUrl(g.id) })),
+    { label: `${KIT_GAMES.length} games`, title: "on the board", href: "/" },
+  ];
+}
+
+function Ticker() {
+  const items = tickerItems();
+  const run = (hidden: boolean) => (
+    <span aria-hidden={hidden || undefined} style={{ display: "inline-flex", alignItems: "center" }}>
+      {items.map((it, i) => (
+        <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
+          <a href={it.href} tabIndex={hidden ? -1 : undefined} style={{ color: "var(--text)", textDecoration: "none", padding: "0 18px" }}>
+            <span style={{ color: "var(--accent)" }}>{it.label}:</span> {it.title}
+          </a>
+          <span aria-hidden="true" style={{ color: "var(--accent-red)" }}>◆</span>
+        </span>
+      ))}
+    </span>
+  );
+  return (
+    <div
+      className="smg-ticker font-label"
+      style={{ background: "var(--ink-deep)", borderBottom: "1px solid var(--border)", fontSize: "15px", padding: "7px 0", overflow: "hidden", whiteSpace: "nowrap" }}
+    >
+      <div className="smg-ticker-track">
+        {run(false)}
+        {run(true)}
+      </div>
+    </div>
+  );
+}
+
+const navLink: React.CSSProperties = { color: "var(--text)", textDecoration: "none", padding: "10px 14px" };
 
 export default function Navbar() {
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50" style={{ background: "var(--bg)" }}>
       {/* Iron Fox tri-color stripe */}
-      <div style={{ display: "flex", height: "9px" }}>
-        <div style={{ flex: 1, background: "#d4572a" }} />
-        <div style={{ flex: 1, background: "#e8a838" }} />
-        <div style={{ flex: 1, background: "#4a8fc4" }} />
+      <div aria-hidden="true" style={{ display: "flex", height: "6px" }}>
+        <div style={{ flex: 1, background: "var(--accent-red)" }} />
+        <div style={{ flex: 1, background: "var(--accent)" }} />
+        <div style={{ flex: 1, background: "var(--accent-blue)" }} />
       </div>
 
-      <header
-        style={{
-          background: "var(--surface)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
+      <Ticker />
 
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-2 shrink-0">
-            <div
-              style={{ background: "var(--accent)", borderRadius: "6px" }}
-              className="w-7 h-7 flex items-center justify-center"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="2" width="5" height="5" rx="1" fill="#d4572a" />
-                <rect x="9" y="2" width="5" height="5" rx="1" fill="#e8a838" />
-                <rect x="2" y="9" width="5" height="5" rx="1" fill="#4a8fc4" />
-                <rect x="9" y="9" width="5" height="5" rx="1" fill="#ffffff" opacity="0.5" />
-              </svg>
-            </div>
-            <span
-              style={{
-                fontFamily: "var(--font-dm-serif)",
-                color: "var(--text)",
-              }}
-              className="text-lg tracking-wide"
-            >
-              Second Monitor
-              <span style={{ color: "var(--accent)" }}> Games</span>
-            </span>
-          </a>
+      <header style={{ borderBottom: "1px solid var(--border)", background: "var(--bg)" }}>
+        <div className="max-w-7xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+          <Link href="/" className="font-display" style={{ color: "var(--text)", textDecoration: "none", fontSize: "28px", lineHeight: 1 }}>
+            Second Monitor <span style={{ color: "var(--accent)" }}>Games</span>
+          </Link>
 
-          {/* Center Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            <a
-              href="/"
-              style={{
-                color: "var(--text)",
-                borderRadius: "6px",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                padding: "8px 16px",
-                textDecoration: "none",
-                transition: "background 0.2s",
-              }}
-              className="hover:bg-black/5 dark:hover:bg-white/5"
-            >
-              Today&apos;s Games
-            </a>
-            <a
-              href="/leaderboard"
-              className="nav-link-muted"
-              style={{
-                borderRadius: "6px",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                padding: "8px 16px",
-                textDecoration: "none",
-              }}
-            >
-              🏆 Leaderboard
-            </a>
-          </nav>
-
-          {/* Right Actions */}
-          <div className="flex items-center gap-3 shrink-0">
+          <nav className="font-label flex flex-wrap items-center gap-1" style={{ fontSize: "17px" }}>
+            <Link href="/" className="smg-tab" style={navLink}>Games</Link>
+            <a href="/leaderboard" className="smg-tab" style={navLink}>Leaderboards</a>
             <SignedOut>
               <SignInButton mode="modal">
                 <button
-                  className="hidden sm:block nav-link-muted"
-                  style={{
-                    fontSize: "0.875rem",
-                    fontWeight: 500,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
+                  type="button"
+                  className="font-label smg-tab"
+                  style={{ fontSize: "17px", color: "var(--accent)", background: "none", border: "2px solid var(--accent)", padding: "8px 16px", marginLeft: "8px", cursor: "pointer" }}
                 >
                   Log in
                 </button>
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <AccountButton />
+              <span style={{ marginLeft: "8px" }}><AccountButton /></span>
             </SignedIn>
-            <ThemeToggle />
-          </div>
-
+          </nav>
         </div>
       </header>
     </div>

@@ -23,7 +23,7 @@ export default async function TryPage({ params }: { params: Promise<{ batch: str
     .catch(() => []);
   const title = (id: string) => kitGame(id)?.title ?? id;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 73px)', minHeight: '480px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--nav-h))', minHeight: '480px' }}>
       <TryBar
         batch={batch}
         game={game}

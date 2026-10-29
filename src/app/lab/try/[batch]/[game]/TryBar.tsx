@@ -46,7 +46,7 @@ export default function TryBar({ batch, game, title, notes: initial }: { batch: 
     <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '10px 24px', flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
         <a href="/lab" className="nav-link-muted" style={{ fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none' }}>← Lab</a>
-        <span style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '1.05rem', color: 'var(--text)' }}>{title}</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', color: 'var(--text)' }}>{title}</span>
         <span style={{ border: '1px solid var(--accent)', color: 'var(--accent)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase' }}>Test build</span>
         <button type="button" onClick={() => setOpen((o) => !o)} className="nav-link-muted" style={{ background: 'none', border: 0, cursor: 'pointer', fontSize: '0.8rem', marginLeft: 'auto' }}>
           {open ? 'Hide changes ▴' : `Changes (${notes.length}) ▾`}

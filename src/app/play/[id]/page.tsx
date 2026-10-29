@@ -29,7 +29,7 @@ export default async function PlayPage({ params }: { params: Promise<{ id: strin
   const accent = g.accent ?? 'var(--accent)';
   const minutes = g.minutes ? `${g.minutes[0]}-${g.minutes[1]} min` : null;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 73px)', minHeight: '420px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--nav-h))', minHeight: '420px' }}>
       <div
         style={{
           minHeight: '48px',
@@ -52,7 +52,7 @@ export default async function PlayPage({ params }: { params: Promise<{ id: strin
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
           <span style={{ fontSize: '1.1rem' }}>{g.icon}</span>
-          <span style={{ fontFamily: 'var(--font-dm-serif)', color: 'var(--text)', fontSize: '1rem', whiteSpace: 'nowrap' }}>{g.title}</span>
+          <span style={{ fontFamily: 'var(--font-display)', color: 'var(--text)', fontSize: '1rem', whiteSpace: 'nowrap' }}>{g.title}</span>
           <span style={{ border: `1px solid ${accent}`, color: 'var(--text)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{g.tag}</span>
           <span className="hidden lg:inline" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '420px' }} title={g.blurb}>
             {g.blurb}
@@ -62,7 +62,7 @@ export default async function PlayPage({ params }: { params: Promise<{ id: strin
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', whiteSpace: 'nowrap' }}>
           <FeedbackButton game={g.id} build={g.source} />
           {minutes && <span className="hidden md:inline" style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{minutes}</span>}
-          <a href={`/leaderboard#${g.id}`} style={{ ...link, color: 'var(--accent)' }}>🏆 Leaderboard</a>
+          <a href={`/leaderboard#${g.id}`} style={{ ...link, color: 'var(--accent)' }}>Leaderboard</a>
           <a href="/account" className="nav-link-muted hidden sm:inline" style={link}>Achievements</a>
           <a href={kitFile(g.id)} target="_blank" rel="noopener" className="nav-link-muted hidden md:inline" style={link} title="Open the game on its own, full window">Pop out ↗</a>
         </div>

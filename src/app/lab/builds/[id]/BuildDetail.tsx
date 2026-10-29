@@ -69,7 +69,7 @@ export default function BuildDetail({ id, power }: { id: string; power: boolean 
     <div>
       <LabNav />
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-        <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', margin: 0, fontWeight: 400 }}>{b.title}</h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', margin: 0, fontWeight: 400 }}>{b.title}</h1>
         <StatusBadge status={b.status} />
         {b.versions > 0 && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>version {b.versions}</span>}
       </div>

@@ -17,7 +17,7 @@ export default async function LeaderboardPage() {
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{
-          fontFamily: 'var(--font-dm-serif)',
+          fontFamily: 'var(--font-display)',
           fontSize: '2rem',
           color: 'var(--text)',
           marginBottom: '6px',

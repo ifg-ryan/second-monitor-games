@@ -36,7 +36,7 @@ export default function PrivacyPage() {
 
         <h1
           style={{
-            fontFamily:   "var(--font-dm-serif)",
+            fontFamily:   "var(--font-display)",
             color:        "var(--text)",
             fontSize:     "clamp(1.75rem, 4vw, 2.5rem)",
             lineHeight:   1.15,
@@ -99,8 +99,7 @@ export default function PrivacyPage() {
             2. Cookies and Tracking
           </h2>
           <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.75, marginBottom: "12px" }}>
-            We use a small number of essential cookies to keep you signed in and remember your
-            theme preference (dark/light mode). These are strictly necessary and cannot be
+            We use a small number of essential cookies to keep you signed in. These are strictly necessary and cannot be
             opted out of while using the service.
           </p>
           <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.75 }}>

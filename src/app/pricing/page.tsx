@@ -109,7 +109,7 @@ export default function PricingPage() {
 
             <h1
               style={{
-                fontFamily:   "var(--font-dm-serif)",
+                fontFamily:   "var(--font-display)",
                 color:        "var(--text)",
                 fontSize:     "clamp(2rem, 4vw, 3.2rem)",
                 lineHeight:   1.1,
@@ -217,7 +217,7 @@ export default function PricingPage() {
               <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "4px" }}>
                 <span
                   style={{
-                    fontFamily: "var(--font-dm-serif)",
+                    fontFamily: "var(--font-display)",
                     fontSize:   "3.2rem",
                     color:      "var(--accent)",
                     lineHeight: 1,
@@ -299,7 +299,7 @@ export default function PricingPage() {
       <section className="max-w-5xl mx-auto px-6 py-20">
         <h2
           style={{
-            fontFamily:   "var(--font-dm-serif)",
+            fontFamily:   "var(--font-display)",
             color:        "var(--text)",
             fontSize:     "clamp(1.5rem, 3vw, 2.25rem)",
             textAlign:    "center",
@@ -351,7 +351,7 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto px-6 py-16">
           <h2
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "clamp(1.5rem, 3vw, 2rem)",
               textAlign:    "center",
@@ -452,7 +452,7 @@ export default function PricingPage() {
         >
           <p
             style={{
-              fontFamily: "var(--font-dm-serif)",
+              fontFamily: "var(--font-display)",
               color:      "var(--text)",
               fontSize:   "clamp(1.25rem, 2.5vw, 1.65rem)",
               lineHeight: 1.5,
@@ -475,7 +475,7 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto px-6 py-16">
           <h2
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "clamp(1.5rem, 3vw, 2rem)",
               marginBottom: "40px",
@@ -537,7 +537,7 @@ export default function PricingPage() {
 
           <h2
             style={{
-              fontFamily:   "var(--font-dm-serif)",
+              fontFamily:   "var(--font-display)",
               color:        "var(--text)",
               fontSize:     "clamp(1.5rem, 3vw, 2.25rem)",
               marginBottom: "14px",

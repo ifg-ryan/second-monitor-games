@@ -83,7 +83,7 @@ export default async function AccountPage() {
         <div style={{ marginBottom: "32px" }}>
           <h1
             style={{
-              fontFamily: "var(--font-dm-serif)",
+              fontFamily: "var(--font-display)",
               color:      "var(--text)",
               fontSize:   "clamp(1.75rem, 4vw, 2.25rem)",
               lineHeight: 1.15,
@@ -170,7 +170,7 @@ export default async function AccountPage() {
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🔓</div>
               <h2
                 style={{
-                  fontFamily:   "var(--font-dm-serif)",
+                  fontFamily:   "var(--font-display)",
                   color:        "var(--text)",
                   fontSize:     "1.25rem",
                   marginBottom: "10px",

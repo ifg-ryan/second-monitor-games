@@ -10,7 +10,7 @@ const Shot = ({ src, alt, small }: { src: string; alt: string; small?: boolean }
   // eslint-disable-next-line @next/next/no-img-element
   <img src={`/lab-guide/${src}`} alt={alt} style={{ display: 'block', width: small ? 'min(420px, 100%)' : '100%', borderRadius: '10px', border: '1px solid var(--border)', margin: '14px 0 22px' }} />
 );
-const H2 = ({ children }: { children: ReactNode }) => <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '1.6rem', margin: '48px 0 12px', fontWeight: 400 }}>{children}</h2>;
+const H2 = ({ children }: { children: ReactNode }) => <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', margin: '48px 0 12px', fontWeight: 400 }}>{children}</h2>;
 const P = ({ children }: { children: ReactNode }) => <p style={{ margin: '0 0 12px' }}>{children}</p>;
 const ol = { listStyle: 'decimal', paddingLeft: '24px', margin: '0 0 12px' } as const;
 const ul = { listStyle: 'disc', paddingLeft: '24px', margin: '0 0 12px' } as const;
@@ -21,7 +21,7 @@ export default function LabGuide() {
     <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 20px 100px', color: 'var(--text)' }}>
       <LabNav />
       <div style={{ maxWidth: '760px', lineHeight: 1.6, fontSize: '1rem' }}>
-      <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2.4rem', margin: '0 0 8px', fontWeight: 400 }}>Lab guide</h1>
+      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', margin: '0 0 8px', fontWeight: 400 }}>Lab guide</h1>
       <P>The lab is where game designers work with Claude on Second Monitor Games. Its sections are the tabs along the top of every lab page:</P>
       <ul style={ul}>
         <li><b>Feedback</b>: notes on any of our games. Claude makes the change, you test it, and push it live (sections 1 to 7).</li>

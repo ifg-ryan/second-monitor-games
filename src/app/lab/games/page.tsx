@@ -70,7 +70,7 @@ async function Game({ id, q }: { id: string; q: StatsQuery }) {
   return (
     <div style={{ marginTop: '22px' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', flexWrap: 'wrap' }}>
-        <h1 style={{ fontFamily: 'var(--font-dm-serif)', fontSize: '2rem', fontWeight: 400, margin: 0 }}>{titleOf(id)}</h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, margin: 0 }}>{titleOf(id)}</h1>
         {site && <a href={`/play/${id}`} style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>Play live ↗</a>}
         <a href={`/lab?game=${id}`} className="nav-link-muted" style={{ fontSize: '0.85rem' }}>Give feedback</a>
       </div>

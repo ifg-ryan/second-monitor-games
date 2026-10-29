@@ -123,7 +123,7 @@ export default function TermsPage() {
 
         <h1
           style={{
-            fontFamily:   "var(--font-dm-serif)",
+            fontFamily:   "var(--font-display)",
             color:        "var(--text)",
             fontSize:     "clamp(1.75rem, 4vw, 2.5rem)",
             lineHeight:   1.15,
