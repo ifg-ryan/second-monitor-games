@@ -1040,5 +1040,58 @@
     "updated": "2026-10-29T00:12:14.995Z",
     "source": "d41186a",
     "preview": "/images/previews/homerun-derby.063f1ad7.jpg"
+  },
+  "ready-set-grow": {
+    "id": "ready-set-grow",
+    "title": "Ready Set Grow",
+    "blurb": "Plant cards, wait for them to ripen, and shovel your rivals' best crops into your own garden.",
+    "tag": "Card Game",
+    "minutes": [
+      3,
+      6
+    ],
+    "accent": "#5a9e3a",
+    "icon": "🌱",
+    "score": {
+      "label": "points",
+      "max": 120
+    },
+    "achievements": [
+      {
+        "id": "first-win",
+        "name": "Green Thumb",
+        "description": "Win a game"
+      },
+      {
+        "id": "maple",
+        "name": "Sap Season",
+        "description": "Harvest a Maple Tree"
+      },
+      {
+        "id": "pod-squad",
+        "name": "Pod Squad",
+        "description": "Harvest 3 Pea Pods at once"
+      },
+      {
+        "id": "bumper",
+        "name": "Bumper Crop",
+        "description": "Score 40 points in a game"
+      },
+      {
+        "id": "garden-party",
+        "name": "Garden Party",
+        "description": "Win a 5-player game"
+      },
+      {
+        "id": "champion",
+        "name": "Master Gardener",
+        "description": "Win 10 games",
+        "goal": 10
+      }
+    ],
+    "added": "2026-10-29T02:46:14.868Z",
+    "updated": "2026-10-29T02:46:14.868Z",
+    "source": "8f82bb2",
+    "preview": "/images/previews/ready-set-grow.1b71b773.jpg"
   }
 }
