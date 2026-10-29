@@ -29,8 +29,8 @@ export interface KitCatalog {
 
 const CANDIDATE = { id: 'candidate', name: 'In a game, could join the kit', blurb: 'Systems built inside one game that a second game could reuse.' };
 
-export default function KitBrowser({ catalog }: { catalog: KitCatalog }) {
-  const [q, setQ] = useState('');
+export default function KitBrowser({ catalog, initialQuery = '' }: { catalog: KitCatalog; initialQuery?: string }) {
+  const [q, setQ] = useState(initialQuery);
   const [cat, setCat] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
   const cats = useMemo(() => [...catalog.categories, ...(catalog.categories.some((c) => c.id === CANDIDATE.id) ? [] : [CANDIDATE])].filter((c) => catalog.pieces.some((p) => p.category === c.id)), [catalog]);

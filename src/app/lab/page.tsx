@@ -9,11 +9,12 @@ import LabQueue from './LabQueue';
 export const metadata: Metadata = { title: 'Lab', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
-export default async function LabPage() {
+export default async function LabPage({ searchParams }: { searchParams: Promise<{ game?: string }> }) {
+  const pick = (await searchParams).game;
   const games = KIT_GAMES.map((g) => ({ id: g.id, title: g.title, icon: g.icon ?? '🎮', build: g.source }));
   return (
     <main style={{ maxWidth: '860px', margin: '0 auto', padding: '32px 20px 80px' }}>
-      {(await isTester()) ? <LabQueue games={games} /> : <LabLogin />}
+      {(await isTester()) ? <LabQueue games={games} initialGame={games.some((g) => g.id === pick) ? pick : undefined} /> : <LabLogin />}
     </main>
   );
 }

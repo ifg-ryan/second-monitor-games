@@ -5,6 +5,7 @@ import { useSyncExternalStore } from 'react';
 
 const LINKS = [
   { href: '/lab', label: 'Feedback' },
+  { href: '/lab/games', label: 'Games' },
   { href: '/lab/builds', label: 'New games' },
   { href: '/lab/kit', label: 'Kit' },
   { href: '/lab/guide', label: 'Guide' },

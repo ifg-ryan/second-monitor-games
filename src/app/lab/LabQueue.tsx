@@ -50,13 +50,13 @@ function moment(ctx: string | null): string {
   }
 }
 
-export default function LabQueue({ games }: { games: Game[] }) {
+export default function LabQueue({ games, initialGame }: { games: Game[]; initialGame?: string }) {
   const [items, setItems] = useState<Item[]>([]);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [, setSeen] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState('');
-  const [addGame, setAddGame] = useState(games[0]?.id ?? '');
+  const [addGame, setAddGame] = useState(initialGame ?? games[0]?.id ?? '');
   const [banner, setBanner] = useState('');
   const [loaded, setLoaded] = useState(false);
   const title = useMemo(() => Object.fromEntries(games.map((g) => [g.id, `${g.icon} ${g.title}`])), [games]);
