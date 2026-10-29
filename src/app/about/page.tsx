@@ -205,10 +205,10 @@ export default function AboutPage() {
             {
               icon:        "🃏",
               name:        "The Escape",
-              type:        "Daily Card Strategy Game",
+              type:        "Card Puzzle",
               color:       "#c9a84c",
-              href:        "/games/the-escape",
-              description: "A unique daily card strategy game — not your standard solitaire. Reveal anchors, manage your hand, and escape before your turns run out. The configuration changes every day, every player gets the same challenge. Takes about 5 minutes.",
+              href:        "/play/the-escape",
+              description: "One deck, eleven turns. Play four cards with the Anchor as a poker hand, then promote one to be the next Anchor. Land a Royal Flush to escape. Takes 2 to 4 minutes.",
             },
             {
               icon:        "🟩",

@@ -5,7 +5,7 @@ import { PRICING_ENABLED } from "@/lib/features";
 
 export const metadata: Metadata = {
   title:       "Game Archive — Every Past Puzzle | Second Monitor Games",
-  description: "Browse every past daily puzzle on Second Monitor Games — The Escape card game and Block Fall. Subscribe to replay any past challenge.",
+  description: "Browse every past daily puzzle on Second Monitor Games. Subscribe to replay any past challenge.",
   alternates:  { canonical: "https://secondmonitorgames.com/archive" },
   robots:      { index: true, follow: true },
 };
@@ -64,17 +64,6 @@ function getPuzzleDays(launchDateStr: string, limit = 60): PuzzleDay[] {
 
 const GAMES = [
   {
-    id:          "the-escape",
-    name:        "The Escape",
-    tag:         "Card Strategy",
-    tagColor:    "#c9a84c",
-    icon:        "🃏",
-    href:        "/games/the-escape",
-    launchDate:  "2026-01-06",
-    gameType:    "puzzle" as const,
-    description: "Reveal anchors, manage your hand, and escape before the turns run out.",
-  },
-  {
     id:          "block-fall",
     name:        "Block Fall",
     tag:         "Arcade",
@@ -82,7 +71,7 @@ const GAMES = [
     icon:        "🟦",
     href:        "/games/block-fall",
     launchDate:  "2026-01-06",
-    gameType:    "arcade" as const,
+    gameType:    "arcade" as "arcade" | "puzzle",
     description: "Daily high score challenge. Leaderboard resets every midnight.",
   },
 ];

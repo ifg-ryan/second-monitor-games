@@ -45,19 +45,6 @@ const KIT_CARDS = KIT_GAMES.map((g, i) => ({
 const GAMES: GridGame[] = [
   ...KIT_CARDS,
   {
-    title: "The Escape",
-    description:
-      "A dark card strategy game. Manage your hand, reveal anchors, and escape before the deck runs out.",
-    tag: "Card Strategy",
-    type: "card",
-    href: "/games/the-escape",
-    accentColor: "#c9a84c",
-    bgGradient: "linear-gradient(135deg, #0a0a0f 0%, #1a1a28 50%, #12100a 100%)",
-    icon: "🃏",
-    previewImage: "/images/previews/the-escape.png",
-    featured: false,
-  },
-  {
     title: "Cryptogram",
     description:
       "Crack the daily code. Each number hides a letter — deduce the secret phrase using logic and letter banks.",

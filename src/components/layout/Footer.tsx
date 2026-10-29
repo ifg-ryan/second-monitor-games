@@ -45,7 +45,7 @@ export default function Footer() {
               </span>
               <nav className="flex flex-col gap-2">
                 {[
-                  { label: "The Escape", href: "/games/the-escape" },
+                  { label: "The Escape", href: "/play/the-escape"  },
                   { label: "Fiver",      href: "/play/fiver"       },
                   { label: "Block Fall", href: "/games/block-fall" },
                 ].map((link) => (

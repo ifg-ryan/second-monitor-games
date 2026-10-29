@@ -1,4 +1,4 @@
-// Play stats for the site's older games (Cryptogram, Block Fall, The Escape original).
+// Play stats for the site's older games (Cryptogram, Block Fall).
 // Kit games get the same thing from @kit/site (claude-games kit/site/Telemetry.ts); keep the two in step.
 // Use: <script src="/smg-play.js" data-game="cryptogram"></script>
 // A play starts at the first input. Time counts while the tab is visible and the player did something

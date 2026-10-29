@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       // Decode was cut in favour of Fiver (the kit's daily word game). Keep old links working.
       { source: "/games/decode", destination: "/play/fiver", permanent: true },
       { source: "/games/decode.html", destination: "/play/fiver", permanent: true },
+      // The original The Escape was replaced by the kit version. Keep old links working.
+      { source: "/games/the-escape", destination: "/play/the-escape", permanent: true },
+      { source: "/games/the-escape.html", destination: "/play/the-escape", permanent: true },
       { source: "/proto", destination: "/proto/index.html", permanent: false },
     ];
   },

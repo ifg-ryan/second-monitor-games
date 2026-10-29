@@ -2,7 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-const VALID_GAMES = ['block-fall', 'the-escape'];
+const VALID_GAMES = ['block-fall'];
 
 // ── Simple in-memory rate limiter (1 POST per 5 seconds per user) ─────────────
 // Note: resets on server restart; adequate for single-instance Vercel deployment.

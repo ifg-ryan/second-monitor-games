@@ -6,7 +6,6 @@
 export const SITE_GAMES: Record<string, string> = {
   cryptogram: 'Cryptogram',
   'block-fall': 'Block Fall',
-  'escape-classic': 'The Escape (original)',
 };
 
 /** A play this short (active seconds) counts as a quick quit. */

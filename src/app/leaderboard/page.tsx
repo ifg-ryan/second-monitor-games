@@ -94,17 +94,6 @@ export default async function LeaderboardPage() {
         }}>
           Block Fall
         </div>
-        {/* Coming Soon */}
-        <div style={{
-          padding: '8px 18px',
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          color: 'var(--text-muted)',
-          opacity: 0.5,
-          cursor: 'not-allowed',
-        }}>
-          The Escape <span style={{ fontSize: '0.7rem' }}>(coming soon)</span>
-        </div>
       </div>
 
       {/* Table */}

@@ -8,7 +8,7 @@ vi.mock("@/lib/prisma",         () => ({ default: {} }));
 import { getArchivePastHref } from "../page";
 
 describe("getArchivePastHref", () => {
-  const gameHref = "/games/the-escape";
+  const gameHref = "/games/block-fall";
   const dateStr  = "2026-02-15";
 
   it("returns /subscribe for a non-subscriber", () => {
@@ -22,13 +22,13 @@ describe("getArchivePastHref", () => {
 
   it("returns a date-parameterised game link for a subscriber", () => {
     expect(getArchivePastHref(gameHref, dateStr, true)).toBe(
-      "/games/the-escape?date=2026-02-15"
+      "/games/block-fall?date=2026-02-15"
     );
   });
 
   it("uses the correct game href for different games", () => {
-    expect(getArchivePastHref("/games/the-escape", dateStr, true)).toBe(
-      "/games/the-escape?date=2026-02-15"
+    expect(getArchivePastHref("/games/block-fall", dateStr, true)).toBe(
+      "/games/block-fall?date=2026-02-15"
     );
     expect(getArchivePastHref("/games/block-fall", dateStr, true)).toBe(
       "/games/block-fall?date=2026-02-15"
@@ -37,7 +37,7 @@ describe("getArchivePastHref", () => {
 
   it("preserves the exact date string in the URL param", () => {
     const result = getArchivePastHref(gameHref, "2026-03-01", true);
-    expect(result).toBe("/games/the-escape?date=2026-03-01");
+    expect(result).toBe("/games/block-fall?date=2026-03-01");
     const url = new URL(result, "https://example.com");
     expect(url.searchParams.get("date")).toBe("2026-03-01");
   });
