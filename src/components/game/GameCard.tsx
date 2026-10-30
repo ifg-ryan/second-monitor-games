@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 interface GameCardProps {
+  id: string;
   title: string;
   description: string;
   tag: string;
@@ -13,18 +14,19 @@ interface GameCardProps {
   minutes?: [number, number];
   isNew?: boolean;
   featured?: boolean;
-  /** Opens the expanded card. */
+  /** Opens (or folds) the card's details under its row. */
   onOpen?: () => void;
+  open?: boolean;
 }
 
-export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen }: GameCardProps) {
+export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen, open = false }: GameCardProps) {
   return (
     <button
       type="button"
       onClick={onOpen}
-      aria-haspopup="dialog"
+      aria-expanded={open}
       className="smg-card"
-      style={{ display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", cursor: "pointer", border: 0, padding: 0, color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
+      style={{ outline: open ? "3px solid var(--accent)" : "none", outlineOffset: "-3px", display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", cursor: "pointer", border: 0, padding: 0, color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
     >
       <div style={{ position: "relative", aspectRatio: "16 / 10", background: "var(--ink-deep)", overflow: "hidden" }}>
         {previewImage && (
