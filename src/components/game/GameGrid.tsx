@@ -4,7 +4,8 @@
 // The choice is kept in the URL (?type=word or ?tag=daily) so a filtered view can be shared.
 // Only types and tags that have games are offered, with their counts.
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import GameCard from "@/components/game/GameCard";
 import GameDetail, { type DetailGame } from "@/components/game/GameDetail";
 import { GAME_TYPES, GAME_TAGS } from "@/lib/gameTypes";
@@ -17,7 +18,29 @@ const same = (a: Filter, b: Filter) => a.kind === b.kind && (a.kind === "all" ||
 
 export default function GameGrid({ games }: { games: GridGame[] }) {
   const [filter, setFilter] = useState<Filter>({ kind: "all" });
-  const [open, setOpen] = useState<GridGame | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [cols, setCols] = useState(4);
+
+  // How many cards fit across, so an opened card can take over its own row.
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const measure = () => setCols(Math.max(1, getComputedStyle(el).gridTemplateColumns.split(" ").length));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Open or fold a card; the grid slides into its new layout where the browser can animate it.
+  const show = useCallback((id: string | null) => {
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (doc.startViewTransition && !reduce) doc.startViewTransition(() => flushSync(() => setOpenId(id)));
+    else setOpenId(id);
+  }, []);
+  const close = useCallback(() => show(null), [show]);
 
   const types = GAME_TYPES.map((t) => ({ ...t, count: games.filter((g) => g.type === t.id).length })).filter((t) => t.count);
   const tags = GAME_TAGS.map((t) => ({ ...t, count: games.filter((g) => g.tags?.includes(t.id)).length })).filter((t) => t.count);
@@ -32,6 +55,7 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
   }, []);
 
   function choose(f: Filter) {
+    setOpenId(null);
     setFilter(f);
     const url = new URL(window.location.href);
     url.searchParams.delete("type");
@@ -45,6 +69,15 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
     filter.kind === "type" ? games.filter((g) => g.type === filter.id)
     : filter.kind === "tag" ? games.filter((g) => g.tags?.includes(filter.id))
     : games.filter((g) => !g.featured);
+
+  // The opened card moves to the start of its row and spans it; its row-mates follow it,
+  // so the grid stays full and every other card keeps its place.
+  const at = shown.findIndex((g) => g.id === openId);
+  const ordered = at < 0 ? shown : (() => {
+    const rowStart = at - (at % cols);
+    const rest = shown.filter((_, i) => i !== at);
+    return [...rest.slice(0, rowStart), shown[at], ...rest.slice(rowStart)];
+  })();
 
   const tabs: { f: Filter; name: string; count: number }[] = [
     { f: { kind: "all" }, name: "All", count: games.length },
@@ -77,13 +110,15 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
         })}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "20px" }}>
-        {shown.map((game) => (
-          <GameCard key={game.href} {...game} onOpen={() => setOpen(game)} />
-        ))}
+      <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "20px" }}>
+        {ordered.map((game) =>
+          game.id === openId ? (
+            <GameDetail key={game.id} game={game} onClose={close} />
+          ) : (
+            <GameCard key={game.id} {...game} onOpen={() => show(game.id)} />
+          ),
+        )}
       </div>
-
-      {open && <GameDetail key={open.id} game={open} onClose={() => setOpen(null)} />}
     </div>
   );
 }

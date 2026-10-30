@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 interface GameCardProps {
+  id: string;
   title: string;
   description: string;
   tag: string;
@@ -17,14 +18,14 @@ interface GameCardProps {
   onOpen?: () => void;
 }
 
-export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen }: GameCardProps) {
+export default function GameCard({ id, title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen }: GameCardProps) {
   return (
     <button
       type="button"
       onClick={onOpen}
-      aria-haspopup="dialog"
+      aria-expanded={false}
       className="smg-card"
-      style={{ display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", cursor: "pointer", border: 0, padding: 0, color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
+      style={{ viewTransitionName: `card-${id}`, display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", cursor: "pointer", border: 0, padding: 0, color: "var(--text)", background: "var(--surface)", borderTop: `4px solid ${stripe}` }}
     >
       <div style={{ position: "relative", aspectRatio: "16 / 10", background: "var(--ink-deep)", overflow: "hidden" }}>
         {previewImage && (

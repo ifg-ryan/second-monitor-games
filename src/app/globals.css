@@ -91,11 +91,12 @@ body {
 .smg-tab:hover { color: var(--accent); }
 .smg-tab:focus-visible, .smg-play:focus-visible, .smg-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.smg-detail::backdrop { background: rgba(5, 10, 7, 0.82); }
-.smg-detail { margin: auto; }
 
 /* Leaderboard page: game art on the left, the board on the right; stacked on narrow screens. */
 .smg-board { display: grid; grid-template-columns: 280px 1fr; }
 .smg-board-art img { transition: opacity 0.15s ease; }
 .smg-board-art:hover img { opacity: 1 !important; }
 @media (max-width: 720px) { .smg-board { grid-template-columns: 1fr; } }
+
+/* Opening a front-page card: the grid slides into place (View Transitions, where supported). */
+::view-transition-group(*) { animation-duration: 0.32s; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
