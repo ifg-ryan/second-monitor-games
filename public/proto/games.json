@@ -52,8 +52,8 @@
       }
     ],
     "added": "2026-10-21T19:48:12Z",
-    "updated": "2026-10-29T03:28:45.026Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:48:48.329Z",
+    "source": "4279375",
     "preview": "/images/previews/astro-rogue.jpg"
   },
   "kit": {
@@ -165,8 +165,8 @@
       }
     ],
     "added": "2026-10-22T01:40:35Z",
-    "updated": "2026-10-29T03:29:14.074Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:49:30.902Z",
+    "source": "4279375",
     "preview": "/images/previews/golf-solitaire.c0956229.jpg"
   },
   "snake-rogue": {
@@ -224,8 +224,8 @@
       }
     ],
     "added": "2026-10-22T02:01:50Z",
-    "updated": "2026-10-30T13:25:28.645Z",
-    "source": "4216a26",
+    "updated": "2026-10-30T17:51:17.496Z",
+    "source": "4279375",
     "preview": "/images/previews/snake-rogue.e9a8e9d2.jpg"
   },
   "high-noon": {
@@ -279,8 +279,8 @@
       }
     ],
     "added": "2026-10-22T02:23:21.561Z",
-    "updated": "2026-10-29T03:29:35.852Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:49:51.538Z",
+    "source": "4279375",
     "preview": "/images/previews/high-noon.7785db0a.jpg"
   },
   "range-rush": {
@@ -334,8 +334,8 @@
       }
     ],
     "added": "2026-10-22T13:33:32.779Z",
-    "updated": "2026-10-29T03:29:47.378Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:50:56.344Z",
+    "source": "4279375",
     "preview": "/images/previews/range-rush.9d41fabf.jpg"
   },
   "brick-rogue": {
@@ -392,8 +392,8 @@
       }
     ],
     "added": "2026-10-22T16:26:18.046Z",
-    "updated": "2026-10-29T03:29:58.670Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:48:59.433Z",
+    "source": "4279375",
     "preview": "/images/previews/brick-rogue.ca7fbd55.jpg"
   },
   "hand-rogue": {
@@ -450,8 +450,8 @@
       }
     ],
     "added": "2026-10-23T15:35:13.416Z",
-    "updated": "2026-10-29T03:30:09.673Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:49:41.275Z",
+    "source": "4279375",
     "preview": "/images/previews/hand-rogue.cf4470eb.jpg"
   },
   "fiver": {
@@ -509,8 +509,8 @@
       }
     ],
     "added": "2026-10-23T17:06:43.016Z",
-    "updated": "2026-10-29T03:30:20.806Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:49:20.565Z",
+    "source": "4279375",
     "preview": "/images/previews/fiver.3f8bc3f8.jpg"
   },
   "hive": {
@@ -567,8 +567,8 @@
       }
     ],
     "added": "2026-10-23T17:06:55.033Z",
-    "updated": "2026-10-29T03:30:32.006Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:50:01.757Z",
+    "source": "4279375",
     "preview": "/images/previews/hive.0116c1b8.jpg"
   },
   "quartets": {
@@ -625,8 +625,8 @@
       }
     ],
     "added": "2026-10-23T17:07:05.420Z",
-    "updated": "2026-10-29T03:30:42.934Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:50:44.887Z",
+    "source": "4279375",
     "preview": "/images/previews/quartets.3a3486ee.jpg"
   },
   "the-escape": {
@@ -712,8 +712,8 @@
       }
     ],
     "added": "2026-10-26T18:33:04.762Z",
-    "updated": "2026-10-29T03:30:54.132Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:51:49.081Z",
+    "source": "4279375",
     "preview": "/images/previews/the-escape.558e4319.jpg"
   },
   "word-gardens": {
@@ -766,8 +766,8 @@
       }
     ],
     "added": "2026-10-26T19:32:52.669Z",
-    "updated": "2026-10-29T02:55:34.512Z",
-    "source": "0f3821d",
+    "updated": "2026-10-30T17:52:11.304Z",
+    "source": "4279375",
     "preview": "/images/previews/word-gardens.jpg"
   },
   "sweep-rush": {
@@ -816,8 +816,8 @@
       }
     ],
     "added": "2026-10-28T02:06:24.208Z",
-    "updated": "2026-10-29T03:31:12.096Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:51:38.530Z",
+    "source": "4279375",
     "preview": "/images/previews/sweep-rush.35c70128.jpg"
   },
   "stack-up": {
@@ -866,8 +866,8 @@
       }
     ],
     "added": "2026-10-28T11:55:56.087Z",
-    "updated": "2026-10-29T03:31:23.450Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:51:27.956Z",
+    "source": "4279375",
     "preview": "/images/previews/stack-up.1790045e.jpg"
   },
   "drone-combat": {
@@ -923,8 +923,8 @@
       }
     ],
     "added": "2026-10-28T15:25:08.703Z",
-    "updated": "2026-10-29T03:31:34.538Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:49:10.338Z",
+    "source": "4279375",
     "preview": "/images/previews/drone-combat.5cee6bf2.jpg"
   },
   "treasure-tunnels": {
@@ -976,8 +976,8 @@
       }
     ],
     "added": "2026-10-28T16:08:59.704Z",
-    "updated": "2026-10-29T03:31:45.839Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:52:00.339Z",
+    "source": "4279375",
     "preview": "/images/previews/treasure-tunnels.144e2767.jpg"
   },
   "holdem-career": {
@@ -1029,8 +1029,8 @@
       }
     ],
     "added": "2026-10-28T17:32:07.623Z",
-    "updated": "2026-10-29T03:31:56.879Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:50:12.311Z",
+    "source": "4279375",
     "preview": "/images/previews/holdem-career.52bea181.jpg"
   },
   "homerun-derby": {
@@ -1084,8 +1084,8 @@
       }
     ],
     "added": "2026-10-28T23:32:28.448Z",
-    "updated": "2026-10-29T03:32:10.563Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:50:23.888Z",
+    "source": "4279375",
     "preview": "/images/previews/homerun-derby.063f1ad7.jpg"
   },
   "ready-set-grow": {
@@ -1138,8 +1138,8 @@
       }
     ],
     "added": "2026-10-29T02:46:14.868Z",
-    "updated": "2026-10-29T03:32:25.522Z",
-    "source": "5ff9cf3",
+    "updated": "2026-10-30T17:51:06.755Z",
+    "source": "4279375",
     "preview": "/images/previews/ready-set-grow.1b71b773.jpg"
   },
   "putt-party": {
@@ -1215,8 +1215,8 @@
       }
     ],
     "added": "2026-10-29T14:43:08.338Z",
-    "updated": "2026-10-29T19:37:02.096Z",
-    "source": "322bec8",
+    "updated": "2026-10-30T17:50:34.458Z",
+    "source": "4279375",
     "preview": "/images/previews/putt-party.e275c958.jpg"
   }
 }
