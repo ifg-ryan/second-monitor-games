@@ -98,5 +98,7 @@ body {
 .smg-board-art:hover img { opacity: 1 !important; }
 @media (max-width: 720px) { .smg-board { grid-template-columns: 1fr; } }
 
-/* Opening a front-page card: the grid slides into place (View Transitions, where supported). */
-::view-transition-group(*) { animation-duration: 0.32s; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+/* A front-page card's details panel grows open under its row. */
+.smg-expanded { overflow: hidden; interpolate-size: allow-keywords; transition: height 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease; }
+@starting-style { .smg-expanded { height: 0; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .smg-expanded { transition: none; } }
