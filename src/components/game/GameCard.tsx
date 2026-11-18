@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { CardMark, ticked, type Mark, type Variant } from "@/components/game/PlayedTodayPrototype";
 
 interface GameCardProps {
   id: string;
@@ -17,9 +18,13 @@ interface GameCardProps {
   /** Opens (or folds) the card's details under its row. */
   onOpen?: () => void;
   open?: boolean;
+  /** PROTOTYPE (played today): which look, and this game's made-up state. */
+  proto?: { variant: Variant; mark: Mark };
 }
 
-export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen, open = false }: GameCardProps) {
+export default function GameCard({ title, tag, stripe, previewImage, number, minutes, isNew = false, onOpen, open = false, proto }: GameCardProps) {
+  const dim = proto?.variant === "B" && ticked(proto.mark);
+  const tick = proto?.variant === "C" && proto.mark ? (ticked(proto.mark) ? "✓ " : "◐ ") : "";
   return (
     <button
       type="button"
@@ -34,7 +39,7 @@ export default function GameCard({ title, tag, stripe, previewImage, number, min
             src={previewImage}
             alt={`${title} gameplay preview`}
             fill
-            style={{ objectFit: "cover", objectPosition: "top center", opacity: 0.92 }}
+            style={{ objectFit: "cover", objectPosition: "top center", opacity: 0.92, filter: dim ? "grayscale(1)" : undefined }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         )}
@@ -52,9 +57,10 @@ export default function GameCard({ title, tag, stripe, previewImage, number, min
             New
           </span>
         )}
+        {proto && <CardMark variant={proto.variant} mark={proto.mark} />}
       </div>
       <div style={{ padding: "14px 16px 18px", display: "flex", flexDirection: "column", gap: "6px" }}>
-        <h3 className="font-display" style={{ fontSize: "26px", lineHeight: 1.05, margin: 0 }}>{title}</h3>
+        <h3 className="font-display" style={{ fontSize: "26px", lineHeight: 1.05, margin: 0, color: dim ? "var(--text-muted)" : undefined }}>{tick && <span style={{ color: "var(--accent)" }}>{tick}</span>}{title}</h3>
         <span className="font-label" style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-muted)" }}>
           {tag}{minutes ? ` · ${minutes[0]}–${minutes[1]} min` : ""}
         </span>

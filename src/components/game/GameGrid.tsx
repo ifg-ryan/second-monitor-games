@@ -8,8 +8,9 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import GameCard from "@/components/game/GameCard";
 import GameDetail, { type DetailGame } from "@/components/game/GameDetail";
 import { GAME_TYPES, GAME_TAGS } from "@/lib/gameTypes";
+import { usePlayedPrototype, ChecklistStrip, PrototypeSwitcher, ticked } from "@/components/game/PlayedTodayPrototype";
 
-export type GridGame = Omit<React.ComponentProps<typeof GameCard>, "onOpen"> & DetailGame & { type?: string; tags?: string[] };
+export type GridGame = Omit<React.ComponentProps<typeof GameCard>, "onOpen" | "proto"> & DetailGame & { type?: string; tags?: string[] };
 
 type Filter = { kind: "all" } | { kind: "type" | "tag"; id: string };
 
@@ -20,6 +21,7 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [cols, setCols] = useState(4);
+  const proto = usePlayedPrototype(games); // PROTOTYPE (played today)
 
   // How many cards fit across, so an opened card can take over its own row.
   useEffect(() => {
@@ -77,6 +79,8 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {proto.on && proto.variant === "C" && <ChecklistStrip games={games} marks={proto.marks} onPick={(id) => { choose({ kind: "all" }); if (!games.find((g) => g.id === id)?.featured) setOpenId(id); }} />}
+      {proto.on && <PrototypeSwitcher variant={proto.variant} sample={proto.sample} count={games.filter((g) => ticked(proto.marks.get(g.id) ?? null)).length} total={games.length} step={proto.step} nextSample={proto.nextSample} />}
       <div role="group" aria-label="Filter games" style={{ display: "flex", flexWrap: "wrap", gap: "2px" }}>
         {tabs.map((t) => {
           const on = same(t.f, filter);
@@ -103,7 +107,7 @@ export default function GameGrid({ games }: { games: GridGame[] }) {
       <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "20px" }}>
         {shown.map((game, i) => (
           <Fragment key={game.id}>
-            <GameCard {...game} open={game.id === openId} onOpen={() => show(game.id === openId ? null : game.id)} />
+            <GameCard {...game} open={game.id === openId} onOpen={() => show(game.id === openId ? null : game.id)} proto={proto.on ? { variant: proto.variant, mark: proto.marks.get(game.id) ?? null } : undefined} />
             {i === rowEnd && <GameDetail key={shown[at].id} game={shown[at]} col={col} cols={cols} onClose={close} />}
           </Fragment>
         ))}
