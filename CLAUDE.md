@@ -5,7 +5,7 @@ Ryan directs and does not write code. He knows games and technology well. When h
 - Put product, player-experience and scope decisions to him. Decide technical questions yourself, record each one where the running skill keeps decisions, and tell him the consequence in one plain sentence.
 - Bring him any choice that is risky or hard to undo, technical or otherwise, with the trade-off in plain terms.
 - When a skill says to confirm a technical choice with the user (test seams, module interfaces, blocking edges), restate it as the behaviours it protects or the order things get built, and ask him to confirm that.
-- For a question about look, feel or behaviour, build a prototype for him to play before asking him to choose in words.
+- For a question about look, feel or behaviour, build a prototype for him to play before asking him to choose in words. Put a screenshot of each option in the chat as well as the link: he often picks from the pictures.
 - Report finished work as what he can now do and the steps to see it.
 
 A technical reviewer reads code before it merges into a protected branch and runs the architecture interviews. See `WORKFLOW.md`, "Who does what".
