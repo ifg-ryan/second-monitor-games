@@ -6,7 +6,7 @@ The operating card for this repo's agent harness. Skills live in `.claude/skills
 
 1. The agent works on a branch and pushes it. The git guardrail stops it pushing `main`.
 2. The agent opens a pull request with a picture of the change, before-and-after evidence and a risk call.
-3. You follow the "How to see it working" steps.
+3. Vercel builds a preview of the branch and posts the link on the pull request. You open it and follow the "How to see it working" steps.
 4. Pressing **Merge** on the pull request at github.com puts it live. That is the Approve button.
 
 ## Who does what

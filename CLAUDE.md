@@ -13,6 +13,7 @@ A technical reviewer reads code before it merges into a protected branch and run
 ## This repo
 
 - Pushing `main` deploys the live site at secondmonitorgames.com within about a minute. Work on a branch and open a pull request.
+- Every pushed branch gets its own preview build. Vercel posts the link as a comment on the pull request. Make that link step one of "How to see it working".
 - Production deploys apply database schema changes that only add things, automatically (`scripts/db-push.mjs`). Treat every change to `prisma/schema.prisma` as hard to undo.
 - `public/proto/`, `lab-data/` and the art and preview images under `public/images/` are written by the `claude-games` repo's ship and lab scripts. Change them there.
 - Pricing is switched off (`PRICING_ENABLED` in `src/lib/features.ts`). Everything plays free until Ryan says otherwise.
